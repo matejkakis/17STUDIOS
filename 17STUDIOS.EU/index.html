@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>17STUDIOS | VISUAL ARCHIVE</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,400&family=Space+Mono:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* === 1. THEME ENGINE === */
+        :root {
+            /* --- DARK MODE --- */
+            --bg-color: #0f0e0d; 
+            --text-color: #e6e0d4;
+            --accent-color: #ff3c00; 
+            --gold-color: #D4AF37;
+            
+            --tech-line: rgba(255, 255, 255, 0.15);
+            --panel-bg: rgba(15, 14, 13, 0.95);
+            --modal-bg: #1a1918;
+            --modal-border: #333;
+            --nav-bg: rgba(15, 14, 13, 0.9);
+            
+            --text-bloom: 0 0 25px rgba(230, 224, 212, 0.4);
+            --accent-bloom: 0 0 25px rgba(255, 60, 0, 0.6);
+            --border-glow: 0 0 10px rgba(255, 60, 0, 0.3);
+            
+            --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+            --noise-blend: overlay;
+            --noise-opacity: 0.25;
+
+            --font-head: 'Playfair Display', serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            --gate-shadow: inset 0 0 80px -20px #000;
+        }
+
+        /* --- LIGHT MODE --- */
+        body.light-mode {
+            --bg-color: #E6E2D6;
+            --text-color: #1A1A1A;
+            --accent-color: #cc3000;
+            --gold-color: #B8860B;
+            
+            --tech-line: rgba(0, 0, 0, 0.2);
+            --panel-bg: rgba(225, 221, 211, 0.95); 
+            --modal-bg: #EAE6DC;
+            --modal-border: #ccc;
+            --nav-bg: rgba(230, 226, 214, 0.95);
+            
+            --text-bloom: none;
+            --accent-bloom: none;
+            --border-glow: none;
+            
+            --noise-blend: multiply;
+            --noise-opacity: 0.12;
+            --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+            
+            --gate-shadow: inset 0 0 60px -20px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            cursor: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            will-change: background-color, color;
+        }
+
+        /* YOUTUBE BACKGROUND HACK */
+        .yt-bg-wrapper {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Zväčšenie iframe na 300% aby sme schovali ovládacie prvky mimo obraz */
+        .yt-bg-wrapper iframe {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 300%; height: 150%; 
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            border: none;
+            opacity: 0.8; 
+        }
+        
+        body.light-mode .yt-bg-wrapper iframe {
+            opacity: 0.6;
+            filter: grayscale(100%); 
+        }
+
+        /* PRELOADER */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-family: var(--font-mono); color: var(--accent-color);
+            transition: opacity 0.5s ease-out;
+        }
+        .boot-text { margin-bottom: 20px; font-size: 0.9rem; letter-spacing: 2px; }
+        .progress-bar { width: 200px; height: 2px; background: #333; position: relative; }
+        .progress-fill { height: 100%; background: var(--accent-color); width: 0%; transition: width 0.1s; }
+
+        .site-content {
+            transition: filter 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            position: relative;
+            z-index: 10;
+        }
+        body.menu-open .site-content { filter: blur(10px) brightness(0.8); pointer-events: none; }
+        body.modal-open { overflow: hidden; }
+
+        /* === TEXTURES === */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: var(--noise-url);
+            pointer-events: none; 
+            z-index: 0;
+            mix-blend-mode: var(--noise-blend); 
+            opacity: var(--noise-opacity);
+        }
+
+        .film-gate-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 49;
+            box-shadow: var(--gate-shadow);
+            transition: box-shadow 0.5s ease;
+        }
+
+        /* CUSTOM CURSOR */
+        .cursor-dot {
+            width: 12px; height: 12px; background-color: var(--accent-color); position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 10001; transform: translate(-50%, -50%);
+            transition: width 0.1s, height 0.1s, background-color 0.3s, border-radius 0.3s;
+            mix-blend-mode: exclusion; border-radius: 50%;
+        }
+        body.light-mode .cursor-dot { mix-blend-mode: normal; border-radius: 0; border: 1px solid #000; }
+
+        @media (hover: none) and (pointer: coarse), (max-width: 1024px) {
+            .cursor-dot { display: none !important; }
+            * { cursor: auto !important; }
+        }
+
+        .dust-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 5;
+            overflow: hidden; 
+            will-change: transform;
+        }
+        body.light-mode .dust-container { filter: invert(1); opacity: 0.5; }
+        .dust-speck {
+            position: absolute; background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%; animation: float 20s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* === NAVIGÁCIA === */
+        .film-strip-nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 20px 5vw;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 2000; background: var(--nav-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--tech-line);
+        }
+
+        .logo {
+            font-family: var(--font-mono); font-weight: 700; font-size: 1.3rem; letter-spacing: -1px;
+            color: var(--text-color); text-shadow: var(--text-bloom); display: flex; align-items: center;
+        }
+        
+        .rec-dot {
+            display: inline-block; width: 8px; height: 8px; background-color: var(--accent-color); border-radius: 50%; 
+            margin-left: 8px; box-shadow: var(--accent-bloom); animation: blink 2s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        .nav-right-group { display: flex; gap: 40px; align-items: center; }
+
+        .mode-group { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; }
+        .mode-label { font-family: var(--font-mono); font-size: 0.6rem; text-transform: uppercase; color: var(--text-color); opacity: 0.7; letter-spacing: 1px; line-height: 1; }
+        
+        .tech-switch { width: 40px; height: 16px; background: rgba(0,0,0,0.2); border: 1px solid var(--text-color); position: relative; transition: 0.3s ease; }
+        body.light-mode .tech-switch { background: rgba(255,255,255,0.5); border-color: var(--text-color); }
+        .switch-piston { width: 18px; height: 100%; background: var(--text-color); position: absolute; left: 0; top: 0; transition: 0.3s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 5px rgba(255,255,255,0.2); }
+        body.light-mode .switch-piston { left: 20px; background: var(--accent-color); }
+        .mode-group:hover .tech-switch { border-color: var(--accent-color); }
+        .mode-group:hover .switch-piston { box-shadow: 0 0 8px var(--accent-color); }
+
+        .menu-trigger { background: none; border: 1px solid var(--text-color); color: var(--text-color); padding: 8px 15px; font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .menu-trigger:hover { border-color: var(--accent-color); background: var(--accent-color); color: #fff; box-shadow: var(--accent-bloom); }
+
+        #close-btn { position: fixed; top: 30px; right: 5vw; background: none; border: none; font-family: var(--font-mono); font-size: 1rem; color: var(--text-color); cursor: pointer; z-index: 9999; display: none; transition: color 0.3s; }
+        #close-btn:hover { color: var(--accent-color); }
+
+        /* === MENU === */
+        .nav-overlay { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--bg-color); transition: right 0.6s cubic-bezier(0.77, 0, 0.175, 1); z-index: 3000; overflow: hidden; border-left: 1px solid var(--text-color); }
+        .nav-overlay.active { right: 0; }
+        .nav-links { list-style: none; position: relative; width: 100%; height: 100%; padding: 0; margin: 0; }
+        .nav-links li { position: absolute; display: flex; flex-direction: column; }
+        .nav-links li:nth-child(1) { top: 20%; left: 15%; }
+        .nav-links li:nth-child(2) { top: 40%; right: 15%; align-items: flex-end; text-align: right; }
+        .nav-links li:nth-child(3) { top: 60%; left: 20%; }
+        .nav-links li:nth-child(4) { bottom: 15%; right: 10%; align-items: flex-end; text-align: right; }
+        .nav-links a { font-family: var(--font-head); font-size: clamp(3rem, 6vw, 5rem); color: var(--text-color); text-decoration: none; line-height: 1; opacity: 0; transform: translateY(20px); transition: 0.5s ease; text-shadow: var(--text-bloom); }
+        .nav-num { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-color); letter-spacing: 2px; margin-bottom: 5px; opacity: 0; transition: 0.5s 0.2s; text-shadow: var(--accent-bloom); }
+        .nav-overlay.active .nav-num { opacity: 1; }
+        .nav-links li::before { content: ''; position: absolute; background: var(--tech-line); transition: width 0.8s ease, height 0.8s ease; opacity: 0.7; }
+        .nav-links li:nth-child(1)::before { left: 0; top: 100%; width: 1px; height: 0; } .nav-overlay.active .nav-links li:nth-child(1)::before { height: 15vh; }
+        .nav-links li:nth-child(2)::before { right: 100%; top: 50%; width: 0; height: 1px; } .nav-overlay.active .nav-links li:nth-child(2)::before { width: 30vw; }
+        .nav-links li:nth-child(3)::before { left: 20px; bottom: 100%; width: 1px; height: 0; } .nav-overlay.active .nav-links li:nth-child(3)::before { height: 10vh; }
+        .nav-links li:nth-child(4)::before { right: -20px; top: 50%; width: 0; height: 1px; } .nav-overlay.active .nav-links li:nth-child(4)::before { width: 20vw; }
+        
+        .nav-overlay.active .nav-links a { opacity: 1; transform: translateY(0); }
+        .nav-overlay.active .nav-links a:hover { opacity: 1; color: var(--accent-color); transform: scale(1.05); }
+
+        /* === HERO === */
+        .hero-section {
+            height: auto;
+            min-height: 60vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            position: relative; z-index: 2; 
+            padding-top: 130px; 
+            padding-bottom: 60px;
+        }
+        
+        .hero-title { 
+            font-family: var(--font-head); font-size: 7vw; line-height: 1.1; z-index: 2; color: var(--text-color);
+            text-shadow: var(--text-bloom); text-align: center; display: flex; flex-direction: column; align-items: center;
+            margin-top: 30px;
+        }
+        body:not(.light-mode) .hero-title { mix-blend-mode: exclusion; }
+
+        .hero-title span { 
+            display: block; opacity: 0; 
+            will-change: transform, opacity;
+            backface-visibility: hidden;
+        }
+
+        @keyframes pulseGlow { 0%, 100% { text-shadow: var(--text-bloom); opacity: 1; } 50% { text-shadow: 0 0 30px var(--accent-color), 0 0 60px var(--accent-color); opacity: 0.9; } }
+
+        body.loaded .line-1 { animation: flyInLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0s forwards; font-weight: 900; }
+        body.loaded .line-2 { font-style: italic; color: var(--accent-color); font-weight: 400; animation: flyInRight 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards, pulseGlow 2.5s infinite ease-in-out 1.5s; }
+        body.loaded .line-3 { font-weight: 900; animation: flyInLeft 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards; }
+
+        @media (min-width: 900px) {
+            @keyframes flyInLeft { 0% { opacity: 0; transform: translateX(-100px) scale(0.9); filter: blur(10px); } 100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); } }
+            @keyframes flyInRight { 0% { opacity: 0; transform: translateX(100px) scale(0.9); filter: blur(10px); } 100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); } }
+        }
+
+        @media (max-width: 899px) {
+            @keyframes flyInLeft { 0% { opacity: 0; transform: translateX(-30px); } 100% { opacity: 1; transform: translateX(0); } }
+            @keyframes flyInRight { 0% { opacity: 0; transform: translateX(30px); } 100% { opacity: 1; transform: translateX(0); } }
+        }
+
+        /* === HUB STYLES (NAD TEXTOM) === */
+        .hero-hub-container {
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0; animation: flyInHub 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+            position: relative; z-index: 5;
+        }
+
+        @media (min-width: 900px) {
+            .hero-hub-container { 
+                transform: scale(1.1);
+                margin-bottom: 20px; 
+            }
+            .hub-stem { width: 1px; height: 30px; background: var(--text-color); opacity: 0.5; }
+            .hub-crossbar-wrapper { display: flex; align-items: flex-start; position: relative; }
+            
+            .hub-crossbar { 
+                height: 1px; 
+                width: 140%; max-width: 500px;
+                background: var(--text-color); opacity: 0.5; 
+                position: absolute; top: 0; left: 50%; 
+                transform: translateX(-50%); 
+            }
+            
+            .hub-legs { display: flex; justify-content: space-between; width: 340px; }
+            .hub-leg-group { display: flex; flex-direction: column; align-items: center; width: 80px; cursor: pointer; position: relative; height: 80px; }
+            .hub-tick { width: 1px; height: 15px; background: var(--text-color); opacity: 0.5; transition: 0.3s; margin-bottom: 5px; }
+            .hub-num { font-family: var(--font-mono); font-size: 0.5rem; color: var(--accent-color); opacity: 0.6; margin-bottom: 2px; transition: 0.3s; }
+            .hub-label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 2px; color: var(--text-color); opacity: 0.7; transition: 0.3s; }
+            
+            .hub-leg-group:hover .hub-tick { height: 25px; background: var(--accent-color); opacity: 1; box-shadow: 0 0 10px var(--accent-color); }
+            .hub-leg-group:hover .hub-num { opacity: 1; transform: translateY(3px); }
+            .hub-leg-group:hover .hub-label { color: var(--accent-color); opacity: 1; text-shadow: var(--accent-bloom); transform: translateY(5px); }
+        }
+
+        @media (max-width: 899px) {
+            .hero-hub-container {
+                width: 100%; margin-top: 0; margin-bottom: 20px;
+                opacity: 1; animation: none; 
+            }
+
+            .hub-stem, .hub-crossbar { display: none; }
+
+            .hub-legs { 
+                display: flex; flex-direction: row; justify-content: center; align-items: center;
+                width: 100%; position: relative; gap: 15px; 
+            }
+
+            .hub-legs::before {
+                content: ''; position: absolute; 
+                left: 10%; right: 10%; top: 50%; height: 1px;
+                background: var(--text-color); opacity: 0.2; 
+                z-index: 0;
+            }
+
+            .hub-leg-group {
+                display: flex; flex-direction: row; align-items: center; gap: 5px;
+                background: var(--bg-color); 
+                padding: 5px 8px; z-index: 1; cursor: pointer;
+            }
+
+            .hub-tick { display: none; } 
+
+            .hub-num {
+                font-size: 0.7rem; color: var(--accent-color); font-weight: bold;
+                font-family: var(--font-mono);
+            }
+            
+            .hub-label {
+                font-size: 0.8rem; letter-spacing: 1px; color: var(--text-color);
+                font-family: var(--font-mono); text-transform: uppercase;
+            }
+            
+            .hub-leg-group:active .hub-label { color: var(--accent-color); }
+        }
+        
+        @keyframes flyInHub {
+            0% { opacity: 0; transform: translateY(-20px) scale(1); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (min-width: 900px) {
+            @keyframes flyInHub {
+                0% { opacity: 0; transform: translateY(-20px) scale(1.1); }
+                100% { opacity: 1; transform: translateY(0) scale(1.1); }
+            }
+        }
+
+        /* === MANIFEST (VISION) === */
+        .manifest-section { padding: 100px 5vw; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; position: relative; z-index: 2; border-bottom: 1px solid var(--tech-line); border-top: 1px solid var(--tech-line); }
+        .manifest-img { 
+            width: 100%; height: 500px; 
+            background: #111; 
+            border: 1px solid var(--text-color); 
+            position: relative; overflow: hidden; 
+        }
+        
+        /* YouTube Embed Wrapper je v main CSS */
+        
+        .data-stream { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
+        .stream-block { 
+            position: relative; 
+            padding-left: 20px; 
+            border-left: 1px solid rgba(255,255,255,0.1); 
+            transition: all 0.3s ease; 
+        }
+        .stream-block:hover { 
+            border-left: 2px solid var(--accent-color); 
+            background: linear-gradient(90deg, rgba(255, 60, 0, 0.05) 0%, transparent 100%);
+        }
+        .stream-label { 
+            font-family: var(--font-mono); 
+            font-size: 0.7rem; 
+            color: var(--accent-color); 
+            letter-spacing: 2px; 
+            margin-bottom: 8px; 
+            display: block; 
+            opacity: 0.8;
+        }
+        .stream-content { 
+            font-family: var(--font-mono); 
+            font-size: 0.95rem; 
+            line-height: 1.5; 
+            opacity: 0.9; 
+            color: var(--text-color); 
+        }
+        .stream-block::before {
+            content: ''; position: absolute; top: 0; left: -2px; width: 3px; height: 0%;
+            background: var(--accent-color); transition: height 0.3s;
+        }
+        .stream-block:hover::before { height: 100%; }
+
+        .manifest-text h2 { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-color); margin-bottom: 20px; letter-spacing: 3px; }
+
+        @media (min-width: 900px) {
+            .manifest-text h2 { font-size: 1.2rem; margin-bottom: 40px; }
+            .data-stream { gap: 50px; } 
+            .stream-content { font-size: 1.2rem; line-height: 1.8; }
+            .stream-label { font-size: 0.85rem; }
+        }
+
+        /* === PORTFÓLIO === */
+        .portfolio-section { padding: 100px 5vw; border-bottom: 1px solid var(--tech-line); position: relative; z-index: 2; }
+        .section-header { font-family: var(--font-mono); font-size: 1.5rem; margin-bottom: 50px; text-transform: uppercase; border-bottom: 1px solid var(--tech-line); padding-bottom: 20px; display: inline-block; }
+        
+        .portfolio-category { margin-bottom: 60px; }
+        .category-title { font-family: var(--font-mono); color: var(--accent-color); font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 20px; padding-left: 20px; border-left: 2px solid var(--accent-color); }
+        
+        .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media(min-width: 800px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .portfolio-item { height: 400px; background: #111; border: 1px solid var(--tech-line); position: relative; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .portfolio-item:hover { border-color: var(--accent-color); }
+        
+        .portfolio-tag { 
+            position: absolute; top: 0; right: 0; 
+            background: var(--accent-color); color: #000; 
+            font-family: var(--font-mono); font-weight: 700; font-size: 0.5rem; letter-spacing: 1px;
+            padding: 4px 8px; z-index: 3;
+        }
+
+        .portfolio-title-box {
+            position: absolute; bottom: 20px; left: 20px;
+            background: #000; border: 1px solid var(--accent-color);
+            color: var(--accent-color); padding: 5px 15px;
+            font-family: var(--font-mono); font-weight: 700; text-transform: uppercase;
+            font-size: 0.5rem; 
+            z-index: 3; transition: 0.3s;
+        }
+
+        .portfolio-item:hover .portfolio-title-box { box-shadow: 0 0 15px var(--accent-color); }
+
+        .portfolio-item video, .portfolio-item img, .portfolio-item .yt-bg-wrapper {
+            width: 100%; height: 100%; object-fit: cover; object-position: center; 
+            position: absolute; top: 0; left: 0; z-index: 0;
+        }
+
+        .slide { opacity: 0; transition: opacity 1.5s ease-in-out; }
+        .slide.active { opacity: 1; }
+
+        .tech-divider { border: 0; height: 1px; background: var(--tech-line); margin: 60px 0; border-bottom: 1px dashed var(--text-color); opacity: 0.3; }
+
+        /* === AI LABS === */
+        .ai-labs-section { padding: 100px 5vw; border-bottom: 1px solid var(--tech-line); position: relative; z-index: 2; background: rgba(0,0,0,0.02); }
+        .ai-panel { display: flex; flex-direction: column; gap: 30px; border: 1px solid var(--tech-line); background: var(--panel-bg); padding: 40px; max-width: 900px; margin: 0 auto; }
+        @media(min-width: 800px) { .ai-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; } }
+        
+        .ai-input-group { display: flex; flex-direction: column; gap: 20px; }
+        .ai-desc { font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.8; line-height: 1.6; }
+        .ai-input { width: 100%; box-sizing: border-box; background: transparent; border: 1px solid var(--tech-line); color: var(--text-color); padding: 15px; font-family: var(--font-mono); font-size: 1rem; outline: none; transition: 0.3s; resize: vertical; }
+        .ai-input:focus { border-color: var(--accent-color); box-shadow: 0 0 10px rgba(255, 60, 0, 0.2); }
+        
+        .ai-result-display { border: 1px dashed var(--tech-line); padding: 20px; font-family: var(--font-mono); font-size: 0.9rem; opacity: 0.7; min-height: 200px; white-space: pre-wrap; display: flex; align-items: center; justify-content: center; text-align: center; flex-direction: column; gap: 10px; }
+        .ai-result-display.has-content { border-style: solid; border-color: var(--accent-color); opacity: 1; text-align: left; align-items: flex-start; }
+        
+        .glow-btn { background: var(--accent-color); color: #fff; border: none; padding: 15px 30px; font-family: var(--font-mono); font-weight: 700; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px var(--accent-bloom); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .glow-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--accent-color); }
+        .glow-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* === GAME === */
+        .game-section { padding: 60px 5vw; background: rgba(0,0,0,0.02); border-top: 1px solid var(--tech-line); border-bottom: 1px solid var(--tech-line); }
+        .game-wrapper { max-width: 800px; margin: 0 auto; padding: 40px; border: 1px solid var(--tech-line); background: var(--panel-bg); text-align: center; display: flex; flex-direction: column; align-items: center; }
+        .game-label { color: var(--gold-color); letter-spacing: 2px; font-size: 0.7rem; margin-bottom: 20px; }
+        .tip-display { min-height: 200px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; width: 100%; }
+        .discount-container { margin-top: 25px; text-align: center; position: relative; display: flex; flex-direction: column; align-items: center; }
+        .discount-label { font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-color); letter-spacing: 2px; margin-bottom: 10px; opacity: 0.7; text-transform: uppercase; }
+        
+        .game-input { background: transparent; border: none; border-bottom: 1px solid var(--text-color); color: var(--accent-color); font-family: var(--font-head); font-size: 1.5rem; text-align: center; width: 80%; margin-bottom: 20px; padding: 10px; outline: none; }
+        .game-input::placeholder { color: var(--text-color); opacity: 0.3; font-family: var(--font-mono); font-size: 1rem; }
+
+        @media (max-width: 600px) {
+            .game-init-text { font-size: 1.5rem !important; }
+            .game-input { font-size: 1.1rem; width: 100%; }
+            .game-input::placeholder { font-size: 0.8rem; }
+        }
+
+        .result-code { 
+            font-size: 1.8rem; color: var(--accent-color); font-weight: bold; 
+            padding: 15px 30px; 
+            background: rgba(0,0,0,0.05); position: relative; z-index: 2; 
+            border: 1px dashed rgba(255, 60, 0, 0.3);
+        }
+
+        .result-code::after {
+            content: ''; position: absolute; inset: -1px; border: 1px dashed var(--accent-color);
+            -webkit-mask-image: linear-gradient(135deg, transparent 40%, black 50%, transparent 60%);
+            mask-image: linear-gradient(135deg, transparent 40%, black 50%, transparent 60%);
+            -webkit-mask-size: 300% 100%; mask-size: 300% 100%;
+            animation: lightWave 3s infinite linear; pointer-events: none;
+        }
+
+        @keyframes lightWave {
+            0% { -webkit-mask-position: 100% 0; mask-position: 100% 0; }
+            100% { -webkit-mask-position: 0% 0; mask-position: 0% 0; }
+        }
+
+        .blink-glow { animation: blinkGlow 2s infinite alternate; }
+        @keyframes blinkGlow { 0% { opacity: 0.8; text-shadow: 0 0 10px var(--accent-color); } 100% { opacity: 1; text-shadow: 0 0 30px var(--accent-color), 0 0 50px var(--accent-color); } }
+        .tip-btn { background: transparent; border: 1px solid var(--accent-color); color: var(--accent-color); padding: 15px 40px; font-family: var(--font-mono); font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .tip-btn:hover { background: var(--accent-color); color: #fff; }
+
+        /* === SLUŽBY === */
+        .services-section { padding: 120px 5vw; position: relative; z-index: 2; }
+        
+        .services-header-wrapper {
+            text-align: center; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .services-main-title {
+             font-family: var(--font-head); font-size: 3rem; color: var(--text-color); margin-bottom: 10px;
+             text-shadow: var(--text-bloom);
+        }
+        
+        .services-hint { 
+            text-align: center; font-family: var(--font-mono); font-size: 0.8rem; 
+            color: var(--accent-color); letter-spacing: 2px; opacity: 0.8; 
+            text-transform: uppercase; animation: pulseHint 3s infinite ease-in-out;
+            width: 100%; max-width: 400px;
+        }
+
+        @media (max-width: 899px) {
+            .services-main-title { font-size: 11vw; }
+            .services-hint {
+                font-size: 0.8rem; width: 100%; display: block;
+                padding: 10px 0; border-top: 1px solid var(--tech-line); border-bottom: 1px solid var(--tech-line);
+                margin-bottom: 30px;
+            }
+        }
+        @keyframes pulseHint { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+        
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .service-card { background-color: var(--bg-color); border: 1px solid var(--tech-line); padding: 50px 30px; text-align: center; transition: all 0.4s ease; position: relative; overflow: hidden; z-index: 1; cursor: pointer; }
+        .service-content-wrapper { position: relative; z-index: 2; transition: transform 0.4s; pointer-events: none; }
+        .service-icon { font-size: 2.5rem; margin-bottom: 25px; display: block; color: var(--text-color); transition: 0.3s; }
+        .service-title { font-family: var(--font-head); font-size: 2rem; margin-bottom: 20px; color: var(--text-color); pointer-events: auto; }
+        .service-desc { color: var(--text-color); opacity: 0.7; font-size: 0.95rem; }
+        .card-bg-media { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0; transition: opacity 0.6s ease, transform 6s ease; }
+        .service-card:hover { border-color: var(--accent-color); box-shadow: var(--border-glow); }
+        .service-card:hover .service-title { color: var(--accent-color); text-shadow: var(--accent-bloom); }
+        .service-card:hover .service-icon { color: var(--accent-color); }
+        .service-card:hover .card-bg-media { opacity: 0.4; transform: scale(1.1); }
+        
+        .service-card.mobile-active {
+            border-color: var(--accent-color);
+            box-shadow: var(--border-glow);
+        }
+        .service-card.mobile-active .service-title {
+            color: var(--accent-color); text-shadow: var(--accent-bloom);
+        }
+        .service-card.mobile-active .service-icon {
+            color: var(--accent-color);
+        }
+        .service-card.mobile-active .card-bg-media {
+            opacity: 0.4; transform: scale(1.1);
+        }
+
+        /* === REFERENCIE === */
+        .testimonials-section { padding: 100px 5vw; background: rgba(0,0,0,0.03); border-top: 1px solid var(--tech-line); position: relative; z-index: 2; }
+        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .testimonial-card { border: 1px solid var(--tech-line); padding: 30px; font-family: var(--font-mono); background: var(--panel-bg); transition: 0.3s; }
+        .testimonial-card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
+        .log-header { font-size: 0.7rem; color: var(--accent-color); border-bottom: 1px dashed var(--tech-line); padding-bottom: 10px; margin-bottom: 20px; }
+        .quote { font-style: italic; opacity: 0.8; margin-bottom: 20px; line-height: 1.6; min-height: 100px; }
+        .author { font-weight: bold; text-align: right; display: block; }
+
+        /* === DATA PACKETS === */
+        .modal-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 5000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 40px 20px; }
+        .modal-backdrop.active { opacity: 1; pointer-events: auto; }
+        .data-packet { width: 100%; max-width: 500px; background: var(--modal-bg); border: 1px solid var(--modal-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); position: relative; transform: translateY(20px); transition: transform 0.4s ease; color: #1a1a1a; display: flex; flex-direction: column; max-height: 90vh; }
+        body:not(.light-mode) .data-packet { color: #e6e0d4; } 
+        .modal-backdrop.active .data-packet { transform: translateY(0); }
+        .packet-header { position: absolute; top: -15px; left: -10px; background: #111; color: #fff; padding: 5px 15px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 2px; display: flex; align-items: center; gap: 8px; z-index: 2; }
+        .packet-indicator { width: 8px; height: 8px; background: var(--accent-color); display: inline-block; }
+        .packet-close { position: absolute; top: 15px; right: 15px; background: transparent; border: 1px solid currentColor; font-family: var(--font-mono); font-size: 0.7rem; padding: 5px 10px; cursor: pointer; color: inherit; z-index: 2; }
+        .packet-close:hover { background: var(--accent-color); color: #fff; border-color: var(--accent-color); }
+        .packet-content { padding: 50px 40px 40px; overflow-y: auto; }
+        .packet-title { font-family: var(--font-mono); font-weight: 700; font-size: 1.8rem; text-transform: uppercase; margin-bottom: 5px; margin-top: 10px; }
+        .packet-subtitle { font-family: var(--font-mono); font-size: 0.8rem; opacity: 0.6; border-bottom: 1px solid currentColor; padding-bottom: 20px; margin-bottom: 30px; display: block; }
+        .price-list { list-style: none; }
+        .price-row { display: flex; justify-content: space-between; align-items: baseline; padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.1); cursor: pointer; transition: 0.2s; }
+        body:not(.light-mode) .price-row { border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .price-row:hover { color: var(--accent-color); padding-left: 10px; }
+        .price-row:last-child { border-bottom: none; }
+        .p-name { font-family: var(--font-mono); font-weight: 700; font-size: 1rem; }
+        .p-val { font-family: var(--font-mono); font-weight: 700; color: var(--accent-color); }
+        .packet-disclaimer { margin-top: 30px; font-size: 0.75rem; opacity: 0.6; font-family: var(--font-mono); line-height: 1.4; }
+
+        /* === KONTAKT === */
+        .contact-section { padding: 150px 5vw; background: var(--panel-bg); position: relative; z-index: 2; border-top: 1px solid var(--tech-line); }
+        .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+        .gold-icon-wrapper { width: 80px; height: 80px; margin-bottom: 30px; color: var(--accent-color); display: block; filter: drop-shadow(var(--accent-bloom)); }
+        .contact-info h2 { font-family: var(--font-head); font-size: 4rem; margin-bottom: 30px; color: var(--accent-color); text-shadow: var(--accent-bloom); }
+        .client-msg { font-size: 1.3rem; color: var(--accent-color); font-weight: bold; margin-bottom: 20px; line-height: 1.4; }
+        .contact-details { list-style: none; color: var(--text-color); opacity: 0.8; font-family: var(--font-mono); font-size: 1.1rem; letter-spacing: 1px; }
+        .contact-details li { margin-bottom: 10px; }
+        .tech-form input, .tech-form textarea, .tech-form select { width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--text-color); color: var(--text-color); padding: 20px 0; font-family: var(--font-mono); font-size: 1.2rem; opacity: 0.7; border-radius: 0; transition: border-color 0.3s, opacity 0.3s; }
+        .tech-form select { appearance: none; cursor: pointer; border: 1px solid var(--text-color); padding: 15px; margin-top: 10px; }
+        .tech-form select option { background: var(--bg-color); color: var(--text-color); }
+        .tech-form input:focus, .tech-form textarea:focus, .tech-form select:focus, .tech-form input:hover, .tech-form textarea:hover, .tech-form select:hover { outline: none; border-bottom: 1px solid var(--accent-color); opacity: 1; }
+        .tech-form select:focus, .tech-form select:hover { border: 1px solid var(--accent-color); }
+        .btn-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 40px; }
+        .submit-btn { background: transparent; color: var(--accent-color); border: 1px solid var(--accent-color); padding: 20px 60px; font-weight: 700; cursor: pointer; transition: 0.3s; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 1px; }
+        .submit-btn:hover { background: var(--accent-color); color: var(--bg-color); box-shadow: 0 0 20px var(--accent-color); }
+        
+        .calendly-btn { background: #fff; color: #000; border: 1px solid #fff; padding: 20px 40px; font-weight: 700; cursor: pointer; transition: 0.3s; font-family: var(--font-mono); text-transform: uppercase; }
+        .calendly-btn:hover { background: transparent; color: #fff; }
+        body.light-mode .calendly-btn { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+        body.light-mode .calendly-btn:hover { background: transparent; color: #1a1a1a; }
+        
+        .sticky-cta { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent-color); border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 4000; box-shadow: 0 0 20px var(--accent-bloom); animation: pulseBtn 3s infinite; color: #fff; cursor: pointer; border: none; }
+        @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.1); box-shadow: 0 0 30px var(--accent-color); } 100% { transform: scale(1); } }
+        .social-links { display: flex; flex-direction: row; gap: 20px; align-items: center; margin-top: 30px; }
+        .social-icon { color: var(--text-color); width: 24px; height: 24px; transition: 0.3s; opacity: 0.7; }
+        .social-icon:hover { color: var(--accent-color); opacity: 1; filter: drop-shadow(0 0 5px var(--accent-color)); }
+
+        footer { border-top: 1px solid var(--tech-line); background: var(--bg-color); padding: 20px 5vw; position: relative; margin-top: 50px; z-index: 2; }
+        .hud-footer { display: flex; justify-content: space-between; align-items: flex-end; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 1px; color: var(--text-color); opacity: 0.7; }
+        .hud-column { display: flex; flex-direction: column; gap: 5px; }
+        .gdpr-link { color: inherit; text-decoration: none; font-size: 0.7rem; border-bottom: 1px dotted currentColor; }
+
+        @media (max-width: 900px) {
+            .hero-section { padding-top: 100px; padding-bottom: 50px; min-height: 50vh; height: auto; } 
+            
+            .hero-title { font-size: 13vw; margin-top: 20px; }
+            .line-2 { margin: 0; } .line-3 { margin: 0; text-align: center; } 
+            
+            .contact-layout { 
+                display: flex; 
+                flex-direction: column; 
+                gap: 50px; 
+                width: 100%;
+                padding: 0; 
+            }
+            .contact-info h2 { font-size: 2.5rem; } 
+            .contact-section { overflow: hidden; } 
+            
+            .services-grid, .manifest-section, .portfolio-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .mode-group { transform: scale(0.8); margin-right: -10px; }
+            .hud-footer { flex-direction: column; align-items: center; gap: 30px; text-align: center; }
+            .hud-column { align-items: center; }
+            .left { order: 2; } .right { order: 1; }
+            .packet-content { padding: 40px 20px 20px; }
+            .packet-header { top: -10px; left: 0; }
+            .manifest-img { height: 300px; }
+            .ai-panel { padding: 20px; gap: 20px; }
+            
+            .section-header { font-size: 0.85rem; word-break: normal; white-space: nowrap; }
+            .mobile-center-fix { object-fit: contain !important; background: #000; }
+            
+            .hero-hub-container {
+                margin-top: 0;
+                margin-bottom: 20px;
+                width: 100%;
+                opacity: 1; animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="boot-text">SYSTEM_BOOT...</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+
+    <div class="cursor-dot"></div>
+    <div class="noise-overlay"></div>
+    <div class="film-gate-overlay"></div>
+    
+    <button class="sticky-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+    </button>
+
+    <div class="dust-container" id="dust-layer">
+        <div class="dust-speck" style="top: 10%; left: 20%; width: 2px; height: 2px; animation-duration: 25s;"></div>
+        <div class="dust-speck" style="top: 30%; left: 80%; width: 3px; height: 3px; animation-duration: 18s;"></div>
+        <div class="dust-speck" style="top: 70%; left: 40%; width: 4px; height: 4px; animation-duration: 30s;"></div>
+        <div class="dust-speck" style="top: 50%; left: 10%; width: 2px; height: 2px; animation-duration: 22s;"></div>
+        <div class="dust-speck" style="top: 20%; left: 60%; width: 1px; height: 1px; animation-duration: 40s;"></div>
+    </div>
+    
+    <div class="site-content">
+        
+        <nav class="film-strip-nav">
+            <div class="logo hacker-text" data-value="17 STUDIOS">
+                <span style="font-weight: 900; font-size: 1.5rem;">17</span> STUDIOS
+                <span class="rec-dot"></span>
+            </div>
+            
+            <div class="nav-right-group">
+                <div class="mode-group" id="theme-switch-wrapper">
+                    <span class="mode-label">Mode</span>
+                    <div class="tech-switch"><div class="switch-piston"></div></div>
+                </div>
+                <button class="menu-trigger hacker-text" data-value="/// MENU">/// MENU</button>
+            </div>
+        </nav>
+
+        <section id="home" class="hero-section">
+            
+            <div class="hero-hub-container">
+                <div class="hub-stem"></div>
+                
+                <div class="hub-crossbar-wrapper">
+                    <div class="hub-crossbar"></div> 
+                    
+                    <div class="hub-legs">
+                        <div class="hub-leg-group" onclick="selectService('Videografia', 'Konzultácia')">
+                            <div class="hub-tick"></div>
+                            <span class="hub-num">01</span>
+                            <span class="hub-label">VIDEO</span>
+                        </div>
+                        
+                        <div class="hub-leg-group" onclick="selectService('Fotografia', 'Konzultácia')">
+                            <div class="hub-tick"></div>
+                            <span class="hub-num">02</span>
+                            <span class="hub-label">FOTO</span>
+                        </div>
+                        
+                        <div class="hub-leg-group" onclick="selectService('Digital Art', 'Konzultácia')">
+                            <div class="hub-tick"></div>
+                            <span class="hub-num">03</span>
+                            <span class="hub-label">DIGITAL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="line-1">Kamera</span>
+                <span class="line-2">Svetlá &</span>
+                <span class="line-3">Emócia</span>
+            </h1>
+        </section>
+
+        <section class="manifest-section">
+            <div class="manifest-img">
+                <div class="yt-bg-wrapper">
+                    <iframe src="https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&controls=0&loop=1&playlist=UfeqKCXXi-g&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div> 
+            <div class="manifest-text">
+                <h2>/// VÍZIA</h2>
+                <div class="data-stream">
+                    <div class="stream-block">
+                        <span class="stream-label">[01] IDENTITY</span>
+                        <div class="stream-content">
+                            Komplexná vizuálna identita bez kompromisov. V 17STUDIOS meníme myšlienky na hmatateľný digitálny obsah.
+                        </div>
+                    </div>
+
+                    <div class="stream-block">
+                        <span class="stream-label">[02] PROTOCOLS</span>
+                        <div class="stream-content">
+                            / Videografia<br>
+                            / Fotografia<br>
+                            / Digital Art
+                        </div>
+                    </div>
+
+                    <div class="stream-block">
+                        <span class="stream-label">[03] RANGE</span>
+                        <div class="stream-content">
+                            Sídlo: Prievidza.<br>
+                            Dosah: Kamkoľvek.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery" class="portfolio-section">
+            <span class="section-header hacker-text" data-value="SELECTED WORKS">SELECTED WORKS</span>
+            
+            <div class="portfolio-category">
+                <h3 class="category-title">VIDEOGRAFIA</h3>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item video-item">
+                        <div class="yt-bg-wrapper">
+                             <iframe src="https://www.youtube.com/embed/vMazDgh0wMo?autoplay=1&mute=1&controls=0&loop=1&playlist=vMazDgh0wMo&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="portfolio-tag">PROJECT_ALPHA</div>
+                        <div class="portfolio-title-box">Hudobný klip</div>
+                    </div>
+                    <div class="portfolio-item video-item">
+                        <div class="yt-bg-wrapper">
+                             <iframe src="https://www.youtube.com/embed/i0jR2p-oiWQ?autoplay=1&mute=1&controls=0&loop=1&playlist=i0jR2p-oiWQ&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="portfolio-tag">PROJECT_BETA</div>
+                        <div class="portfolio-title-box">Aftermovie</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="tech-divider">
+
+            <div class="portfolio-category">
+                <h3 class="category-title">FOTOGRAFIA</h3>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item slideshow-item">
+                        <img src="humans_1.jpg" class="slide active">
+                        <img src="humans_2.jpg" class="slide">
+                        <img src="humans_3.jpg" class="slide">
+                        <div class="portfolio-tag">PROJECT_GAMMA</div>
+                        <div class="portfolio-title-box">HUMANS</div>
+                    </div>
+                    
+                    <div class="portfolio-item slideshow-item">
+                        <img src="brands_1.jpg" class="slide active">
+                        <img src="brands_2.jpg" class="slide">
+                        <img src="brands_3.jpg" class="slide">
+                        <div class="portfolio-tag">PROJECT_DELTA</div>
+                        <div class="portfolio-title-box">BRANDS</div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="tech-divider">
+
+            <div class="portfolio-category">
+                <h3 class="category-title">DIGITAL ART</h3>
+                <div class="portfolio-grid">
+                    <div class="portfolio-item slideshow-item">
+                        <img src="art_1.jpg" class="slide active">
+                        <img src="art_2.jpg" class="slide">
+                        <div class="portfolio-tag">PROJECT_EPSILON</div>
+                        <div class="portfolio-title-box">Visual Art</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="ai-labs-section">
+            <span class="section-header hacker-text" data-value="AI_LABS // VISION_GENESIS">AI_LABS // VISION_GENESIS</span>
+            <div class="ai-panel">
+                <div class="ai-input-group">
+                    <h3 style="font-family:var(--font-head); font-size:1.5rem;">Kreatívny Koncept</h3>
+                    <p class="ai-desc">Máte víziu, ale neviete ju opísať? Zadajte hrubú predstavu a naša AI vytvorí filmový koncept, mood a vizuálny štýl projektu.</p>
+                    <textarea id="vision-input" class="ai-input" rows="4" placeholder="Napr.: Romantická svadba pri západe slnka, lúka plná kvetov, zlatá hodinka..."></textarea>
+                    <button id="vision-btn" class="glow-btn">GENEROVAŤ KONCEPT ✨</button>
+                </div>
+                <div id="vision-result" class="ai-result-display">[ ČAKÁM NA VSTUPNÉ DÁTA... ]</div>
+            </div>
+        </section>
+
+        <div class="game-section">
+            <div class="game-wrapper">
+                <div class="game-label">/// ARCHETYPE_ANALYZER</div>
+                <div id="tip-text" class="tip-display">
+                    <span class="game-init-text" style="font-size:2rem; font-family:var(--font-head);">AKÝ JE VÁŠ ARCHETYP?</span>
+                    <input type="text" id="archetype-input" class="game-input" placeholder="Zadajte slovo (napr. búrka)..." autocomplete="off">
+                </div>
+                <button id="tip-btn" class="tip-btn">NÁJSŤ SVOJ ARCHETYP ✨</button>
+            </div>
+        </div>
+
+        <section id="services" class="services-section">
+            <div class="services-header-wrapper">
+                <h2 class="services-main-title">CENNÍK</h2>
+                <div class="services-hint">[ KLIKNITE NA KARTU PRE ZOBRAZENIE ]</div>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card" onclick="openModal('modal-video')">
+                    <div class="yt-bg-wrapper card-bg-media">
+                         <iframe src="https://www.youtube.com/embed/em7w-iKJnCU?autoplay=1&mute=1&controls=0&loop=1&playlist=em7w-iKJnCU&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                    <div class="service-content-wrapper">
+                        <span class="service-icon">◉</span><h3 class="service-title" data-value="Videografia">Videografia</h3>
+                        <p class="service-desc">Filmový storytelling, hudobné klipy, reklamné spoty.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="openModal('modal-photo')">
+                    <img src="Cestný Pirát 9.jpg" onerror="this.src='https://images.unsplash.com/photo-1558981403-c5f9899a28bc'" alt="Moto" class="card-bg-media">
+                    <div class="service-content-wrapper">
+                        <span class="service-icon">▣</span><h3 class="service-title" data-value="Fotografia">Fotografia</h3>
+                        <p class="service-desc">Portréty, editoriály a zachytenie atmosféry.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="openModal('modal-art')">
+                    <img src="digital-art.jpg" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe'" alt="Art" class="card-bg-media">
+                    <div class="service-content-wrapper">
+                        <span class="service-icon">◈</span><h3 class="service-title" data-value="Digital Art">Digital Art</h3>
+                        <p class="service-desc">Abstraktné vizuály a experimentálna grafika.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials-section">
+            <span class="section-header hacker-text" data-value="CLIENT_LOGS">CLIENT_LOGS</span>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="log-header">> LOG_ENTRY_01</div>
+                    <p class="quote">"S Matejom som spolupracoval dvakrát a vždy veľká spokojnosť s výsledným videom. Znova ďakujem za spoluprácu a odporúčam!"</p>
+                    <span class="author">Radoslav H.</span>
+                </div>
+                <div class="testimonial-card">
+                    <div class="log-header">> LOG_ENTRY_02</div>
+                    <p class="quote">"Donor mi splnil môj dievčenský sen a fotky sú naozaj krásne - ako z iného vesmíru. Ďakujeem. :)"</p>
+                    <span class="author">Kristína K.</span>
+                </div>
+                <div class="testimonial-card">
+                    <div class="log-header">> LOG_ENTRY_03</div>
+                    <p class="quote">"Naše svadobné fotky a krátke video z pytačiek sa Maťovi veľmi podarili a aj s prístupom sme boli veľmi spokojní!"</p>
+                    <span class="author">Igor H.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="contact-layout">
+                <div class="contact-info">
+                    <div class="gold-icon-wrapper"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="12" r="6" /><circle cx="16" cy="12" r="6" /></svg></div>
+                    <h2>Spolupráca</h2>
+                    <p class="client-msg">Zrealizujme Vašu víziu.</p>
+                    <ul class="contact-details"><li>matejkakis@gmail.com</li><li>0902 385 807</li></ul>
+                    
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/donorvisuals" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
+                        <a href="https://www.facebook.com/MatejKakisDonor" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+                        <a href="https://www.tiktok.com/@donorvisuals" target="_blank" class="social-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg></a>
+                    </div>
+                </div>
+                
+                <form class="tech-form" action="https://formsubmit.co/el/zefupa" method="POST">
+                    <input type="hidden" name="_subject" value="Nová správa z 17 STUDIOS">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://donorvisuals.com/"> 
+                    <input type="hidden" name="_template" value="table">
+
+                    <div style="margin-bottom:30px;"><label style="color:var(--accent-color); font-size:0.7rem; letter-spacing:2px;">MENO</label><input type="text" name="meno" placeholder="_" required></div>
+                    <div style="margin-bottom:30px;"><label style="color:var(--accent-color); font-size:0.7rem; letter-spacing:2px;">SLUŽBA</label><select id="form-service-select" name="sluzba"><option value="Videografia">Videografia</option><option value="Fotografia">Fotografia</option><option value="Digital Art">Digital Art</option></select></div>
+                    <div style="margin-bottom:30px;"><label style="color:var(--accent-color); font-size:0.7rem; letter-spacing:2px;">SPRÁVA</label><textarea id="form-message" name="sprava" rows="3" placeholder="..." required></textarea></div>
+                    
+                    <div class="btn-group">
+                        <button type="submit" class="submit-btn">ODOSLAŤ</button>
+                        <button type="button" class="calendly-btn" onclick="alert('Tu vlož svoj Calendly link!')">REZERVOVAŤ CALL</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <footer>
+            <div class="hud-footer">
+                <div class="hud-column left">
+                    <div style="color:red; font-weight:700;">REC <span style="display:inline-block;width:8px;height:8px;background:red;border-radius:50%;animation:blink 2s infinite;"></span></div>
+                    <div id="timecode">00:00:00:00</div>
+                </div>
+                <div class="hud-column right">
+                    <a href="#" class="gdpr-link">GDPR & Privacy</a>
+                    <span>© 2025</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal-backdrop" id="modal-video"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: VIDEO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-video')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK VIDEO</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Videografia', 'Hudobný Klip')"><span class="p-name">HUDOBNÝ KLIP</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Videografia', 'Event / Aftermovie')"><span class="p-name">EVENT / AFTERMOVIE</span><span class="p-val">od €400</span></li><li class="price-row" onclick="selectService('Videografia', 'Reels Content')"><span class="p-name">REELS / SHORTS</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Videografia', 'Kampaň / Reklama')"><span class="p-name">KAMPAŇ / REKLAMA</span><span class="p-val">od €900</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
+    <div class="modal-backdrop" id="modal-photo"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: PHOTO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-photo')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK FOTOGRAFIA</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Fotografia', 'Portrétne Fotenie')"><span class="p-name">PORTRÉTNE FOTENIE (1h)</span><span class="p-val">€150</span></li><li class="price-row" onclick="selectService('Fotografia', 'Event Report')"><span class="p-name">EVENT REPORT (4h)</span><span class="p-val">€400</span></li><li class="price-row" onclick="selectService('Fotografia', 'Editorial / Brand')"><span class="p-name">EDITORIAL / BRAND</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Fotografia', 'Celý Deň')"><span class="p-name">CELÝ DEŇ (8h)</span><span class="p-val">€800</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
+    <div class="modal-backdrop" id="modal-art"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: ART_SERVICES</div><button class="packet-close" onclick="closeModal('modal-art')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">VISUAL ART</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Digital Art', 'Cover Art / Poster')"><span class="p-name">COVER ART / PLAGÁT</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Digital Art', 'Visual Art na mieru')"><span class="p-name">VISUAL ART / PS ÚPRAVA</span><span class="p-val">od €250</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
+
+    <button id="close-btn">ZAVRIEŤ [X]</button>
+    
+    <div class="nav-overlay">
+        <ul class="nav-links">
+            <li><span class="nav-num">01</span><a href="#home" class="hacker-text" data-value="Intro">Intro</a></li>
+            <li><span class="nav-num">02</span><a href="#services" class="hacker-text" data-value="Služby">Služby</a></li>
+            <li><span class="nav-num">03</span><a href="#gallery" class="hacker-text" data-value="Portfólio">Portfólio</a></li>
+            <li><span class="nav-num">04</span><a href="#contact" class="hacker-text" data-value="Kontakt">Kontakt</a></li>
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const apiKey = ""; // API Key
+
+            // --- PRELOADER & HERO SYNC ---
+            const preloader = document.getElementById('preloader');
+            const progressFill = document.querySelector('.progress-fill');
+            
+            setTimeout(() => { progressFill.style.width = "60%"; }, 100);
+            setTimeout(() => { progressFill.style.width = "100%"; }, 400);
+            setTimeout(() => { 
+                preloader.style.opacity = '0';
+                setTimeout(() => { 
+                    preloader.style.display = 'none'; 
+                    body.classList.add('loaded'); 
+                }, 400); 
+            }, 800);
+
+            // --- OPTIMALIZOVANÝ HACKER EFFECT ---
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+";
+
+            const runHackerEffect = (target) => {
+                if (target.dataset.animating === "true") return;
+                
+                target.dataset.animating = "true";
+                let frame = 0;
+                let iterations = 0;
+                const originalText = target.dataset.value;
+                
+                const animate = () => {
+                    frame++;
+                    if (frame % 2 === 0) {
+                        iterations += 1; 
+                        target.innerText = originalText.split("").map((letter, index) => {
+                            if(index < iterations) return originalText[index];
+                            return letters[Math.floor(Math.random() * letters.length)];
+                        }).join("");
+                    }
+                    if(iterations < originalText.length) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        target.dataset.animating = "false";
+                    }
+                };
+                requestAnimationFrame(animate);
+            };
+
+            const clearHackerEffect = (target) => {
+                target.innerText = target.dataset.value;
+                target.dataset.animating = "false";
+            };
+
+            document.querySelectorAll('.hacker-text').forEach(item => {
+                item.addEventListener('mouseenter', event => runHackerEffect(event.target));
+                item.addEventListener('mouseleave', event => clearHackerEffect(event.target));
+            });
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                   const title = card.querySelector('.service-title');
+                   if(title) runHackerEffect(title);
+                });
+                card.addEventListener('mouseleave', () => {
+                   const title = card.querySelector('.service-title');
+                   if(title) clearHackerEffect(title);
+                });
+            });
+
+            // --- MOBILNÝ "SPOTLIGHT" EFEKT (Touch Move) ---
+            if (window.innerWidth < 900) {
+                const cards = document.querySelectorAll('.service-card');
+                
+                const clearCards = () => {
+                    cards.forEach(c => {
+                        c.classList.remove('mobile-active');
+                    });
+                };
+
+                window.addEventListener('touchmove', (e) => {
+                    const touch = e.touches[0];
+                    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+                    
+                    if (target) {
+                        const card = target.closest('.service-card');
+                        
+                        if (card && !card.classList.contains('mobile-active')) {
+                            clearCards(); 
+                            card.classList.add('mobile-active'); 
+                            
+                            const title = card.querySelector('.service-title');
+                            if(title) runHackerEffect(title);
+                        } 
+                    }
+                }, { passive: true });
+                
+                cards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        clearCards();
+                        card.classList.add('mobile-active');
+                    });
+                });
+            }
+
+            // --- SMOOTH SLIDESHOW LOGIC ---
+            document.querySelectorAll('.slideshow-item').forEach(item => {
+                let slides = item.querySelectorAll('.slide');
+                let index = 0;
+                setInterval(() => {
+                    slides[index].classList.remove('active');
+                    index = (index + 1) % slides.length;
+                    slides[index].classList.add('active');
+                }, 3500); 
+            });
+
+            // --- OPTIMALIZOVANÝ DUST ---
+            const dustLayer = document.getElementById('dust-layer');
+            let ticking = false;
+            document.addEventListener('mousemove', (e) => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const x = (window.innerWidth - e.pageX * 2) / 100;
+                        const y = (window.innerHeight - e.pageY * 2) / 100;
+                        if(dustLayer) dustLayer.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+
+            // --- THEME & NAV ---
+            const themeSwitch = document.getElementById('theme-switch-wrapper');
+            themeSwitch.addEventListener('click', () => body.classList.toggle('light-mode'));
+
+            const menuBtn = document.querySelector('.menu-trigger');
+            const closeBtn = document.getElementById('close-btn');
+            const navOverlay = document.querySelector('.nav-overlay');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            const openMenu = () => { navOverlay.classList.add('active'); body.classList.add('menu-open'); menuBtn.style.opacity = '0'; menuBtn.style.pointerEvents = 'none'; closeBtn.style.display = 'block'; };
+            const closeMenu = () => { navOverlay.classList.remove('active'); body.classList.remove('menu-open'); menuBtn.style.opacity = '1'; menuBtn.style.pointerEvents = 'auto'; closeBtn.style.display = 'none'; };
+            menuBtn.addEventListener('click', openMenu); closeBtn.addEventListener('click', closeMenu); navLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+            window.openModal = (id) => { document.getElementById(id).classList.add('active'); body.classList.add('modal-open'); document.querySelector('.site-content').style.filter = "blur(5px)"; };
+            window.closeModal = (id) => { document.getElementById(id).classList.remove('active'); body.classList.remove('modal-open'); document.querySelector('.site-content').style.filter = "none"; };
+            
+            window.selectService = (category, serviceName) => {
+                document.querySelectorAll('.modal-backdrop').forEach(el => el.classList.remove('active'));
+                body.classList.remove('modal-open'); document.querySelector('.site-content').style.filter = "none";
+                const contactSection = document.getElementById('contact'); contactSection.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    document.getElementById('form-service-select').value = category;
+                    document.getElementById('form-message').value = `Dobrý deň,\n\nMal by som záujem o službu "${serviceName}".`;
+                    document.getElementById('form-message').focus();
+                }, 800);
+            };
+
+            const cursor = document.querySelector('.cursor-dot');
+            document.addEventListener('mousemove', (e) => { 
+                if(window.innerWidth > 1024) {
+                    requestAnimationFrame(() => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+                }
+            });
+            const clickables = document.querySelectorAll('a, button, .service-card, input, select, .mode-group, .price-row, .social-icon, .portfolio-item, textarea, .hub-leg-group');
+            clickables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.style.transform = "translate(-50%, -50%) scale(2.5)");
+                el.addEventListener('mouseleave', () => cursor.style.transform = "translate(-50%, -50%) scale(1)");
+            });
+
+            // ==========================================
+            // === GEMINI AI INTEGRATION (HYBRID) ===
+            // ==========================================
+
+            async function callGemini(userPrompt, systemPrompt) {
+                if (!apiKey) throw new Error("No Key"); 
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: userPrompt }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] },
+                    generationConfig: { responseMimeType: "application/json" }
+                };
+                const response = await fetch(url, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+                });
+                if (!response.ok) throw new Error('API Error');
+                const data = await response.json();
+                return JSON.parse(data.candidates[0].content.parts[0].text);
+            }
+
+            // --- 1. VISION GENESIS (MOCK) ---
+            const visionBtn = document.getElementById('vision-btn');
+            const visionInput = document.getElementById('vision-input');
+            const visionResult = document.getElementById('vision-result');
+
+            const visionPresets = [
+                { keywords: ['tma', 'noc', 'dark', 'neón', 'mesto', 'city'], title: 'NEON_NOIR', style: 'Cyberpunk / High Contrast', desc: 'Vizuál zachytáva kontrast medzi chladným betónom a pulzujúcim teplým svetlom v nočnom meste.' },
+                { keywords: ['les', 'príroda', 'hory', 'voda', 'svetlo', 'nature'], title: 'ORGANIC_FLOW', style: 'Natural Light / Ethereal', desc: 'Surová krása prírody zachytená cez jemné, difúzne svetlo a makro detaily.' },
+                { keywords: ['auto', 'rýchlosť', 'šport', 'pohyb', 'dynamika', 'car'], title: 'ADRENALINE_RUSH', style: 'Fast Cuts / Motion Blur', desc: 'Agresívny strih a dynamická kamera sledujúca objekt v pohybe pre maximálny efekt rýchlosti.' },
+                { keywords: ['svadba', 'láska', 'love', 'wedding', 'pár'], title: 'ETERNAL_BOND', style: 'Cinematic / Warm Tones', desc: 'Zameranie na intímne momenty a emócie s použitím hĺbky ostrosti a teplých tónov.' }
+            ];
+            const fallbackVision = { title: "VISUAL_ECHO", style: "Experimental / Abstract", desc: "Abstraktná kompozícia hrajúca sa s textúrami a svetlom pre vytvorenie unikátnej atmosféry." };
+
+            visionBtn.addEventListener('click', async () => {
+                const text = visionInput.value.trim().toLowerCase();
+                if (!text) return;
+
+                visionBtn.innerText = "SPRACOVÁVAM DÁTA...";
+                visionBtn.disabled = true;
+                visionResult.innerHTML = "/// ANALYZING INPUT STREAM...<br>/// ACCESSING CREATIVE DATABASE...";
+
+                try {
+                    let data;
+                    if(apiKey) {
+                        const systemPrompt = "Ste kreatívny riaditeľ v '17 STUDIOS'. Vráť JSON: { title, style, description (2 vety po slovensky) }.";
+                        data = await callGemini(text, systemPrompt);
+                    } else {
+                        await new Promise(r => setTimeout(r, 1500)); 
+                        data = visionPresets.find(preset => preset.keywords.some(k => text.includes(k))) || fallbackVision;
+                    }
+                    
+                    visionResult.innerHTML = `<div style="width:100%"><div style="border-bottom:1px solid var(--accent-color); padding-bottom:10px; margin-bottom:15px; color:var(--accent-color); font-weight:bold; letter-spacing:2px;">PROJEKT: ${data.title}</div><div style="font-size:0.8rem; margin-bottom:15px; opacity:0.8;">ŠTÝL: [ ${data.style} ]</div><div style="line-height:1.6; font-style:italic; margin-bottom:20px;">"${data.desc || data.description}"</div><div style="margin-top:20px; text-align:center; border-top:1px dashed var(--tech-line); padding-top:20px;"><button onclick="useAiConcept('${data.title}', '${(data.desc || data.description).replace(/'/g, "\\'")}')" class="glow-btn" style="font-size:0.8rem; padding:10px 20px; width:100%;">POUŽIŤ KONCEPT V SPRÁVE ↓</button></div></div>`;
+                    visionResult.classList.add('has-content');
+                    visionBtn.innerText = "GENEROVAŤ NOVÝ KONCEPT ✨";
+                } catch (e) {
+                    visionResult.innerText = "ERROR: CONNECTION INTERRUPTED.";
+                    visionBtn.innerText = "SKÚSIŤ ZNOVU";
+                } finally {
+                    visionBtn.disabled = false;
+                }
+            });
+
+            window.useAiConcept = (title, desc) => {
+                const contactSection = document.getElementById('contact');
+                const msgBox = document.getElementById('form-message');
+                contactSection.scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    msgBox.value = `Dobrý deň,\n\nZaujal ma tento AI koncept:\n\nPROJEKT: ${title}\nPOPIS: ${desc}\n\nRád by som to s vami prebral.`;
+                    msgBox.focus();
+                }, 800);
+            };
+
+            // --- 2. ARCHETYPE ANALYZER ---
+            const tipBtn = document.getElementById('tip-btn'); 
+            const tipText = document.getElementById('tip-text');
+            const archInput = document.getElementById('archetype-input');
+            
+            const archetypesDB = [
+                { id: 'dreamer', title: "HĽADAČ SNOV", keywords: ['sen', 'snívať', 'nebo', 'mraky', 'hviezdy', 'noc', 'mesiac', 'láska', 'duša'], desc: "Vidíte krásu tam, kde iní vidia všednosť. Nechajte sa uniesť emóciou." },
+                { id: 'rebel', title: "REBEL", keywords: ['chaos', 'tma', 'oheň', 'cesta', 'zmena', 'hluk', 'sila', 'protest', 'hnev'], desc: "Nejdete s davom. Váš životný štýl je odvážny. Nebojte sa byť iný." },
+                { id: 'magician', title: "ALCHYMISTA", keywords: ['zmena', 'zlato', 'mágia', 'tajomstvo', 'vzorec', 'veda', 'vesmír'], desc: "Meníte obyčajné momenty na zlato. Hľadajte svetlo v tme." },
+                { id: 'sage', title: "POZOROVATEĽ", keywords: ['ticho', 'detail', 'pravda', 'kniha', 'múdrosť', 'pokoj', 'čas'], desc: "Máte radi hĺbku a detaily v tichých momentoch. V jednoduchosti je sila." },
+                { id: 'explorer', title: "ŽIVEL", keywords: ['pohyb', 'sila', 'cesta', 'vietor', 'more', 'beh', 'šport', 'akcia'], desc: "Ste plný energie a pohybu. Potrebujete dynamiku. Zachyťte ten moment navždy." },
+                { id: 'creator', title: "TVORCA", keywords: ['umenie', 'nápad', 'stavba', 'dizajn', 'nové', 'farba', 'štetec'], desc: "Vaša predstavivosť nemá hranice. Dávate myšlienkam reálny tvar." },
+                { id: 'ruler', title: "VLÁDCA", keywords: ['moc', 'luxus', 'poriadok', 'úspech', 'peniaze', 'firma', 'vedenie'], desc: "Máte radi poriadok a kontrolu. Váš vizuál musí byť precízny a dominantný." },
+                { id: 'caregiver', title: "OPATROVATEĽ", keywords: ['rodina', 'pomoc', 'teplo', 'domov', 'dieťa', 'láska', 'starostlivosť'], desc: "Chránite to, na čom záleží. Vaša sila je v empatii a ľudskosti." },
+                { id: 'lover', title: "MILENEC", keywords: ['vášeň', 'krása', 'dotyk', 'srdce', 'romantika', 'vzťah', 'blízkosť'], desc: "Vášeň je váš motor. Vnímate svet všetkými zmyslami a hľadáte intimitu." },
+                { id: 'innocent', title: "NEVINNÝ", keywords: ['svetlo', 'čistota', 'radosť', 'biely', 'nádej', 'začiatok', 'úsmev'], desc: "Hľadáte čistotu a jednoduchosť. Svetlo je váš najlepší sprievodca." },
+                { id: 'jester', title: "ZABÁVAČ", keywords: ['smiech', 'zábava', 'vtip', 'hra', 'farby', 'párty', 'radosť'], desc: "Život je hra. Hľadáte radosť a farby aj v šedi bežných dní." },
+                { id: 'everyman', title: "REALISTA", keywords: ['ulica', 'život', 'realita', 'pravda', 'ľudia', 'dav', 'mesto'], desc: "Stojíte nohami pevne na zemi. Hľadáte surovú autenticitu bez príkras." }
+            ];
+
+            function getArchetype(input) {
+                const lowerInput = input.toLowerCase();
+                const found = archetypesDB.find(arch => arch.keywords.some(keyword => lowerInput.includes(keyword)));
+                return found || archetypesDB[Math.floor(Math.random() * archetypesDB.length)];
+            }
+
+            function showResult(data, forcedDiscount) { 
+                const discountValue = data.discount || forcedDiscount;
+                
+                tipText.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center; gap:10px; width:100%;"><span style="font-size:0.6rem; letter-spacing:2px; opacity:0.7; font-family:var(--font-mono);">VÁŠ ARCHETYP</span><span class="result-title blink-glow" style="font-family:var(--font-head); font-size:2.5rem; color:var(--accent-color);">${data.title}</span><span class="result-desc" style="font-family:var(--font-mono); font-size:0.9rem; max-width:90%; padding:10px 0;">"${data.desc}"</span><div class="discount-container"><div class="result-bg-flash"></div><div class="discount-label">ZĽAVOVÝ KÓD (-${discountValue}%)</div><span class="result-code">DONOR${discountValue}</span></div></div>`; 
+                tipBtn.innerText = "KÓD ULOŽENÝ"; 
+                tipBtn.disabled = true; 
+                tipBtn.style.opacity = "0.5"; 
+            }
+
+            const savedData = localStorage.getItem('donorUserResult');
+            if (savedData) { 
+                try {
+                    const parsed = JSON.parse(savedData);
+                    if (!parsed.title || parsed.title === "undefined" || !parsed.discount) {
+                        localStorage.removeItem('donorUserResult'); 
+                    } else {
+                        archInput.style.display = "none";
+                        showResult(parsed, parsed.discount); 
+                    }
+                } catch(e) {
+                    localStorage.removeItem('donorUserResult');
+                }
+            }
+
+            tipBtn.addEventListener('click', async () => {
+                const inputText = archInput.value.trim();
+                if (!inputText) {
+                   archInput.style.borderBottomColor = "red";
+                   setTimeout(() => archInput.style.borderBottomColor = "", 1000);
+                   return;
+                }
+
+                tipBtn.style.display = "none";
+                archInput.style.display = "none";
+                
+                let steps = ["PRIPÁJAM SA...", "HĽADÁM VZORCE...", "HOTOVO."];
+                let stepIndex = 0;
+                tipText.innerHTML = `<div style="font-family:var(--font-mono); color:var(--accent-color); font-size:1.2rem;">${steps[0]}</div>`;
+                
+                const interval = setInterval(() => { 
+                    stepIndex++;
+                    if(stepIndex < steps.length) {
+                        tipText.innerHTML = `<div style="font-family:var(--font-mono); color:var(--accent-color); font-size:1.2rem;">${steps[stepIndex]}</div>`;
+                    }
+                }, 1000);
+
+                const guaranteedDiscount = Math.floor(Math.random() * 6) + 5; 
+
+                try {
+                    let aiData;
+                    if(apiKey) {
+                        const systemPrompt = "Analyzuj vstupné slovo a urči archetyp. Vráť JSON: { title, desc }.";
+                        aiData = await callGemini(inputText, systemPrompt);
+                    } else {
+                        await new Promise(r => setTimeout(r, 2000));
+                        aiData = getArchetype(inputText);
+                    }
+                    
+                    clearInterval(interval);
+                    
+                    const finalResult = { ...aiData, discount: guaranteedDiscount };
+                    localStorage.setItem('donorUserResult', JSON.stringify(finalResult));
+                    
+                    showResult(aiData, guaranteedDiscount);
+
+                } catch (e) {
+                    clearInterval(interval);
+                    const random = archetypesDB[Math.floor(Math.random() * archetypesDB.length)];
+                    const safeResult = { title: random.title, desc: random.desc, discount: guaranteedDiscount };
+                    localStorage.setItem('donorUserResult', JSON.stringify(safeResult));
+                    showResult(safeResult, guaranteedDiscount);
+                }
+            });
+            
+            const timecodeEl = document.getElementById('timecode');
+            setInterval(() => { const now = new Date(); timecodeEl.innerText = now.toLocaleTimeString() + ':' + String(Math.floor(now.getMilliseconds()/10)).padStart(2,'0'); }, 40);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISUALS | MANIAC LAB</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@400;600;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* MANIAC PALETTE */
+            --bg-color: #f4f1ea;        /* Off-white / Cream */
+            --text-color: #222222;      /* Dark Grey */
+            --accent-color: #ff4400;    /* Safety Orange */
+            --secondary-accent: #008080; /* Teal/Green retro */
+            --gold-color: #d4af37;      /* Ponechávam pre kontinuitu, ale menej výrazné */
+            --tech-line: #ccc;
+            
+            --font-head: 'Work Sans', sans-serif; /* Viac "Lab" font */
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-mono);
+            overflow-x: hidden; line-height: 1.6; cursor: none;
+        }
+        body.menu-open { overflow: hidden; height: 100vh; }
+
+        /* Retro Noise (Film Grain) - Tmavý na svetlom */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 50; mix-blend-mode: multiply; opacity: 0.15;
+        }
+
+        .cursor-dot {
+            width: 12px; height: 12px;
+            background-color: var(--accent-color);
+            /* Štvorec namiesto kruhu pre retro digitálny feel */
+            border-radius: 2px; 
+            position: fixed; top: 0; left: 0;
+            pointer-events: none; z-index: 10000;
+            mix-blend-mode: multiply;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s;
+        }
+
+        /* HEADER */
+        .film-strip-nav {
+            position: fixed; top: 0; left: 0; width: 100%; padding: 30px 60px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 2000; background: rgba(244, 241, 234, 0.9);
+            border-bottom: 2px solid #222;
+        }
+        .logo { font-family: var(--font-head); font-weight: 900; font-size: 1.5rem; text-transform: uppercase; letter-spacing: -1px; }
+        .menu-trigger {
+            background: #222; color: #fff; border: none; padding: 10px 25px;
+            font-family: var(--font-mono); font-weight: 700; cursor: pointer;
+            box-shadow: 4px 4px 0px var(--accent-color); /* Retro tieň */
+            transition: 0.2s;
+        }
+        .menu-trigger:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--accent-color); }
+        #close-btn { position: fixed; top: 30px; right: 60px; background: #222; color: #fff; padding: 10px; border: none; z-index: 9999; display: none; cursor: pointer; }
+
+        /* MENU - CLEAN LIST */
+        .nav-overlay { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: var(--bg-color); display: flex; flex-direction: column; justify-content: center; align-items: center; transition: right 0.5s cubic-bezier(0.8, 0, 0.2, 1); z-index: 3000; }
+        .nav-overlay.active { right: 0; }
+        
+        .nav-links li a {
+            font-family: var(--font-head); font-weight: 900; font-size: 4rem; color: #ccc;
+            text-decoration: none; text-transform: uppercase; transition: 0.3s;
+            -webkit-text-stroke: 1px #222; color: transparent; /* Outline text */
+        }
+        .nav-links li a:hover { color: var(--accent-color); -webkit-text-stroke: 0px; }
+
+        /* HERO - Clean & Optimistic */
+        .hero-section { padding: 180px 5vw 80px; min-height: 95vh; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .hero-title { font-family: var(--font-head); font-weight: 900; font-size: 5vw; line-height: 1; color: #222; }
+        .hero-image-wrapper { 
+            width: 100%; height: 60vh; background: #ddd; border: 2px solid #222; 
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.1); /* Retro tieň */
+            overflow: hidden;
+        }
+        .hero-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); transition: 0.5s; }
+        .hero-image-wrapper:hover .hero-img { filter: grayscale(0%); }
+
+        /* HRA - LAB TERMINAL */
+        .game-section { padding: 60px 5vw; background: #e8e6df; border-top: 2px solid #222; border-bottom: 2px solid #222; }
+        .game-wrapper { max-width: 600px; margin: 0 auto; text-align: center; border: 2px solid #222; padding: 30px; background: #fff; }
+        .game-label { background: #222; color: #fff; display: inline-block; padding: 5px 10px; margin-bottom: 20px; font-weight: 700; }
+        .tip-display { font-family: var(--font-mono); font-size: 1.2rem; min-height: 80px; display: flex; align-items: center; justify-content: center; color: var(--secondary-accent); font-weight: 700; }
+        .tip-btn { background: var(--accent-color); color: #fff; border: 2px solid #222; padding: 15px 30px; font-weight: 700; cursor: pointer; box-shadow: 4px 4px 0 #222; transition: 0.1s; }
+        .tip-btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 #222; }
+
+        /* SLUŽBY - CARDS */
+        .services-section { padding: 100px 5vw; }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+        .service-card { 
+            background: #fff; border: 2px solid #222; padding: 40px 20px; text-align: center; 
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+        .service-card:hover { transform: translateY(-5px); box-shadow: 10px 10px 0px rgba(0,0,0,0.1); }
+        
+        /* Pre čitateľnosť textu na svetlom pozadí karty */
+        .service-title { font-family: var(--font-head); font-weight: 900; font-size: 2rem; color: #222; margin-bottom: 10px; position: relative; z-index: 2; }
+        .service-desc { color: #555; position: relative; z-index: 2; }
+        
+        .card-bg-media { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s; z-index: 0; }
+        .service-card:hover .card-bg-media { opacity: 0.2; } /* Jemne presvitá */
+
+        /* FOOTER - ANALOG LABEL STYLE */
+        .hud-footer { 
+            border-top: 4px solid #222; padding: 30px 5vw; background: #fff; color: #222;
+            display: flex; justify-content: space-between; font-weight: 700;
+        }
+        .rec-status { color: red; display: flex; align-items: center; gap: 5px; }
+        .rec-dot-ui { width: 10px; height: 10px; background: red; border-radius: 50%; animation: blink 1s steps(2, start) infinite; } /* Steps animácia je viac retro */
+
+        @media (max-width: 900px) {
+            .hero-section { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+            .hud-footer { flex-direction: column; align-items: center; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-dot"></div>
+    <div class="noise-overlay"></div>
+    <button id="close-btn">X</button>
+
+    <nav class="film-strip-nav">
+        <div class="logo">DONOR<span style="color:var(--accent-color)">.</span>VISUALS</div>
+        <button class="menu-trigger">MENU</button>
+    </nav>
+
+    <div class="nav-overlay">
+        <ul class="nav-links">
+            <li><a href="#home">01 Intro</a></li>
+            <li><a href="#services">02 Služby</a></li>
+            <li><a href="#gallery">03 Portfólio</a></li>
+            <li><a href="#contact">04 Kontakt</a></li>
+        </ul>
+    </div>
+
+    <div class="site-content">
+        <section id="home" class="hero-section">
+            <div class="hero-text">
+                <h1 class="hero-title">KAMERA<br>SVETLÁ<br><span style="color:var(--accent-color)">EMÓCIA</span></h1>
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1542202229-7d93c33f5d34?q=80&w=1200" class="hero-img">
+            </div>
+        </section>
+
+        <div class="game-section">
+            <div class="game-wrapper">
+                <div class="game-label">SUBJECT 01: CREATIVE ANALYSIS</div>
+                <div id="tip-text" class="tip-display">WAITING FOR INPUT...</div>
+                <button id="tip-btn" class="tip-btn">INITIALIZE</button>
+            </div>
+        </div>
+
+        <section id="services" class="services-section">
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3 class="service-title">VIDEOGRAFIA</h3>
+                    <p class="service-desc">Analógové teplo v digitálnom svete.</p>
+                </div>
+                <div class="service-card">
+                    <img src="Cestný Pirát 9.jpg" class="card-bg-media">
+                    <h3 class="service-title">FOTOGRAFIA</h3>
+                    <p class="service-desc">Zachytenie momentu. Surové a čisté.</p>
+                </div>
+                <div class="service-card">
+                    <h3 class="service-title">DIGITAL ART</h3>
+                    <p class="service-desc">Budúcnosť, ktorú si pamätáme.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="hud-footer">
+            <div class="rec-status"><span class="rec-dot-ui"></span>REC</div>
+            <div id="timecode">00:00:00</div>
+            <div>© 2025 DONOR</div>
+        </footer>
+    </div>
+
+    <script>
+        // Jednoduchý JS pre funkčnosť (Menu, Timecode, Hra)
+        const menuBtn = document.querySelector('.menu-trigger');
+        const closeBtn = document.getElementById('close-btn');
+        const navOverlay = document.querySelector('.nav-overlay');
+        const body = document.body;
+        
+        menuBtn.addEventListener('click', () => { navOverlay.classList.add('active'); body.classList.add('menu-open'); closeBtn.style.display='block'; });
+        closeBtn.addEventListener('click', () => { navOverlay.classList.remove('active'); body.classList.remove('menu-open'); closeBtn.style.display='none'; });
+
+        const cursor = document.querySelector('.cursor-dot');
+        document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+
+        const timecodeEl = document.getElementById('timecode');
+        setInterval(() => { const now = new Date(); timecodeEl.innerText = now.toLocaleTimeString(); }, 1000);
+
+        const tipBtn = document.getElementById('tip-btn');
+        const tipText = document.getElementById('tip-text');
+        const visions = ["STORY: NOSTALGIA / BONUS: +30MIN", "STORY: RAW ENERGY / BONUS: 4K DELIVERY", "STORY: PURE EMOTION / BONUS: TEASER"];
+        
+        tipBtn.addEventListener('click', () => {
+            tipText.innerText = "PROCESSING...";
+            setTimeout(() => {
+                tipText.innerText = visions[Math.floor(Math.random()*visions.length)];
+            }, 800);
+        });
+    </script>
+</body>
+</html>
