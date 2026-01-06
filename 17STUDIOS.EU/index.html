@@ -40,28 +40,30 @@
             --gate-shadow: inset 0 0 80px -20px #000;
         }
 
-        /* --- LIGHT MODE --- */
+        /* --- LIGHT MODE (MANIAC AESTHETIC FIX) --- */
         body.light-mode {
-            --bg-color: #E6E2D6;
+            /* Teplejšia, krémová retro biela (nie šedá) */
+            --bg-color: #F2F0E6; 
             --text-color: #1A1A1A;
             --accent-color: #cc3000;
             --gold-color: #B8860B;
             
-            --tech-line: rgba(0, 0, 0, 0.2);
-            --panel-bg: rgba(225, 221, 211, 0.95); 
+            --tech-line: rgba(0, 0, 0, 0.15);
+            --panel-bg: rgba(242, 240, 230, 0.95); 
             --modal-bg: #EAE6DC;
             --modal-border: #ccc;
-            --nav-bg: rgba(230, 226, 214, 0.95);
+            --nav-bg: rgba(242, 240, 230, 0.95);
             
             --text-bloom: none;
             --accent-bloom: none;
             --border-glow: none;
             
+            /* Jemnejší noise pre svetlý mód */
             --noise-blend: multiply;
-            --noise-opacity: 0.12;
+            --noise-opacity: 0.08; 
             --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
             
-            --gate-shadow: inset 0 0 60px -20px rgba(0,0,0,0.1);
+            --gate-shadow: inset 0 0 60px -20px rgba(0,0,0,0.05);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -79,7 +81,8 @@
             font-family: var(--font-mono);
             line-height: 1.6;
             cursor: none;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            /* OPTIMALIZÁCIA: Animujeme len farby, nie layout = plynulé ako maslo */
+            transition: background-color 0.4s ease, color 0.4s ease;
             will-change: background-color, color;
         }
 
@@ -99,12 +102,13 @@
             transform: translate(-50%, -50%);
             pointer-events: none;
             border: none;
-            opacity: 0.8; 
+            opacity: 0.7; 
+            /* Fix: Žiadny grayscale v light mode */
+            transition: opacity 0.5s ease;
         }
         
         body.light-mode .yt-bg-wrapper iframe {
-            opacity: 0.6;
-            filter: grayscale(100%); 
+            opacity: 0.8; /* Trochu jasnejšie v light mode */
         }
 
         /* PRELOADER */
@@ -135,6 +139,7 @@
             z-index: 0;
             mix-blend-mode: var(--noise-blend); 
             opacity: var(--noise-opacity);
+            transition: opacity 0.4s ease;
         }
 
         .film-gate-overlay {
@@ -164,7 +169,7 @@
             overflow: hidden; 
             will-change: transform;
         }
-        body.light-mode .dust-container { filter: invert(1); opacity: 0.5; }
+        body.light-mode .dust-container { filter: invert(1); opacity: 0.3; }
         .dust-speck {
             position: absolute; background: rgba(255, 255, 255, 0.4);
             border-radius: 50%; animation: float 20s infinite linear;
@@ -239,13 +244,16 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             position: relative; z-index: 2; 
             padding-top: 130px; 
-            padding-bottom: 60px;
+            /* Odstránená hranica dole, aby to plynule prešlo */
+            padding-bottom: 20px; 
         }
         
         .hero-title { 
             font-family: var(--font-head); font-size: 7vw; line-height: 1.1; z-index: 2; color: var(--text-color);
             text-shadow: var(--text-bloom); text-align: center; display: flex; flex-direction: column; align-items: center;
             margin-top: 30px;
+            /* Pridaný margin-bottom pre miesto na Hub */
+            margin-bottom: 30px;
         }
         body:not(.light-mode) .hero-title { mix-blend-mode: exclusion; }
 
@@ -271,58 +279,123 @@
             @keyframes flyInRight { 0% { opacity: 0; transform: translateX(30px); } 100% { opacity: 1; transform: translateX(0); } }
         }
 
-        /* === HUB STYLES (NAD TEXTOM) === */
-        .hero-hub-container {
-            display: flex; flex-direction: column; align-items: center;
-            opacity: 0; animation: flyInHub 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
-            position: relative; z-index: 5;
+        /* === NOVÝ DESIGN PRE HUB (Stromová Štruktúra) === */
+        .tree-hub-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            opacity: 0;
+            animation: fadeInHub 1s ease 1.5s forwards;
+            padding-bottom: 40px;
         }
 
-        @media (min-width: 900px) {
-            .hero-hub-container { 
-                transform: scale(1.1);
-                margin-bottom: 20px; 
-            }
-            .hub-stem { width: 1px; height: 30px; background: var(--text-color); opacity: 0.5; }
-            .hub-crossbar-wrapper { display: flex; align-items: flex-start; position: relative; }
-            
-            .hub-crossbar { 
-                height: 1px; 
-                width: 140%; max-width: 500px;
-                background: var(--text-color); opacity: 0.5; 
-                position: absolute; top: 0; left: 50%; 
-                transform: translateX(-50%); 
-            }
-            
-            .hub-legs { display: flex; justify-content: space-between; width: 340px; }
-            .hub-leg-group { display: flex; flex-direction: column; align-items: center; width: 80px; cursor: pointer; position: relative; height: 80px; }
-            .hub-tick { width: 1px; height: 15px; background: var(--text-color); opacity: 0.5; transition: 0.3s; margin-bottom: 5px; }
-            .hub-num { font-family: var(--font-mono); font-size: 0.5rem; color: var(--accent-color); opacity: 0.6; margin-bottom: 2px; transition: 0.3s; }
-            .hub-label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 2px; color: var(--text-color); opacity: 0.7; transition: 0.3s; }
-            
-            .hub-leg-group:hover .hub-tick { height: 25px; background: var(--accent-color); opacity: 1; box-shadow: 0 0 10px var(--accent-color); }
-            .hub-leg-group:hover .hub-num { opacity: 1; transform: translateY(3px); }
-            .hub-leg-group:hover .hub-label { color: var(--accent-color); opacity: 1; text-shadow: var(--accent-bloom); transform: translateY(5px); }
+        @keyframes fadeInHub { to { opacity: 1; } }
+
+        /* Zvislá čiara od nadpisu dole */
+        .tree-stem-top {
+            width: 1px;
+            height: 40px;
+            background: var(--text-color);
+            opacity: 0.5;
+            margin-bottom: 0;
         }
 
-        /* GLOBÁLNE SKRYTIE MOBILNÉHO HUBU NA DESKTOPE */
-        .mobile-hub-wrapper {
-            display: none;
+        /* Vodorovná čiara (Držiak) */
+        .tree-bracket {
+            display: flex;
+            justify-content: space-between;
+            width: 90%; /* Šírka rozvetvenia */
+            max-width: 350px;
+            position: relative;
+            padding-top: 15px; /* Priestor pre "ramená" */
         }
 
-        @keyframes flyInHub {
-            0% { opacity: 0; transform: translateY(-20px) scale(1); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+        /* Horná vodorovná čiara bracketu */
+        .tree-bracket::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--text-color);
+            opacity: 0.5;
         }
-        @media (min-width: 900px) {
-            @keyframes flyInHub {
-                0% { opacity: 0; transform: translateY(-20px) scale(1.1); }
-                100% { opacity: 1; transform: translateY(0) scale(1.1); }
-            }
+
+        /* Stredná zvislá čiara (malý konektor) */
+        .tree-bracket::after {
+            content: '';
+            position: absolute;
+            top: -10px; /* Aby sa spojila s hornou stem-top */
+            left: 50%;
+            width: 1px;
+            height: 10px;
+            background: var(--text-color);
+            opacity: 0.5;
         }
+
+        /* Jednotlivé položky v strome */
+        .tree-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s;
+            padding-top: 15px; /* Odstup od vodorovnej čiary */
+        }
+        
+        /* Zvislé čiary pre každú položku */
+        .tree-item::before {
+            content: '';
+            position: absolute;
+            top: 0; /* Začína na vodorovnej čiare */
+            left: 50%;
+            width: 1px;
+            height: 15px;
+            background: var(--text-color);
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+
+        .tree-num {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .tree-label {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-color);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Hover efekty na Tree Items */
+        .tree-item:hover .tree-label { color: var(--accent-color); text-shadow: var(--accent-bloom); }
+        .tree-item:hover::before { background: var(--accent-color); opacity: 1; height: 25px; }
+
 
         /* === MANIFEST (VISION) === */
-        .manifest-section { padding: 100px 5vw; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; position: relative; z-index: 2; border-bottom: 1px solid var(--tech-line); border-top: 1px solid var(--tech-line); }
+        .manifest-section { 
+            padding: 50px 5vw 100px 5vw; /* Menej paddingu hore, aby to nadväzovalo */
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 50px; 
+            align-items: center; 
+            position: relative; 
+            z-index: 2; 
+            /* Odstránený border-top podľa požiadavky */
+            border-bottom: 1px solid var(--tech-line); 
+        }
+        
         .manifest-img { 
             width: 100%; height: 500px; 
             background: #111; 
@@ -341,35 +414,40 @@
             border-left: 2px solid var(--accent-color); 
             background: linear-gradient(90deg, rgba(255, 60, 0, 0.05) 0%, transparent 100%);
         }
+        
+        /* ZVÄČŠENIE TEXTOV VO VÍZII */
         .stream-label { 
             font-family: var(--font-mono); 
-            font-size: 0.7rem; 
+            font-size: 1rem; /* Zväčšené z 0.7rem */
+            font-weight: 700;
             color: var(--accent-color); 
             letter-spacing: 2px; 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             display: block; 
-            opacity: 0.8;
+            opacity: 1;
         }
+        
         .stream-content { 
             font-family: var(--font-mono); 
-            font-size: 0.95rem; 
-            line-height: 1.5; 
+            font-size: 1.1rem; /* Zväčšené z 0.95rem */
+            line-height: 1.6; 
             opacity: 0.9; 
             color: var(--text-color); 
         }
+        
         .stream-block::before {
             content: ''; position: absolute; top: 0; left: -2px; width: 3px; height: 0%;
             background: var(--accent-color); transition: height 0.3s;
         }
         .stream-block:hover::before { height: 100%; }
 
-        .manifest-text h2 { font-family: var(--font-mono); font-size: 0.9rem; color: var(--accent-color); margin-bottom: 20px; letter-spacing: 3px; }
+        .manifest-text h2 { font-family: var(--font-mono); font-size: 1.2rem; color: var(--accent-color); margin-bottom: 20px; letter-spacing: 3px; }
 
         @media (min-width: 900px) {
-            .manifest-text h2 { font-size: 1.2rem; margin-bottom: 40px; }
+            .manifest-text h2 { font-size: 1.5rem; margin-bottom: 40px; }
             .data-stream { gap: 50px; } 
-            .stream-content { font-size: 1.2rem; line-height: 1.8; }
-            .stream-label { font-size: 0.85rem; }
+            .stream-content { font-size: 1.3rem; line-height: 1.8; }
+            .stream-label { font-size: 1.1rem; }
         }
 
         /* === PORTFÓLIO === */
@@ -382,7 +460,6 @@
         .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
         @media(min-width: 800px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
 
-        /* PREPRACOVANÉ PORTFOLIO ITEM (aby fungovalo s <a> tagom aj divom pre video) */
         .portfolio-item { 
             display: block; 
             height: 400px; 
@@ -684,76 +761,10 @@
             .section-header { font-size: 0.85rem; word-break: normal; white-space: nowrap; }
             .mobile-center-fix { object-fit: contain !important; background: #000; }
             
-            /* === MOBILNÝ FIX PRE HUB (ROZBOČOVAČ) === */
-            
-            /* 1. Skryjeme pôvodný hub v Hero sekcii na mobile */
-            .hero-section .hero-hub-container {
-                display: none !important;
+            /* Prispôsobenie Hubu na mobile */
+            .tree-hub-container {
+                max-width: 90%;
             }
-
-            /* 2. Zobrazíme a upravíme nový hub v Manifest sekcii */
-            .mobile-hub-wrapper {
-                display: flex !important; /* Zapneme ho (na desktope bude vypnutý) */
-                width: 100%;
-                margin-bottom: 30px;
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            /* Úprava medzier v manifest sekcii kvôli hubu */
-            .manifest-section {
-                display: flex; /* Zmeníme grid na flex pre lepšie poradie */
-                flex-direction: column;
-                gap: 30px;
-            }
-            
-            /* Uistíme sa, že video je pod hubom */
-            .manifest-img {
-                order: 2;
-                width: 100%;
-            }
-            
-            .manifest-text {
-                order: 3;
-            }
-            
-            /* Toto zabezpečí, že mobilný hub bude prvý */
-            .mobile-hub-wrapper {
-                order: 1;
-            }
-            
-            /* Prispôsobenie vzhľadu hubu na mobile */
-            .hub-legs { 
-                display: flex; flex-direction: row; justify-content: center; align-items: center;
-                width: 100%; position: relative; gap: 15px; 
-            }
-
-            .hub-legs::before {
-                content: ''; position: absolute; 
-                left: 10%; right: 10%; top: 50%; height: 1px;
-                background: var(--text-color); opacity: 0.2; 
-                z-index: 0;
-            }
-
-            .hub-leg-group {
-                display: flex; flex-direction: row; align-items: center; gap: 5px;
-                background: var(--bg-color); 
-                padding: 5px 8px; z-index: 1; cursor: pointer;
-            }
-
-            .hub-tick { display: none; } 
-
-            .hub-num {
-                font-size: 0.7rem; color: var(--accent-color); font-weight: bold;
-                font-family: var(--font-mono);
-            }
-            
-            .hub-label {
-                font-size: 0.8rem; letter-spacing: 1px; color: var(--text-color);
-                font-family: var(--font-mono); text-transform: uppercase;
-            }
-            
-            .hub-leg-group:active .hub-label { color: var(--accent-color); }
         }
     </style>
 </head>
@@ -798,62 +809,34 @@
         </nav>
 
         <section id="home" class="hero-section">
-            
-            <div class="hero-hub-container">
-                <div class="hub-stem"></div>
-                
-                <div class="hub-crossbar-wrapper">
-                    <div class="hub-crossbar"></div> 
-                    
-                    <div class="hub-legs">
-                        <div class="hub-leg-group" onclick="selectService('Videografia', 'Konzultácia')">
-                            <div class="hub-tick"></div>
-                            <span class="hub-num">01</span>
-                            <span class="hub-label">VIDEO</span>
-                        </div>
-                        
-                        <div class="hub-leg-group" onclick="selectService('Fotografia', 'Konzultácia')">
-                            <div class="hub-tick"></div>
-                            <span class="hub-num">02</span>
-                            <span class="hub-label">FOTO</span>
-                        </div>
-                        
-                        <div class="hub-leg-group" onclick="selectService('Digital Art', 'Konzultácia')">
-                            <div class="hub-tick"></div>
-                            <span class="hub-num">03</span>
-                            <span class="hub-label">DIGITAL</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <h1 class="hero-title">
                 <span class="line-1">Kamera</span>
                 <span class="line-2">Svetlá &</span>
                 <span class="line-3">Emócia</span>
             </h1>
-        </section>
 
-        <section class="manifest-section">
-            
-            <div class="hero-hub-container mobile-hub-wrapper">
-                <div class="hub-legs">
-                    <div class="hub-leg-group" onclick="selectService('Videografia', 'Konzultácia')">
-                        <span class="hub-num">01</span>
-                        <span class="hub-label">VIDEO</span>
+            <div class="tree-hub-container">
+                <div class="tree-stem-top"></div>
+                <div class="tree-bracket">
+                    <div class="tree-item" onclick="selectService('Videografia', 'Konzultácia')">
+                        <span class="tree-num">01</span>
+                        <span class="tree-label">VIDEO</span>
                     </div>
                     
-                    <div class="hub-leg-group" onclick="selectService('Fotografia', 'Konzultácia')">
-                        <span class="hub-num">02</span>
-                        <span class="hub-label">FOTO</span>
+                    <div class="tree-item" onclick="selectService('Fotografia', 'Konzultácia')">
+                        <span class="tree-num">02</span>
+                        <span class="tree-label">FOTO</span>
                     </div>
-                    
-                    <div class="hub-leg-group" onclick="selectService('Digital Art', 'Konzultácia')">
-                        <span class="hub-num">03</span>
-                        <span class="hub-label">DIGITAL</span>
+
+                    <div class="tree-item" onclick="selectService('Digital Art', 'Konzultácia')">
+                        <span class="tree-num">03</span>
+                        <span class="tree-label">DIGITAL</span>
                     </div>
                 </div>
             </div>
+        </section>
+
+        <section class="manifest-section">
             <div class="manifest-img">
                 <div class="yt-bg-wrapper">
                     <iframe src="https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&controls=0&loop=1&playlist=UfeqKCXXi-g&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -1325,10 +1308,26 @@
                     requestAnimationFrame(() => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
                 }
             });
-            const clickables = document.querySelectorAll('a, button, .service-card, input, select, .mode-group, .price-row, .social-icon, .portfolio-item, textarea, .hub-leg-group');
+            const clickables = document.querySelectorAll('a, button, .service-card, input, select, .mode-group, .price-row, .social-icon, .portfolio-item, textarea, .hub-leg-group, .tree-item');
             clickables.forEach(el => {
                 el.addEventListener('mouseenter', () => cursor.style.transform = "translate(-50%, -50%) scale(2.5)");
                 el.addEventListener('mouseleave', () => cursor.style.transform = "translate(-50%, -50%) scale(1)");
+            });
+
+            // --- VIDEO AUTO-WAKE UP (MOBILE FIX) ---
+            // Tento kód sleduje, či je stránka viditeľná. Ak sa zobudí z pozadia,
+            // reštartuje iframy, aby sa videá nezasekli.
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    const iframes = document.querySelectorAll('iframe');
+                    iframes.forEach(iframe => {
+                        // Jemný reštart src atribútu donúti video znova načítať
+                        const currentSrc = iframe.src;
+                        if(currentSrc.includes("autoplay=1")) {
+                            iframe.src = currentSrc; 
+                        }
+                    });
+                }
             });
 
             // ==========================================
