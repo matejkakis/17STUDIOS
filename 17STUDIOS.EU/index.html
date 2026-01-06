@@ -382,9 +382,9 @@
         .portfolio-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
         @media(min-width: 800px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
 
-        /* PREPRACOVANÉ PORTFOLIO ITEM (aby fungovalo s <a> tagom) */
+        /* PREPRACOVANÉ PORTFOLIO ITEM (aby fungovalo s <a> tagom aj divom pre video) */
         .portfolio-item { 
-            display: block; /* Zmenené pre <a> tag */
+            display: block; 
             height: 400px; 
             background: #111; 
             border: 1px solid var(--tech-line); 
@@ -929,31 +929,32 @@
                 <h3 class="category-title">FOTOGRAFIA</h3>
                 <div class="portfolio-grid">
                     
-                    <a href="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=1200" 
+                    <a href="humans_1.jpg" 
                        class="portfolio-item"
                        data-fancybox="humans" 
                        data-caption="Humans - Portrét 01">
                         
-                        <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?q=80&w=600" alt="Humans">
+                        <img src="humans_1.jpg" alt="Humans">
                         <div class="portfolio-tag">PROJECT_GAMMA</div>
                         <div class="portfolio-title-box">HUMANS</div>
                     </a>
 
-                    <a href="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200" data-fancybox="humans" data-caption="Humans - Portrét 02" style="display:none"></a>
-                    <a href="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1200" data-fancybox="humans" data-caption="Humans - Portrét 03" style="display:none"></a>
+                    <a href="humans_2.jpg" data-fancybox="humans" data-caption="Humans - Portrét 02" style="display:none"></a>
+                    <a href="humans_3.jpg" data-fancybox="humans" data-caption="Humans - Portrét 03" style="display:none"></a>
 
                     
-                    <a href="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1200" 
+                    <a href="brands_1.jpg" 
                        class="portfolio-item"
                        data-fancybox="brands" 
                        data-caption="Brands - Produkt 01">
                         
-                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=600" alt="Brands">
+                        <img src="brands_1.jpg" alt="Brands">
                         <div class="portfolio-tag">PROJECT_DELTA</div>
                         <div class="portfolio-title-box">BRANDS</div>
                     </a>
                     
-                    <a href="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200" data-fancybox="brands" data-caption="Brands - Produkt 02" style="display:none"></a>
+                    <a href="brands_2.jpg" data-fancybox="brands" data-caption="Brands - Produkt 02" style="display:none"></a>
+                    <a href="brands_3.jpg" data-fancybox="brands" data-caption="Brands - Produkt 03" style="display:none"></a>
                 </div>
             </div>
 
@@ -963,19 +964,17 @@
                 <h3 class="category-title">DIGITAL ART</h3>
                 <div class="portfolio-grid">
                     
-                    <a href="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200" 
+                    <a href="art_1.jpg" 
                        class="portfolio-item"
                        data-fancybox="digital-art"
-                       data-caption="Visual Art - Abstrakt">
+                       data-caption="Visual Art - 01">
                        
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600" alt="Art">
+                        <img src="art_1.jpg" alt="Art">
                         <div class="portfolio-tag">PROJECT_EPSILON</div>
                         <div class="portfolio-title-box">Visual Art</div>
                     </a>
 
-                    <a href="https://images.unsplash.com/photo-1633511090164-b43840ea1607?q=80&w=1200" data-fancybox="digital-art" data-caption="Cyberpunk Concept" style="display:none"></a>
-                    <a href="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1200" data-fancybox="digital-art" data-caption="Neon Geometry" style="display:none"></a>
-
+                    <a href="art_2.jpg" data-fancybox="digital-art" data-caption="Visual Art - 02" style="display:none"></a>
                 </div>
             </div>
         </section>
