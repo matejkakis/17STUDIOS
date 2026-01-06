@@ -328,8 +328,6 @@
             position: relative; overflow: hidden; 
         }
         
-        /* YouTube Embed Wrapper je v main CSS */
-        
         .data-stream { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
         .stream-block { 
             position: relative; 
@@ -407,6 +405,62 @@
             width: 100%; height: 100%; object-fit: cover; object-position: center; 
             position: absolute; top: 0; left: 0; z-index: 0;
         }
+        
+        /* === VIDEO LIGHTBOX STYLES === */
+        .video-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .video-modal.active { opacity: 1; pointer-events: auto; }
+
+        .video-modal-content {
+            width: 90%; max-width: 1000px; position: relative;
+            border: 1px solid var(--accent-color);
+            box-shadow: 0 0 50px rgba(255, 60, 0, 0.2);
+        }
+
+        .video-container {
+            position: relative; padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0; overflow: hidden; background: #000;
+        }
+
+        .video-container iframe {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        }
+
+        .modal-close-btn {
+            position: absolute; top: -40px; right: 0;
+            background: transparent; border: none;
+            color: var(--text-color); font-family: var(--font-mono);
+            cursor: pointer; font-size: 1rem; letter-spacing: 2px;
+        }
+        .modal-close-btn:hover { color: var(--accent-color); }
+
+        /* PLAY OVERLAY NA KARTÁCH */
+        .play-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: 2;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: 0.3s;
+        }
+        .portfolio-item:hover .play-overlay { opacity: 1; }
+
+        .play-btn {
+            width: 60px; height: 60px; border: 2px solid var(--accent-color);
+            border-radius: 50%; color: var(--accent-color);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; margin-bottom: 10px;
+            box-shadow: 0 0 20px var(--accent-bloom);
+            transition: 0.3s;
+        }
+        .play-text {
+            font-family: var(--font-mono); color: #fff; font-size: 0.8rem; letter-spacing: 2px;
+        }
+
+        .portfolio-item:hover .play-btn { transform: scale(1.1); background: var(--accent-color); color: #000; }
 
         .slide { opacity: 0; transition: opacity 1.5s ease-in-out; }
         .slide.active { opacity: 1; }
@@ -832,20 +886,31 @@
             <div class="portfolio-category">
                 <h3 class="category-title">VIDEOGRAFIA</h3>
                 <div class="portfolio-grid">
-                    <div class="portfolio-item video-item">
+                    
+                    <div class="portfolio-item video-item" onclick="openVideoModal('vMazDgh0wMo')">
                         <div class="yt-bg-wrapper">
                              <iframe src="https://www.youtube.com/embed/vMazDgh0wMo?autoplay=1&mute=1&controls=0&loop=1&playlist=vMazDgh0wMo&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">▶</div>
+                            <span class="play-text">PREHRAŤ PROJEKT</span>
                         </div>
                         <div class="portfolio-tag">PROJECT_ALPHA</div>
                         <div class="portfolio-title-box">Hudobný klip</div>
                     </div>
-                    <div class="portfolio-item video-item">
+
+                    <div class="portfolio-item video-item" onclick="openVideoModal('i0jR2p-oiWQ')">
                         <div class="yt-bg-wrapper">
                              <iframe src="https://www.youtube.com/embed/i0jR2p-oiWQ?autoplay=1&mute=1&controls=0&loop=1&playlist=i0jR2p-oiWQ&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <div class="play-overlay">
+                            <div class="play-btn">▶</div>
+                            <span class="play-text">PREHRAŤ PROJEKT</span>
                         </div>
                         <div class="portfolio-tag">PROJECT_BETA</div>
                         <div class="portfolio-title-box">Aftermovie</div>
                     </div>
+                    
                 </div>
             </div>
 
@@ -1012,6 +1077,15 @@
         </footer>
     </div>
 
+    <div id="video-lightbox" class="video-modal" onclick="closeVideoModal()">
+        <div class="video-modal-content">
+            <button class="modal-close-btn" onclick="closeVideoModal()">ZAVRIEŤ [X]</button>
+            <div class="video-container">
+                <iframe id="lightbox-iframe" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
     <div class="modal-backdrop" id="modal-video"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: VIDEO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-video')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK VIDEO</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Videografia', 'Hudobný Klip')"><span class="p-name">HUDOBNÝ KLIP</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Videografia', 'Event / Aftermovie')"><span class="p-name">EVENT / AFTERMOVIE</span><span class="p-val">od €400</span></li><li class="price-row" onclick="selectService('Videografia', 'Reels Content')"><span class="p-name">REELS / SHORTS</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Videografia', 'Kampaň / Reklama')"><span class="p-name">KAMPAŇ / REKLAMA</span><span class="p-val">od €900</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
     <div class="modal-backdrop" id="modal-photo"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: PHOTO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-photo')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK FOTOGRAFIA</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Fotografia', 'Portrétne Fotenie')"><span class="p-name">PORTRÉTNE FOTENIE (1h)</span><span class="p-val">€150</span></li><li class="price-row" onclick="selectService('Fotografia', 'Event Report')"><span class="p-name">EVENT REPORT (4h)</span><span class="p-val">€400</span></li><li class="price-row" onclick="selectService('Fotografia', 'Editorial / Brand')"><span class="p-name">EDITORIAL / BRAND</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Fotografia', 'Celý Deň')"><span class="p-name">CELÝ DEŇ (8h)</span><span class="p-val">€800</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
     <div class="modal-backdrop" id="modal-art"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: ART_SERVICES</div><button class="packet-close" onclick="closeModal('modal-art')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">VISUAL ART</div><span class="packet-subtitle">/// 2025_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Digital Art', 'Cover Art / Poster')"><span class="p-name">COVER ART / PLAGÁT</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Digital Art', 'Visual Art na mieru')"><span class="p-name">VISUAL ART / PS ÚPRAVA</span><span class="p-val">od €250</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
@@ -1172,6 +1246,23 @@
             window.openModal = (id) => { document.getElementById(id).classList.add('active'); body.classList.add('modal-open'); document.querySelector('.site-content').style.filter = "blur(5px)"; };
             window.closeModal = (id) => { document.getElementById(id).classList.remove('active'); body.classList.remove('modal-open'); document.querySelector('.site-content').style.filter = "none"; };
             
+            // --- VIDEO LIGHTBOX LOGIC ---
+            window.openVideoModal = (videoId) => {
+                const modal = document.getElementById('video-lightbox');
+                const iframe = document.getElementById('lightbox-iframe');
+                // Autoplay + Zvuk zapnutý (odstránené mute=1)
+                iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0`;
+                modal.classList.add('active');
+            };
+
+            window.closeVideoModal = () => {
+                const modal = document.getElementById('video-lightbox');
+                const iframe = document.getElementById('lightbox-iframe');
+                modal.classList.remove('active');
+                // Vypnutie zvuku po zatvorení
+                setTimeout(() => { iframe.src = ""; }, 300);
+            };
+
             window.selectService = (category, serviceName) => {
                 document.querySelectorAll('.modal-backdrop').forEach(el => el.classList.remove('active'));
                 body.classList.remove('modal-open'); document.querySelector('.site-content').style.filter = "none";
