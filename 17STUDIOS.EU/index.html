@@ -40,27 +40,25 @@
             --gate-shadow: inset 0 0 80px -20px #000;
         }
 
-        /* --- LIGHT MODE (MANIAC AESTHETIC FIX) --- */
+        /* --- LIGHT MODE (MANIAC AESTHETIC - ORIGINAL) --- */
         body.light-mode {
-            /* Teplejšia, krémová retro biela (nie šedá) */
-            --bg-color: #F2F0E6; 
+            --bg-color: #E6E2D6; /* Tvoja pôvodná farba */
             --text-color: #1A1A1A;
             --accent-color: #cc3000;
             --gold-color: #B8860B;
             
             --tech-line: rgba(0, 0, 0, 0.15);
-            --panel-bg: rgba(242, 240, 230, 0.95); 
+            --panel-bg: rgba(230, 226, 214, 0.95); 
             --modal-bg: #EAE6DC;
             --modal-border: #ccc;
-            --nav-bg: rgba(242, 240, 230, 0.95);
+            --nav-bg: rgba(230, 226, 214, 0.95);
             
             --text-bloom: none;
             --accent-bloom: none;
             --border-glow: none;
             
-            /* Jemnejší noise pre svetlý mód */
             --noise-blend: multiply;
-            --noise-opacity: 0.08; 
+            --noise-opacity: 0.1; 
             --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
             
             --gate-shadow: inset 0 0 60px -20px rgba(0,0,0,0.05);
@@ -82,11 +80,11 @@
             line-height: 1.6;
             cursor: none;
             /* OPTIMALIZÁCIA: Animujeme len farby, nie layout = plynulé ako maslo */
-            transition: background-color 0.4s ease, color 0.4s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
             will-change: background-color, color;
         }
 
-        /* YOUTUBE BACKGROUND HACK */
+        /* YOUTUBE BACKGROUND */
         .yt-bg-wrapper {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -103,12 +101,12 @@
             pointer-events: none;
             border: none;
             opacity: 0.7; 
-            /* Fix: Žiadny grayscale v light mode */
+            /* OPRAVA: Odstránený grayscale, aby videá boli farebné */
             transition: opacity 0.5s ease;
         }
         
         body.light-mode .yt-bg-wrapper iframe {
-            opacity: 0.8; /* Trochu jasnejšie v light mode */
+            opacity: 0.8; 
         }
 
         /* PRELOADER */
@@ -139,7 +137,7 @@
             z-index: 0;
             mix-blend-mode: var(--noise-blend); 
             opacity: var(--noise-opacity);
-            transition: opacity 0.4s ease;
+            /* Zrušená tranzícia pre lepší výkon */
         }
 
         .film-gate-overlay {
@@ -244,7 +242,6 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             position: relative; z-index: 2; 
             padding-top: 130px; 
-            /* Odstránená hranica dole, aby to plynule prešlo */
             padding-bottom: 20px; 
         }
         
@@ -252,7 +249,6 @@
             font-family: var(--font-head); font-size: 7vw; line-height: 1.1; z-index: 2; color: var(--text-color);
             text-shadow: var(--text-bloom); text-align: center; display: flex; flex-direction: column; align-items: center;
             margin-top: 30px;
-            /* Pridaný margin-bottom pre miesto na Hub */
             margin-bottom: 30px;
         }
         body:not(.light-mode) .hero-title { mix-blend-mode: exclusion; }
@@ -280,6 +276,7 @@
         }
 
         /* === NOVÝ DESIGN PRE HUB (Stromová Štruktúra) === */
+        /* Tento blok rieši prekrývanie textov */
         .tree-hub-container {
             display: flex;
             flex-direction: column;
@@ -291,11 +288,11 @@
             opacity: 0;
             animation: fadeInHub 1s ease 1.5s forwards;
             padding-bottom: 40px;
+            margin-top: 20px; /* Odstup od nadpisu */
         }
 
         @keyframes fadeInHub { to { opacity: 1; } }
 
-        /* Zvislá čiara od nadpisu dole */
         .tree-stem-top {
             width: 1px;
             height: 40px;
@@ -304,17 +301,15 @@
             margin-bottom: 0;
         }
 
-        /* Vodorovná čiara (Držiak) */
         .tree-bracket {
             display: flex;
             justify-content: space-between;
-            width: 90%; /* Šírka rozvetvenia */
+            width: 90%; 
             max-width: 350px;
             position: relative;
-            padding-top: 15px; /* Priestor pre "ramená" */
+            padding-top: 15px; 
         }
 
-        /* Horná vodorovná čiara bracketu */
         .tree-bracket::before {
             content: '';
             position: absolute;
@@ -326,11 +321,10 @@
             opacity: 0.5;
         }
 
-        /* Stredná zvislá čiara (malý konektor) */
         .tree-bracket::after {
             content: '';
             position: absolute;
-            top: -10px; /* Aby sa spojila s hornou stem-top */
+            top: -10px; 
             left: 50%;
             width: 1px;
             height: 10px;
@@ -338,7 +332,6 @@
             opacity: 0.5;
         }
 
-        /* Jednotlivé položky v strome */
         .tree-item {
             display: flex;
             flex-direction: column;
@@ -346,14 +339,13 @@
             position: relative;
             cursor: pointer;
             transition: 0.3s;
-            padding-top: 15px; /* Odstup od vodorovnej čiary */
+            padding-top: 15px; 
         }
         
-        /* Zvislé čiary pre každú položku */
         .tree-item::before {
             content: '';
             position: absolute;
-            top: 0; /* Začína na vodorovnej čiare */
+            top: 0; 
             left: 50%;
             width: 1px;
             height: 15px;
@@ -378,21 +370,19 @@
             text-transform: uppercase;
         }
 
-        /* Hover efekty na Tree Items */
         .tree-item:hover .tree-label { color: var(--accent-color); text-shadow: var(--accent-bloom); }
         .tree-item:hover::before { background: var(--accent-color); opacity: 1; height: 25px; }
 
 
-        /* === MANIFEST (VISION) === */
+        /* === MANIFEST (VISION) - OPRAVA LAYOUTU === */
         .manifest-section { 
-            padding: 50px 5vw 100px 5vw; /* Menej paddingu hore, aby to nadväzovalo */
+            padding: 50px 5vw 100px 5vw; 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 50px; 
             align-items: center; 
             position: relative; 
             z-index: 2; 
-            /* Odstránený border-top podľa požiadavky */
             border-bottom: 1px solid var(--tech-line); 
         }
         
@@ -418,7 +408,7 @@
         /* ZVÄČŠENIE TEXTOV VO VÍZII */
         .stream-label { 
             font-family: var(--font-mono); 
-            font-size: 1rem; /* Zväčšené z 0.7rem */
+            font-size: 1rem; /* Zväčšené */
             font-weight: 700;
             color: var(--accent-color); 
             letter-spacing: 2px; 
@@ -429,7 +419,7 @@
         
         .stream-content { 
             font-family: var(--font-mono); 
-            font-size: 1.1rem; /* Zväčšené z 0.95rem */
+            font-size: 1.1rem; /* Zväčšené */
             line-height: 1.6; 
             opacity: 0.9; 
             color: var(--text-color); 
@@ -764,6 +754,25 @@
             /* Prispôsobenie Hubu na mobile */
             .tree-hub-container {
                 max-width: 90%;
+            }
+            
+            /* FIX PRE "ROZBITÚ" VÍZIU NA MOBILE */
+            .manifest-section {
+                display: flex !important; /* Vynúti flexbox */
+                flex-direction: column !important; /* Pod seba */
+                padding: 50px 5vw;
+                gap: 30px;
+            }
+            
+            .manifest-text {
+                width: 100%; /* Plná šírka */
+                padding-bottom: 60px; /* Miesto pre tlačidlo dole */
+            }
+            
+            .manifest-img {
+                width: 100%;
+                height: 300px;
+                order: -1; /* Obrázok prvý */
             }
         }
     </style>
