@@ -304,67 +304,43 @@
             .hub-leg-group:hover .hub-label { color: var(--accent-color); opacity: 1; text-shadow: var(--accent-bloom); transform: translateY(5px); }
         }
 
-        @media (max-width: 899px) {
-            .hero-hub-container {
-                width: 100%; margin-top: 0; margin-bottom: 20px;
-                opacity: 1; animation: none; 
-            }
+       /* --- CSS PRE MOBIL (vložte do existujúceho @media max-width: 899px) --- */
+    
+    /* 1. Skryjeme pôvodný hub v Hero sekcii na mobile */
+    .hero-section .hero-hub-container {
+        display: none !important;
+    }
 
-            .hub-stem, .hub-crossbar { display: none; }
-
-            .hub-legs { 
-                display: flex; flex-direction: row; justify-content: center; align-items: center;
-                width: 100%; position: relative; gap: 15px; 
-            }
-
-            .hub-legs::before {
-                content: ''; position: absolute; 
-                left: 10%; right: 10%; top: 50%; height: 1px;
-                background: var(--text-color); opacity: 0.2; 
-                z-index: 0;
-            }
-
-            .hub-leg-group {
-                display: flex; flex-direction: row; align-items: center; gap: 5px;
-                background: var(--bg-color); 
-                padding: 5px 8px; z-index: 1; cursor: pointer;
-            }
-
-            .hub-tick { display: none; } 
-
-            .hub-num {
-                font-size: 0.7rem; color: var(--accent-color); font-weight: bold;
-                font-family: var(--font-mono);
-            }
-            
-            .hub-label {
-                font-size: 0.8rem; letter-spacing: 1px; color: var(--text-color);
-                font-family: var(--font-mono); text-transform: uppercase;
-            }
-            
-            .hub-leg-group:active .hub-label { color: var(--accent-color); }
-        }
-        
-        @keyframes flyInHub {
-            0% { opacity: 0; transform: translateY(-20px) scale(1); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @media (min-width: 900px) {
-            @keyframes flyInHub {
-                0% { opacity: 0; transform: translateY(-20px) scale(1.1); }
-                100% { opacity: 1; transform: translateY(0) scale(1.1); }
-            }
-        }
-
-        /* === MANIFEST (VISION) === */
-        .manifest-section { padding: 100px 5vw; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; position: relative; z-index: 2; border-bottom: 1px solid var(--tech-line); border-top: 1px solid var(--tech-line); }
-        .manifest-img { 
-            width: 100%; height: 500px; 
-            background: #111; 
-            border: 1px solid var(--text-color); 
-            position: relative; overflow: hidden; 
-        }
-        
+    /* 2. Zobrazíme a upravíme nový hub v Manifest sekcii */
+    .mobile-hub-wrapper {
+        display: flex !important; /* Zapneme ho (na desktope bude vypnutý) */
+        width: 100%;
+        margin-bottom: 30px;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Úprava medzier v manifest sekcii kvôli hubu */
+    .manifest-section {
+        display: flex; /* Zmeníme grid na flex pre lepšie poradie */
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    /* Uistíme sa, že video je pod hubom */
+    .manifest-img {
+        order: 2;
+        width: 100%;
+    }
+    
+    .manifest-text {
+        order: 3;
+    }
+    
+    /* Toto zabezpečí, že mobilný hub bude prvý */
+    .mobile-hub-wrapper {
+        order: 1;
+    }
         /* YouTube Embed Wrapper je v main CSS */
         
         .data-stream { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
@@ -408,6 +384,11 @@
             .stream-content { font-size: 1.2rem; line-height: 1.8; }
             .stream-label { font-size: 0.85rem; }
         }
+
+/* --- GLOBÁLNE SKRYTIE MOBILNÉHO HUBU --- */
+.mobile-hub-wrapper {
+    display: none;
+}
 
         /* === PORTFÓLIO === */
         .portfolio-section { padding: 100px 5vw; border-bottom: 1px solid var(--tech-line); position: relative; z-index: 2; }
@@ -743,14 +724,46 @@
             </h1>
         </section>
 
-        <section class="manifest-section">
-            <div class="manifest-img">
-                <div class="yt-bg-wrapper">
-                    <iframe src="https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&controls=0&loop=1&playlist=UfeqKCXXi-g&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                </div>
-            </div> 
-            <div class="manifest-text">
-                <h2>/// VÍZIA</h2>
+   <section class="manifest-section">
+    
+    <div class="hero-hub-container mobile-hub-wrapper">
+        <div class="hub-legs">
+            <div class="hub-leg-group" onclick="selectService('Videografia', 'Konzultácia')">
+                <span class="hub-num">01</span>
+                <span class="hub-label">VIDEO</span>
+            </div>
+            
+            <div class="hub-leg-group" onclick="selectService('Fotografia', 'Konzultácia')">
+                <span class="hub-num">02</span>
+                <span class="hub-label">FOTO</span>
+            </div>
+            
+            <div class="hub-leg-group" onclick="selectService('Digital Art', 'Konzultácia')">
+                <span class="hub-num">03</span>
+                <span class="hub-label">DIGITAL</span>
+            </div>
+        </div>
+    </div>
+    <div class="manifest-img">
+        <div class="yt-bg-wrapper">
+            <iframe src="https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&controls=0&loop=1&playlist=UfeqKCXXi-g&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div> 
+    
+    <div class="manifest-text">
+        <h2>/// VÍZIA</h2>
+        ```
+
+### Čo sme práve urobili?
+
+1.  **Desktop:** Všetko ostáva po starom. Nový kód v sekcii Vízia je skrytý (`display: none`).
+2.  **Mobil:**
+    * V Hero sekcii sme skryli starý hub. Ostane tam len čistý nadpis "Kamera Svetlá & Emócia".
+    * V Manifest sekcii (Vízia) sa objaví nový hub **hneď na vrchu** (nad videom).
+    * Zmenili sme `display: grid` na `display: flex` pri Manifest sekcii (len na mobile), aby sme mohli ľahko zoradiť prvky pod seba v poradí: **Hub -> Video -> Text**.
+
+Takto to bude na mobile pôsobiť oveľa logickejšie – scrollovateľný príbeh, ktorý začína emóciou a pokračuje výberom. Skúste to nahodiť a dajte vedieť, či to sedí!
+
                 <div class="data-stream">
                     <div class="stream-block">
                         <span class="stream-label">[01] IDENTITY</span>
