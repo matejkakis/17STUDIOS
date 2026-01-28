@@ -315,16 +315,21 @@
         .tree-item:hover .tree-label { color: var(--accent-color); text-shadow: var(--accent-bloom); }
         .tree-item:hover::before { background: var(--accent-color); opacity: 1; height: 25px; }
 
-        /* === MANIFEST (VISION) === */
+        /* === MANIFEST (VISION) - OPRAVENÉ PRE MOBILY === */
         .manifest-section { 
             padding: 50px 5vw 100px 5vw; 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; 
+            display: grid; 
+            /* ZMENA: Defaultne 1 stĺpec (Mobile First prístup) */
+            grid-template-columns: 1fr; 
+            gap: 50px; 
             align-items: center; position: relative; z-index: 2; 
             border-bottom: 1px solid var(--tech-line); 
         }
         
         .manifest-img { 
-            width: 100%; height: 500px; 
+            width: 100%; 
+            /* ZMENA: Výška pre mobily */
+            height: 300px; 
             background: #111; 
             border: 1px solid var(--text-color); 
             position: relative; overflow: hidden; 
@@ -360,6 +365,10 @@
         .manifest-text h2 { font-family: var(--font-mono); font-size: 1.2rem; color: var(--accent-color); margin-bottom: 20px; letter-spacing: 3px; }
 
         @media (min-width: 900px) {
+            /* ZMENA: Až na desktope sa prepne na 2 stĺpce */
+            .manifest-section { grid-template-columns: 1fr 1fr; }
+            .manifest-img { height: 500px; }
+            
             .manifest-text h2 { font-size: 1.5rem; margin-bottom: 40px; }
             .data-stream { gap: 50px; } 
             .stream-content { font-size: 1.3rem; line-height: 1.8; }
@@ -409,7 +418,7 @@
         .portfolio-item video, .portfolio-item img, .portfolio-item .yt-bg-wrapper {
             width: 100%; height: 100%; object-fit: cover; object-position: center; 
             position: absolute; top: 0; left: 0; z-index: 0;
-            pointer-events: none; /* FIX: Zabezpečí, že sa nedá kliknúť na iframe, ale na kartu */
+            pointer-events: none; 
         }
         
         /* === VIDEO LIGHTBOX STYLES === */
@@ -649,13 +658,12 @@
             .left { order: 2; } .right { order: 1; }
             .packet-content { padding: 40px 20px 20px; }
             .packet-header { top: -10px; left: 0; }
-            .manifest-img { height: 300px; }
+            /* .manifest-img height už je ošetrené vyššie v hlavnom bloku */
             .ai-panel { padding: 20px; gap: 20px; }
             
             .section-header { font-size: 0.85rem; word-break: normal; white-space: nowrap; }
             .mobile-center-fix { object-fit: contain !important; background: #000; }
             
-            /* Prispôsobenie Hubu na mobile */
             .tree-hub-container {
                 max-width: 90%;
             }
@@ -1043,13 +1051,9 @@
             const apiKey = ""; // API Key
 
             // --- INICIALIZÁCIA FANCYBOX ---
-            Fancybox.bind("[data-fancybox]", {
-                // Voliteľné nastavenia:
-                // Thumbs: false,
-                // Toolbar: { display: { right: ["close"] } }
-            });
+            Fancybox.bind("[data-fancybox]", {});
 
-            // --- PRELOADER & HERO SYNC ---
+            // --- PRELOADER ---
             const preloader = document.getElementById('preloader');
             const progressFill = document.querySelector('.progress-fill');
             
@@ -1068,7 +1072,6 @@
 
             const runHackerEffect = (target) => {
                 if (target.dataset.animating === "true") return;
-                
                 target.dataset.animating = "true";
                 let frame = 0;
                 let iterations = 0;
@@ -1112,27 +1115,19 @@
                 });
             });
 
-            // --- MOBILNÝ "SPOTLIGHT" EFEKT (Touch Move) ---
+            // --- MOBILNÝ "SPOTLIGHT" EFEKT ---
             if (window.innerWidth < 900) {
                 const cards = document.querySelectorAll('.service-card');
-                
-                const clearCards = () => {
-                    cards.forEach(c => {
-                        c.classList.remove('mobile-active');
-                    });
-                };
+                const clearCards = () => cards.forEach(c => c.classList.remove('mobile-active'));
 
                 window.addEventListener('touchmove', (e) => {
                     const touch = e.touches[0];
                     const target = document.elementFromPoint(touch.clientX, touch.clientY);
-                    
                     if (target) {
                         const card = target.closest('.service-card');
-                        
                         if (card && !card.classList.contains('mobile-active')) {
                             clearCards(); 
                             card.classList.add('mobile-active'); 
-                            
                             const title = card.querySelector('.service-title');
                             if(title) runHackerEffect(title);
                         } 
@@ -1182,7 +1177,6 @@
             window.openVideoModal = (videoId) => {
                 const modal = document.getElementById('video-lightbox');
                 const iframe = document.getElementById('lightbox-iframe');
-                // Autoplay + Zvuk zapnutý (odstránené mute=1)
                 iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0`;
                 modal.classList.add('active');
             };
@@ -1191,7 +1185,6 @@
                 const modal = document.getElementById('video-lightbox');
                 const iframe = document.getElementById('lightbox-iframe');
                 modal.classList.remove('active');
-                // Vypnutie zvuku po zatvorení
                 setTimeout(() => { iframe.src = ""; }, 300);
             };
 
@@ -1218,7 +1211,7 @@
                 el.addEventListener('mouseleave', () => cursor.style.transform = "translate(-50%, -50%) scale(1)");
             });
 
-            // --- VIDEO AUTO-WAKE UP (MOBILE FIX) ---
+            // --- VIDEO AUTO-WAKE UP ---
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     const iframes = document.querySelectorAll('iframe');
@@ -1231,10 +1224,7 @@
                 }
             });
 
-            // ==========================================
             // === GEMINI AI INTEGRATION (HYBRID) ===
-            // ==========================================
-
             async function callGemini(userPrompt, systemPrompt) {
                 if (!apiKey) throw new Error("No Key"); 
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
@@ -1251,11 +1241,9 @@
                 return JSON.parse(data.candidates[0].content.parts[0].text);
             }
 
-            // --- 1. VISION GENESIS (MOCK) ---
             const visionBtn = document.getElementById('vision-btn');
             const visionInput = document.getElementById('vision-input');
             const visionResult = document.getElementById('vision-result');
-
             const visionPresets = [
                 { keywords: ['tma', 'noc', 'dark', 'neón', 'mesto', 'city'], title: 'NEON_NOIR', style: 'Cyberpunk / High Contrast', desc: 'Vizuál zachytáva kontrast medzi chladným betónom a pulzujúcim teplým svetlom v nočnom meste.' },
                 { keywords: ['les', 'príroda', 'hory', 'voda', 'svetlo', 'nature'], title: 'ORGANIC_FLOW', style: 'Natural Light / Ethereal', desc: 'Surová krása prírody zachytená cez jemné, difúzne svetlo a makro detaily.' },
@@ -1307,7 +1295,6 @@
             const tipBtn = document.getElementById('tip-btn'); 
             const tipText = document.getElementById('tip-text');
             const archInput = document.getElementById('archetype-input');
-            
             const archetypesDB = [
                 { id: 'dreamer', title: "HĽADAČ SNOV", keywords: ['sen', 'snívať', 'nebo', 'mraky', 'hviezdy', 'noc', 'mesiac', 'láska', 'duša'], desc: "Vidíte krásu tam, kde iní vidia všednosť. Nechajte sa uniesť emóciou." },
                 { id: 'rebel', title: "REBEL", keywords: ['chaos', 'tma', 'oheň', 'cesta', 'zmena', 'hluk', 'sila', 'protest', 'hnev'], desc: "Nejdete s davom. Váš životný štýl je odvážny. Nebojte sa byť iný." },
