@@ -40,9 +40,8 @@
             --gate-shadow: inset 0 0 80px -20px #000;
         }
 
-        /* --- LIGHT MODE (MANIAC AESTHETIC FIX) --- */
+        /* --- LIGHT MODE --- */
         body.light-mode {
-            /* Teplejšia, krémová retro biela (nie šedá) */
             --bg-color: #F2F0E6; 
             --text-color: #1A1A1A;
             --accent-color: #cc3000;
@@ -58,7 +57,6 @@
             --accent-bloom: none;
             --border-glow: none;
             
-            /* Jemnejší noise pre svetlý mód */
             --noise-blend: multiply;
             --noise-opacity: 0.08; 
             --noise-url: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
@@ -81,7 +79,6 @@
             font-family: var(--font-mono);
             line-height: 1.6;
             cursor: none;
-            /* OPTIMALIZÁCIA: Animujeme len farby, nie layout = plynulé ako maslo */
             transition: background-color 0.4s ease, color 0.4s ease;
             will-change: background-color, color;
         }
@@ -103,12 +100,11 @@
             pointer-events: none;
             border: none;
             opacity: 0.7; 
-            /* Fix: Žiadny grayscale v light mode */
             transition: opacity 0.5s ease;
         }
         
         body.light-mode .yt-bg-wrapper iframe {
-            opacity: 0.8; /* Trochu jasnejšie v light mode */
+            opacity: 0.8;
         }
 
         /* PRELOADER */
@@ -244,7 +240,6 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             position: relative; z-index: 2; 
             padding-top: 130px; 
-            /* Odstránená hranica dole, aby to plynule prešlo */
             padding-bottom: 20px; 
         }
         
@@ -252,7 +247,6 @@
             font-family: var(--font-head); font-size: 7vw; line-height: 1.1; z-index: 2; color: var(--text-color);
             text-shadow: var(--text-bloom); text-align: center; display: flex; flex-direction: column; align-items: center;
             margin-top: 30px;
-            /* Pridaný margin-bottom pre miesto na Hub */
             margin-bottom: 30px;
         }
         body:not(.light-mode) .hero-title { mix-blend-mode: exclusion; }
@@ -279,7 +273,7 @@
             @keyframes flyInRight { 0% { opacity: 0; transform: translateX(30px); } 100% { opacity: 1; transform: translateX(0); } }
         }
 
-        /* === NOVÝ DESIGN PRE HUB (Stromová Štruktúra) === */
+        /* === NOVÝ HUB (Strom) === */
         .tree-hub-container {
             display: flex;
             flex-direction: column;
@@ -295,104 +289,37 @@
 
         @keyframes fadeInHub { to { opacity: 1; } }
 
-        /* Zvislá čiara od nadpisu dole */
-        .tree-stem-top {
-            width: 1px;
-            height: 40px;
-            background: var(--text-color);
-            opacity: 0.5;
-            margin-bottom: 0;
-        }
-
-        /* Vodorovná čiara (Držiak) */
+        .tree-stem-top { width: 1px; height: 40px; background: var(--text-color); opacity: 0.5; margin-bottom: 0; }
+        
         .tree-bracket {
-            display: flex;
-            justify-content: space-between;
-            width: 90%; /* Šírka rozvetvenia */
-            max-width: 350px;
-            position: relative;
-            padding-top: 15px; /* Priestor pre "ramená" */
+            display: flex; justify-content: space-between; width: 90%; max-width: 350px;
+            position: relative; padding-top: 15px; 
         }
 
-        /* Horná vodorovná čiara bracketu */
-        .tree-bracket::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--text-color);
-            opacity: 0.5;
-        }
+        .tree-bracket::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 1px; background: var(--text-color); opacity: 0.5; }
+        .tree-bracket::after { content: ''; position: absolute; top: -10px; left: 50%; width: 1px; height: 10px; background: var(--text-color); opacity: 0.5; }
 
-        /* Stredná zvislá čiara (malý konektor) */
-        .tree-bracket::after {
-            content: '';
-            position: absolute;
-            top: -10px; /* Aby sa spojila s hornou stem-top */
-            left: 50%;
-            width: 1px;
-            height: 10px;
-            background: var(--text-color);
-            opacity: 0.5;
-        }
-
-        /* Jednotlivé položky v strome */
         .tree-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            transition: 0.3s;
-            padding-top: 15px; /* Odstup od vodorovnej čiary */
+            display: flex; flex-direction: column; align-items: center; position: relative;
+            cursor: pointer; transition: 0.3s; padding-top: 15px; 
         }
         
-        /* Zvislé čiary pre každú položku */
         .tree-item::before {
-            content: '';
-            position: absolute;
-            top: 0; /* Začína na vodorovnej čiare */
-            left: 50%;
-            width: 1px;
-            height: 15px;
-            background: var(--text-color);
-            opacity: 0.5;
-            transition: 0.3s;
+            content: ''; position: absolute; top: 0; left: 50%; width: 1px; height: 15px;
+            background: var(--text-color); opacity: 0.5; transition: 0.3s;
         }
 
-        .tree-num {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--accent-color);
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
+        .tree-num { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent-color); font-weight: bold; margin-bottom: 2px; }
+        .tree-label { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-color); letter-spacing: 1px; text-transform: uppercase; }
 
-        .tree-label {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--text-color);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Hover efekty na Tree Items */
         .tree-item:hover .tree-label { color: var(--accent-color); text-shadow: var(--accent-bloom); }
         .tree-item:hover::before { background: var(--accent-color); opacity: 1; height: 25px; }
 
-
         /* === MANIFEST (VISION) === */
         .manifest-section { 
-            padding: 50px 5vw 100px 5vw; /* Menej paddingu hore, aby to nadväzovalo */
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 50px; 
-            align-items: center; 
-            position: relative; 
-            z-index: 2; 
-            /* Odstránený border-top podľa požiadavky */
+            padding: 50px 5vw 100px 5vw; 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; 
+            align-items: center; position: relative; z-index: 2; 
             border-bottom: 1px solid var(--tech-line); 
         }
         
@@ -405,8 +332,7 @@
         
         .data-stream { display: flex; flex-direction: column; gap: 30px; margin-top: 30px; }
         .stream-block { 
-            position: relative; 
-            padding-left: 20px; 
+            position: relative; padding-left: 20px; 
             border-left: 1px solid rgba(255,255,255,0.1); 
             transition: all 0.3s ease; 
         }
@@ -415,24 +341,14 @@
             background: linear-gradient(90deg, rgba(255, 60, 0, 0.05) 0%, transparent 100%);
         }
         
-        /* ZVÄČŠENIE TEXTOV VO VÍZII */
         .stream-label { 
-            font-family: var(--font-mono); 
-            font-size: 1rem; /* Zväčšené z 0.7rem */
-            font-weight: 700;
-            color: var(--accent-color); 
-            letter-spacing: 2px; 
-            margin-bottom: 10px; 
-            display: block; 
-            opacity: 1;
+            font-family: var(--font-mono); font-size: 1rem; font-weight: 700;
+            color: var(--accent-color); letter-spacing: 2px; margin-bottom: 10px; display: block; opacity: 1;
         }
         
         .stream-content { 
-            font-family: var(--font-mono); 
-            font-size: 1.1rem; /* Zväčšené z 0.95rem */
-            line-height: 1.6; 
-            opacity: 0.9; 
-            color: var(--text-color); 
+            font-family: var(--font-mono); font-size: 1.1rem; line-height: 1.6; 
+            opacity: 0.9; color: var(--text-color); 
         }
         
         .stream-block::before {
@@ -493,6 +409,7 @@
         .portfolio-item video, .portfolio-item img, .portfolio-item .yt-bg-wrapper {
             width: 100%; height: 100%; object-fit: cover; object-position: center; 
             position: absolute; top: 0; left: 0; z-index: 0;
+            pointer-events: none; /* FIX: Zabezpečí, že sa nedá kliknúť na iframe, ale na kartu */
         }
         
         /* === VIDEO LIGHTBOX STYLES === */
@@ -527,29 +444,6 @@
             cursor: pointer; font-size: 1rem; letter-spacing: 2px;
         }
         .modal-close-btn:hover { color: var(--accent-color); }
-
-        /* PLAY OVERLAY NA KARTÁCH */
-        .play-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.4); z-index: 2;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; transition: 0.3s;
-        }
-        .portfolio-item:hover .play-overlay { opacity: 1; }
-
-        .play-btn {
-            width: 60px; height: 60px; border: 2px solid var(--accent-color);
-            border-radius: 50%; color: var(--accent-color);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.5rem; margin-bottom: 10px;
-            box-shadow: 0 0 20px var(--accent-bloom);
-            transition: 0.3s;
-        }
-        .play-text {
-            font-family: var(--font-mono); color: #fff; font-size: 0.8rem; letter-spacing: 2px;
-        }
-
-        .portfolio-item:hover .play-btn { transform: scale(1.1); background: var(--accent-color); color: #000; }
 
         .tech-divider { border: 0; height: 1px; background: var(--tech-line); margin: 60px 0; border-bottom: 1px dashed var(--text-color); opacity: 0.3; }
 
@@ -883,10 +777,6 @@
                         <div class="yt-bg-wrapper">
                              <iframe src="https://www.youtube.com/embed/vMazDgh0wMo?autoplay=1&mute=1&controls=0&loop=1&playlist=vMazDgh0wMo&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                         </div>
-                        <div class="play-overlay">
-                            <div class="play-btn">▶</div>
-                            <span class="play-text">PREHRAŤ PROJEKT</span>
-                        </div>
                         <div class="portfolio-tag">PROJECT_ALPHA</div>
                         <div class="portfolio-title-box">Hudobný klip</div>
                     </div>
@@ -894,10 +784,6 @@
                     <div class="portfolio-item video-item" onclick="openVideoModal('i0jR2p-oiWQ')">
                         <div class="yt-bg-wrapper">
                              <iframe src="https://www.youtube.com/embed/i0jR2p-oiWQ?autoplay=1&mute=1&controls=0&loop=1&playlist=i0jR2p-oiWQ&showinfo=0&rel=0&iv_load_policy=3&fs=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                        </div>
-                        <div class="play-overlay">
-                            <div class="play-btn">▶</div>
-                            <span class="play-text">PREHRAŤ PROJEKT</span>
                         </div>
                         <div class="portfolio-tag">PROJECT_BETA</div>
                         <div class="portfolio-title-box">Aftermovie</div>
@@ -963,7 +849,7 @@
                        class="portfolio-item"
                        data-fancybox="digital-art"
                        data-caption="Visual Art - 01">
-                       
+                        
                         <img src="art_1.jpg" alt="Art">
                         <div class="portfolio-tag">PROJECT_EPSILON</div>
                         <div class="portfolio-title-box">Visual Art</div>
@@ -1116,7 +1002,25 @@
         </div>
     </div>
 
-    <div class="modal-backdrop" id="modal-video"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: VIDEO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-video')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK VIDEO</div><span class="packet-subtitle">/// 2026_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Videografia', 'Hudobný Klip')"><span class="p-name">HUDOBNÝ KLIP</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Videografia', 'Event / Aftermovie')"><span class="p-name">EVENT / AFTERMOVIE</span><span class="p-val">od €400</span></li><li class="price-row" onclick="selectService('Videografia', 'Reels Content')"><span class="p-name">REELS / SHORTS</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Videografia', 'Kampaň / Reklama')"><span class="p-name">KAMPAŇ / REKLAMA</span><span class="p-val">od €900</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
+    <div class="modal-backdrop" id="modal-video">
+        <div class="data-packet">
+            <div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: VIDEO_SERVICES</div>
+            <button class="packet-close" onclick="closeModal('modal-video')">ZAVRIEŤ [X]</button>
+            <div class="packet-content">
+                <div class="packet-title">CENNÍK VIDEO</div>
+                <span class="packet-subtitle">/// 2026_EDITION</span>
+                <ul class="price-list">
+                    <li class="price-row" onclick="selectService('Videografia', 'Hudobný Klip')"><span class="p-name">HUDOBNÝ KLIP</span><span class="p-val">od €500</span></li>
+                    <li class="price-row" onclick="selectService('Videografia', 'Event / Aftermovie')"><span class="p-name">EVENT / AFTERMOVIE</span><span class="p-val">od €400</span></li>
+                    <li class="price-row" onclick="selectService('Videografia', 'Reels Content')"><span class="p-name">REELS / SHORTS</span><span class="p-val">od €150</span></li>
+                    <li class="price-row" onclick="selectService('Videografia', 'Kampaň / Reklama')"><span class="p-name">KAMPAŇ / REKLAMA</span><span class="p-val">od €900</span></li>
+                    <li class="price-row" onclick="selectService('Videografia', 'Svadba')"><span class="p-name">SVADBA</span><span class="p-val">od €700</span></li>
+                </ul>
+                <div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal-backdrop" id="modal-photo"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: PHOTO_SERVICES</div><button class="packet-close" onclick="closeModal('modal-photo')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">CENNÍK FOTOGRAFIA</div><span class="packet-subtitle">/// 2026_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Fotografia', 'Portrétne Fotenie')"><span class="p-name">PORTRÉTNE FOTENIE (1h)</span><span class="p-val">€150</span></li><li class="price-row" onclick="selectService('Fotografia', 'Event Report')"><span class="p-name">EVENT REPORT (4h)</span><span class="p-val">€400</span></li><li class="price-row" onclick="selectService('Fotografia', 'Editorial / Brand')"><span class="p-name">EDITORIAL / BRAND</span><span class="p-val">od €500</span></li><li class="price-row" onclick="selectService('Fotografia', 'Celý Deň')"><span class="p-name">CELÝ DEŇ (8h)</span><span class="p-val">€800</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
     <div class="modal-backdrop" id="modal-art"><div class="data-packet"><div class="packet-header"><span class="packet-indicator"></span>DATA_PACKET: ART_SERVICES</div><button class="packet-close" onclick="closeModal('modal-art')">ZAVRIEŤ [X]</button><div class="packet-content"><div class="packet-title">VISUAL ART</div><span class="packet-subtitle">/// 2026_EDITION</span><ul class="price-list"><li class="price-row" onclick="selectService('Digital Art', 'Cover Art / Poster')"><span class="p-name">COVER ART / PLAGÁT</span><span class="p-val">od €150</span></li><li class="price-row" onclick="selectService('Digital Art', 'Visual Art na mieru')"><span class="p-name">VISUAL ART / PS ÚPRAVA</span><span class="p-val">od €250</span></li></ul><div class="packet-disclaimer">*Ceny zahŕňajú aj post-produkciu.</div></div></div></div>
 
@@ -1315,13 +1219,10 @@
             });
 
             // --- VIDEO AUTO-WAKE UP (MOBILE FIX) ---
-            // Tento kód sleduje, či je stránka viditeľná. Ak sa zobudí z pozadia,
-            // reštartuje iframy, aby sa videá nezasekli.
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') {
                     const iframes = document.querySelectorAll('iframe');
                     iframes.forEach(iframe => {
-                        // Jemný reštart src atribútu donúti video znova načítať
                         const currentSrc = iframe.src;
                         if(currentSrc.includes("autoplay=1")) {
                             iframe.src = currentSrc; 
