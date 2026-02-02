@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoservis 4xR | Profesionálny autoservis Prievidza</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- GARAGE SETTINGS --- */
+        :root {
+            --racing-red: #ff3b30; /* Agresívna červená */
+            --dark-metal: #111111; /* Čierna */
+            --carbon-grey: #1c1c1e; /* Tmavá šedá */
+            --steel-silver: #d1d1d6; /* Strieborná pre text */
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-metal);
+            color: var(--steel-silver);
+            overflow-x: hidden;
+        }
+
+        /* --- "CARBON FIBER" POZADIE --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+                linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+                linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+                linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+                linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+                linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+            background-color: #131313;
+            background-size: 20px 20px;
+            z-index: -1;
+            opacity: 1;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- TLAČIDLÁ (S GLOW EFEKTOM) --- */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--racing-red);
+            color: var(--white);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            border: none;
+            clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%); /* Skosený tvar */
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 59, 48, 0.4); /* Červená žiara */
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #ff1f12;
+            box-shadow: 0 0 30px rgba(255, 59, 48, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* --- NAVIGÁCIA --- */
+        header {
+            background: rgba(0, 0, 0, 0.9);
+            border-bottom: 2px solid var(--racing-red);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            color: var(--white);
+        }
+
+        .logo span { color: var(--racing-red); }
+
+        /* --- HERO SEKCIA --- */
+        #hero {
+            height: 85vh;
+            background: linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1486262715619-01b80258e715?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Dekoratívny pásik */
+        #hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--racing-red),
+                var(--racing-red) 10px,
+                #000 10px,
+                #000 20px
+            );
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 5px 5px 0px rgba(0,0,0,0.5);
+            font-style: italic;
+        }
+
+        #hero p {
+            font-size: 1.4rem;
+            max-width: 600px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--racing-red);
+            padding-left: 20px;
+        }
+
+        /* --- KARTY SLUŽIEB (GLASSMORPHISM) --- */
+        #sluzby {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section-title span { color: var(--racing-red); }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.05); /* Priehľadná */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-10px);
+            border-color: var(--racing-red);
+        }
+
+        /* Číslo v pozadí karty */
+        .card-bg-num {
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 8rem;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            z-index: 0;
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card p {
+            font-size: 1rem;
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .icon-box {
+            font-size: 2.5rem;
+            color: var(--racing-red);
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- PREČO MY (STATS) --- */
+        #stats {
+            background-color: var(--racing-red);
+            padding: 60px 0;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .stat-item h3 {
+            font-size: 3.5rem;
+            margin-bottom: 0;
+        }
+        .stat-item p {
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* --- KONTAKT --- */
+        #kontakt {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .contact-box {
+            background: #000;
+            border: 2px solid var(--carbon-grey);
+            padding: 50px;
+            display: inline-block;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+        
+        /* Rohy ako zameriavač */
+        .contact-box::before { content: ''; position: absolute; top: -2px; left: -2px; width: 30px; height: 30px; border-top: 4px solid var(--racing-red); border-left: 4px solid var(--racing-red); }
+        .contact-box::after { content: ''; position: absolute; bottom: -2px; right: -2px; width: 30px; height: 30px; border-bottom: 4px solid var(--racing-red); border-right: 4px solid var(--racing-red); }
+
+        .phone-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--white);
+            font-family: 'Rajdhani', sans-serif;
+            display: block;
+            margin: 20px 0;
+            text-decoration: none;
+        }
+        
+        .phone-number:hover { color: var(--racing-red); }
+
+        footer {
+            background: #000;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+            border-top: 1px solid #222;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2.5rem; }
+            #hero { height: 90vh; } /* Na mobile dlhšie, aby sa zmestil obsah */
+            .stats-grid { flex-direction: column; gap: 30px; }
+            .logo { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">AUTOSERVIS <span>4XR</span></div>
+        </div>
+    </header>
+
+    <section id="hero">
+        <div class="container">
+            <h1>PRÉMIOVÝ SERVIS<br>PRE VAŠE AUTO</h1>
+            <p>Rýchla diagnostika. Profesionálna oprava. Férový prístup. Vaše auto si zaslúži starostlivosť expertov, nie pokusy.</p>
+            <a href="#kontakt" class="btn">OBJEDNAŤ NA SERVIS</a>
+        </div>
+    </section>
+
+    <section id="sluzby">
+        <div class="container">
+            <h2 class="section-title">NAŠE <span>ŠPECIALIZÁCIE</span></h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="card-bg-num">01</div>
+                    <div class="icon-box">🔧</div>
+                    <h3>KOMPLETNÝ SERVIS</h3>
+                    <p>Výmena olejov, filtrov, bŕzd a tlmičov. Používame len značkové diely, ktoré zaručujú dlhú životnosť.</p>
+                </div>
+                <div class="service-card">
+                    <div class="card-bg-num">02</div>
+                    <div class="icon-box">💻</div>
+                    <h3>DIAGNOSTIKA</h3>
+                    <p>Svieti kontrolka motora? Naša moderná diagnostika odhalí presnú príčinu problému skôr, než bude neskoro.</p>
+                </div>
+                <div class="service-card">
+                    <div class="card-bg-num">03</div>
+                    <div class="icon-box">❄️</div>
+                    <h3>KLIMATIZÁCIE</h3>
+                    <p>Plnenie, čistenie a dezinfekcia autoklimatizácií. Dýchajte v aute čistý vzduch.</p>
+                </div>
+                <div class="service-card">
+                    <div class="card-bg-num">04</div>
+                    <div class="icon-box">⚙️</div>
+                    <h3>PNEUSERVIS</h3>
+                    <p>Prezúvanie a vyvažovanie kolies na najmodernejších strojoch. Rýchlo a bez čakania.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="stats">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <h3>10+</h3>
+                <p>ROKOV PRAXE</p>
+            </div>
+            <div class="stat-item">
+                <h3>1000+</h3>
+                <p>OPRAVENÝCH ÁUT</p>
+            </div>
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>ZÁRUKA KVALITY</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="kontakt">
+        <div class="container">
+            <div class="contact-box">
+                <h2 style="margin-bottom: 10px;">MÁTE PROBLÉM S AUTOM?</h2>
+                <p>Nečakajte, kým sa to zhorší. Zavolajte nám hneď.</p>
+                <a href="tel:0900000000" class="phone-number">09XX XXX XXX</a>
+                <p style="opacity: 0.6; font-size: 0.9rem;">PONDELOK - PIATOK: 8:00 - 17:00</p>
+                <br>
+                <a href="tel:0900000000" class="btn">ZAVOLAŤ TERAZ</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 AUTOSERVIS 4XR | Design & Code: 17studios.eu</p>
+    </footer>
+
+</body>
+</html>
