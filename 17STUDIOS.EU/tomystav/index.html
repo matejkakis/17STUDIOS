@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TO-MY-STAV s.r.o. | Profesionálne stavebné práce</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230f172a%22/><text x=%2250%22 y=%2270%22 font-family=%22Arial%22 font-size=%2270%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22%23ff5500%22>T</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
     
     <style>
         /* --- CONFIG --- */
@@ -15,6 +17,7 @@
             --bg-grey: #f1f5f9;
             --glass-nav: rgba(255, 255, 255, 0.98);
             --text-main: #334155;
+            --text-strong: #0f172a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,11 +44,14 @@
             letter-spacing: -0.5px;
         }
 
+        /* --- TYPOGRAFIA (Vylepšená čitateľnosť) --- */
         p {
-            font-size: 1.2rem;
-            font-weight: 400;
-            color: #475569;
-            margin-bottom: 20px;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text-strong);
+            margin-bottom: 25px;
+            max-width: 75ch;
+            line-height: 1.9;
         }
 
         /* --- NAVBAR --- */
@@ -91,45 +97,39 @@
         .nav-btn:hover { background: var(--dark-navy); }
         .nav-btn::after { display: none; }
 
-        /* Hamburger */
         .hamburger {
-            display: none; 
-            cursor: pointer; 
-            font-size: 2rem; 
-            color: var(--dark-navy);
-            padding: 10px;
-            z-index: 99999; 
-            position: relative;
-            user-select: none;
-            line-height: 1;
+            display: none; cursor: pointer; font-size: 2rem; color: var(--dark-navy);
+            padding: 10px; z-index: 99999; position: relative; user-select: none; line-height: 1;
         }
 
         /* --- HERO SEKCIA --- */
         #hero {
             min-height: calc(100vh - 80px);
+            /* Pozadie Hero sekcie nechávame z Unsplash (ak nemáš hero.jpg) */
             background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.4)), url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover; 
-            background-position: center;
+            background-size: cover; background-position: center;
             background-attachment: fixed;
             display: flex; align-items: center; padding: 0 10%;
         }
 
         .hero-text {
-            max-width: 750px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-left: 6px solid var(--accent-orange);
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-left: 8px solid var(--accent-orange);
             backdrop-filter: blur(5px);
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .hero-text h1 {
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            line-height: 1.2; margin-bottom: 20px;
+            font-size: clamp(2rem, 4vw, 3.8rem);
+            line-height: 1.1; margin-bottom: 25px;
         }
 
         .hero-text p {
-            font-size: 1.2rem; color: #334155; margin-bottom: 30px; border: none; padding: 0;
+            font-size: 1.35rem; color: #1e293b; 
+            margin-bottom: 35px; border: none; padding: 0;
+            font-weight: 500;
         }
 
         .btn-cta {
@@ -150,48 +150,31 @@
         }
 
         /* --- ANIMÁCIE --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* --- O NÁS --- */
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .about-img img {
-            width: 100%; border-radius: 4px;
-            box-shadow: 30px 30px 0 var(--dark-navy);
-        }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+        .about-img img { width: 100%; border-radius: 4px; box-shadow: 30px 30px 0 var(--dark-navy); }
 
         /* --- CERTIFIKÁTY --- */
-        .cert-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;
-        }
+        .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
         .cert-item {
             background: white; padding: 10px; border: 1px solid #e2e8f0;
             border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center;
         }
+        /* LOKÁLNE OBRÁZKY PRE CERTIFIKÁTY */
         .cert-item img { width: 100%; height: auto; border-radius: 4px; }
         .cert-item p { font-size: 0.9rem; margin: 10px 0 0 0; font-weight: 600; color: var(--dark-navy); }
 
         /* --- REALIZÁCIE --- */
-        .gallery-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
-        }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
         .gallery-item {
             position: relative; height: 350px; overflow: hidden; border-radius: 6px;
-            background-color: #cbd5e1;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background-color: #cbd5e1; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        .gallery-item img {
-            width: 100%; height: 100%; 
-            object-fit: cover;
-            transition: transform 0.6s ease;
-        }
+        /* LOKÁLNE OBRÁZKY PRE GALÉRIU */
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
         .gallery-item:hover img { transform: scale(1.05); }
         .gallery-label {
             position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
@@ -207,14 +190,12 @@
         }
         .price-row {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 25px 40px; border-bottom: 1px solid #e2e8f0;
-            transition: 0.2s;
+            padding: 25px 40px; border-bottom: 1px solid #e2e8f0; transition: 0.2s;
         }
         .price-row:hover { background-color: #f8fafc; padding-left: 45px; }
-        .price-row span { font-size: 1.1rem; font-weight: 600; color: var(--dark-navy); }
+        .price-row span { font-size: 1.15rem; font-weight: 700; color: var(--dark-navy); }
         .price-row strong {
-            color: var(--accent-orange); font-size: 1.2rem; font-weight: 800;
-            white-space: nowrap;
+            color: var(--accent-orange); font-size: 1.25rem; font-weight: 800; white-space: nowrap;
         }
 
         /* --- KONTAKT --- */
@@ -225,23 +206,19 @@
             display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
             max-width: 1100px; margin: 0 auto; text-align: left;
         }
-
         .contact-info { padding-top: 20px; }
         .info-item { margin-bottom: 40px; }
         .info-item h3 { color: var(--accent-orange); margin-bottom: 10px; font-size: 1.2rem; }
         .info-item a { color: white; font-size: 1.6rem; font-weight: 700; text-decoration: none; display: block; margin-bottom: 5px; }
         .info-item p { color: #94a3b8; font-size: 0.95rem; margin: 0; }
 
-        .contact-form {
-            background: white; padding: 40px; border-radius: 8px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
+        .contact-form { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         .contact-form h3 { color: var(--dark-navy); margin-bottom: 20px; font-size: 1.5rem; }
         .contact-form input, .contact-form textarea {
             width: 100%; padding: 15px; margin-bottom: 15px;
             border: 1px solid #cbd5e1; border-radius: 4px;
             font-family: 'Manrope', sans-serif; background: #f8fafc;
-            color: var(--dark-navy); transition: 0.3s; font-size: 1rem;
+            color: var(--dark-navy); transition: 0.3s; font-size: 1rem; font-weight: 500;
         }
         .contact-form input:focus, .contact-form textarea:focus {
             outline: none; border-color: var(--accent-orange); background: white;
@@ -256,34 +233,21 @@
 
         /* --- MOBILE RESPONSIVE --- */
         @media (max-width: 1024px) {
-            
             #hero {
                 background-attachment: scroll !important;
-                height: auto;
-                min-height: auto;
-                padding: 140px 20px 80px 20px;
+                height: auto; min-height: auto; padding: 140px 20px 80px 20px;
             }
-
             .hamburger { display: block; }
-            
             .nav-links {
-                position: fixed; 
-                top: 0; 
-                left: 0; 
-                width: 100%; 
-                height: 100vh;
-                background: white; 
-                flex-direction: column; 
-                justify-content: center; 
-                align-items: center;
-                gap: 40px; 
-                transform: translateX(100%); 
-                transition: transform 0.3s ease-in-out;
-                z-index: 5000;
-                padding-top: 60px;
+                position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+                background: white; flex-direction: column; justify-content: center; align-items: center;
+                gap: 40px; transform: translateX(100%); transition: transform 0.3s ease-in-out;
+                z-index: 5000; padding-top: 60px;
             }
             .nav-links.active { transform: translateX(0); }
-            .nav-links a { font-size: 1.5rem; }
+            
+            p { font-size: 1.15rem; max-width: 100%; text-align: left !important; }
+            .hero-text p { font-size: 1.2rem; }
 
             .contact-wrapper { grid-template-columns: 1fr; gap: 40px; }
             .contact-info { text-align: center; } 
@@ -303,9 +267,7 @@
 
     <nav class="navbar">
         <a href="#" class="logo">TO-MY-<span>STAV</span></a>
-        
         <div class="hamburger" id="hamburger-btn">☰</div>
-
         <ul class="nav-links" id="nav-menu">
             <li><a href="#o-nas">O nás</a></li>
             <li><a href="#certifikaty">Certifikáty</a></li>
@@ -331,10 +293,10 @@
             <div class="about-text">
                 <p><strong>Zabudnite na improvizáciu.</strong> V&nbsp;<span style="white-space: nowrap; font-weight: 700; color: #0f172a;">TO-MY-STAV</span> pristupujeme ku každej zákazke ako k projektu, ktorý musí vydržať generácie. Sme certifikovaná stavebná spoločnosť so zameraním na detail.</p>
                 <p>Špecializujeme sa na tri kľúčové oblasti:</p>
-                <ul style="list-style: none; margin-top: 20px; font-size: 1.1rem; color: #334155;">
-                    <li style="margin-bottom: 15px;"><strong>01. Hrubé stavby</strong> – Presné murovanie z Ytongu a tehly podľa projektovej dokumentácie.</li>
-                    <li style="margin-bottom: 15px;"><strong>02. Fasády</strong> – Certifikované zatepľovacie systémy (ETICS) pre maximálnu úsporu energií.</li>
-                    <li style="margin-bottom: 15px;"><strong>03. Rekonštrukcie</strong> – Komplexná obnova interiérov, bytových jadier a omietok.</li>
+                <ul style="list-style: none; margin-top: 25px; font-size: 1.25rem; color: #0f172a; font-weight: 500;">
+                    <li style="margin-bottom: 20px;"><strong>01. Hrubé stavby</strong> – Presné murovanie z Ytongu a tehly podľa projektovej dokumentácie.</li>
+                    <li style="margin-bottom: 20px;"><strong>02. Fasády</strong> – Certifikované zatepľovacie systémy (ETICS) pre maximálnu úsporu energií.</li>
+                    <li style="margin-bottom: 20px;"><strong>03. Rekonštrukcie</strong> – Komplexná obnova interiérov, bytových jadier a omietok.</li>
                 </ul>
             </div>
             <div class="about-img">
@@ -347,7 +309,7 @@
         <div class="section-header reveal">
             <h2>NAŠE CERTIFIKÁTY</h2>
         </div>
-        <p style="text-align: center; max-width: 700px; margin: 0 auto;">Neustále sa vzdelávame a držíme krok s najnovšími technológiami v stavebníctve.</p>
+        <p style="text-align: center; margin: 0 auto;">Neustále sa vzdelávame a držíme krok s najnovšími technológiami v stavebníctve.</p>
         
         <div class="cert-grid reveal">
             <div class="cert-item">
@@ -411,7 +373,7 @@
                 <strong style="color: var(--accent-orange);">GRÁTIS</strong>
             </div>
         </div>
-        <p style="text-align: center; margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">Ceny sú orientačné, bez DPH a materiálu. Presnú kalkuláciu vypracujeme po obhliadke.</p>
+        <p style="text-align: center; margin-top: 30px; font-size: 1rem; opacity: 0.9;">Ceny sú orientačné, bez DPH a materiálu. Presnú kalkuláciu vypracujeme po obhliadke.</p>
     </section>
 
     <section id="kontakt">
@@ -442,7 +404,7 @@
             </form>
         </div>
 
-        <p style="text-align: center; margin-top: 80px; font-size: 0.8rem; opacity: 0.5; color: white;">© 2026 TO-MY-STAV s.r.o. | Design by 17studios.eu</p>
+        <p style="text-align: center; margin-top: 80px; font-size: 0.9rem; opacity: 0.6; color: white;">© 2026 TO-MY-STAV s.r.o. | Design by 17studios.eu</p>
     </section>
 
     <script>
@@ -468,14 +430,11 @@
 
             function reveal() {
                 if (window.innerWidth <= 1024) return;
-
                 var reveals = document.querySelectorAll(".reveal");
-
                 for (var i = 0; i < reveals.length; i++) {
                     var windowHeight = window.innerHeight;
                     var elementTop = reveals[i].getBoundingClientRect().top;
                     var elementVisible = 100;
-
                     if (elementTop < windowHeight - elementVisible) {
                         reveals[i].classList.add("active");
                     }
