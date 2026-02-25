@@ -59,10 +59,7 @@
             --noise-blend:   multiply;
             --noise-opacity: 0.10;
         }
-        @supports (color: oklch(0 0 0)) {
-            :root      { --accent: oklch(0.55 0.24 28); --gold: oklch(0.72 0.12 75); }
-            body.light { --accent: oklch(0.48 0.22 28); }
-        }
+
         *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior: smooth; }
         html, body { width:100%; max-width:100%; overflow-x:hidden; }
@@ -174,7 +171,7 @@
         body.menu-open .site-content { filter: blur(10px) brightness(.7); pointer-events:none; }
         body.modal-open { overflow:hidden; }
         .hero { min-height:60vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:130px; padding-bottom:30px; position:relative; z-index:2; }
-        .hero-title { font-family: var(--font-head); font-size:clamp(3rem, 7vw, 7rem); line-height:1.1; text-align:center; color: var(--text); text-shadow: var(--glow-text); display:flex; flex-direction:column; align-items:center; margin: 30px 0; }
+        .hero-title { font-family: var(--font-head); font-size:clamp(2.4rem, 7vw, 7rem); line-height:1.08; text-align:center; color: var(--text); text-shadow: var(--glow-text); display:flex; flex-direction:column; align-items:center; margin: 30px 0; }
         body:not(.light) .hero-title { mix-blend-mode:exclusion; }
         .hero-title span { display: block; opacity: 0; transform: translateX(-120vw); }
         .hero-title .line-3 { transform: translateX(120vw); font-style: italic; font-weight: 400; }
@@ -247,6 +244,92 @@
         .p-item:hover .p-title { box-shadow:0 0 15px var(--accent); }
         .p-item img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
         .p-item .yt-thumb img { opacity:.65; transition:opacity .3s; }
+        /* ── SKELETON LOADER ── */
+        .p-item .skeleton {
+            position: absolute; inset: 0;
+            background: linear-gradient(90deg, var(--panel) 25%, rgba(255,255,255,.04) 50%, var(--panel) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite;
+            z-index: 1;
+        }
+        @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+        .p-item img.loaded + .skeleton,
+        .p-item img.loaded { z-index: 2; }
+        .p-item img { opacity: 0; transition: opacity .4s ease; }
+        .p-item img.loaded { opacity: 1; }
+        /* Process mobile vertical connector */
+        @media(max-width:900px) {
+            .process-step { padding-bottom: 30px; }
+            .process-step:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                left: 50%; top: 48px;
+                width: 1px; height: calc(100% - 28px);
+                background: linear-gradient(to bottom, var(--accent), transparent);
+                opacity: .3;
+                transform: translateX(-50%);
+            }
+        }
+        /* Testimonial signal strength */
+        .test-signal {
+            display: inline-flex; gap: 2px; align-items: flex-end;
+            margin-left: 8px; vertical-align: middle;
+        }
+        .test-signal span {
+            display: inline-block; width: 3px; background: var(--accent);
+            border-radius: 1px; opacity: .3;
+            transition: opacity .3s, height .3s;
+        }
+        .test-signal span:nth-child(1) { height: 5px; }
+        .test-signal span:nth-child(2) { height: 9px; }
+        .test-signal span:nth-child(3) { height: 13px; }
+        .test-card:hover .test-signal span { opacity: 1; }
+        /* Form validation */
+        .form-group { position: relative; }
+        .field-error {
+            font-family: var(--font-mono); font-size: .6rem;
+            color: var(--accent); letter-spacing: 1px;
+            position: absolute; bottom: -18px; left: 0;
+            opacity: 0; transform: translateY(-4px);
+            transition: opacity .2s, transform .2s;
+            pointer-events: none;
+        }
+        .field-error.visible { opacity: 1; transform: translateY(0); }
+        .tech-form input.error,
+        .tech-form textarea.error { border-bottom-color: var(--accent) !important; }
+        /* Lazy iframe placeholder */
+        .iframe-lazy {
+            position: absolute; inset: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--bg); cursor: pointer;
+        }
+        .iframe-lazy-icon {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: rgba(255,60,0,.15); border: 1px solid var(--accent);
+            display: flex; align-items: center; justify-content: center;
+            animation: pulseCta 3s infinite;
+        }
+        /* AI Labs enhanced */
+        .ai-thinking {
+            display: flex; gap: 6px; align-items: center;
+            font-family: var(--font-mono); font-size: .8rem; opacity: .6;
+        }
+        .ai-thinking span {
+            width: 6px; height: 6px; background: var(--accent);
+            border-radius: 50%; animation: aiDot 1.2s infinite;
+        }
+        .ai-thinking span:nth-child(2) { animation-delay: .2s; }
+        .ai-thinking span:nth-child(3) { animation-delay: .4s; }
+        @keyframes aiDot { 0%,80%,100%{transform:scale(.6);opacity:.3} 40%{transform:scale(1);opacity:1} }
+        /* Share archetyp button */
+        .share-btn {
+            background: none; border: 1px solid var(--line);
+            color: var(--text); font-family: var(--font-mono);
+            font-size: .65rem; padding: 8px 16px; cursor: pointer;
+            letter-spacing: 1px; transition: .25s; margin-top: 10px;
+        }
+        .share-btn:hover { border-color: var(--accent); color: var(--accent); }
+
         .p-item:hover .yt-thumb img { opacity:.45; }
         .tech-divider { border:0; height:1px; background: var(--line); margin:50px 0; border-bottom:1px dashed var(--text); opacity:.25; }
         #video-lightbox { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,.95); backdrop-filter:blur(12px); display:flex; justify-content:center; align-items:center; opacity:0; pointer-events:none; transition:opacity .3s; }
@@ -315,12 +398,13 @@
         .services-hint { font-size:.75rem; color:var(--accent); letter-spacing:2px; opacity:.8; text-transform:uppercase; animation:pulseHint 3s ease-in-out infinite; text-align:center; line-height:1.8; }
         @keyframes pulseHint { 0%,100%{opacity:.4} 50%{opacity:1} }
         .services-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+        @media(max-width:600px){ .service-card { padding: 40px 24px 36px; } }
         @media(max-width:1100px){ .services-grid{grid-template-columns:repeat(2,1fr);} }
         @media(max-width:600px){ .services-grid{grid-template-columns:1fr;} }
         .service-card { background:var(--bg); border:1px solid var(--line); padding:50px 28px; text-align:center; position:relative; overflow:hidden; cursor:pointer; transition: border-color .35s, box-shadow .35s; z-index:1; }
         .service-card:hover, .service-card.active { border-color:var(--accent); box-shadow:var(--glow-border); }
         .sc-inner { position:relative; z-index:2; pointer-events:none; transition:transform .35s; }
-        .service-icon { font-size:2.2rem; display:block; margin-bottom:22px; color:var(--text); transition:color .35s; }
+        .service-icon { font-size:2.8rem; display:block; margin-bottom:22px; color:var(--text); transition:color .35s; }
         .service-title { font-family:var(--font-head); font-size:1.9rem; margin-bottom:16px; color:var(--text); transition:color .35s, text-shadow .35s; }
         .service-desc { opacity:.7; font-size:.9rem; }
         .service-card:hover .service-icon, .service-card.active .service-icon { color:var(--accent); }
@@ -600,10 +684,10 @@
     </section>
 
     <section class="vision-section reveal" aria-labelledby="vision-heading">
-        <div class="vision-media">
-            <iframe src="https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&loop=1&playlist=UfeqKCXXi-g&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&showinfo=0&fs=0&cc_load_policy=0&color=white&playsinline=1"
-                style="position:absolute;top:-60px;left:-60px;width:calc(100% + 120px);height:calc(100% + 120px);border:none;pointer-events:none;"
-                allow="autoplay;encrypted-media" loading="lazy" title="17 Studios showreel"></iframe>
+        <div class="vision-media" id="vision-media-wrap">
+            <div class="iframe-lazy" id="vision-lazy">
+                <div class="iframe-lazy-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--accent)"><path d="M8 5v14l11-7z"/></svg></div>
+            </div>
         </div>
         <div class="vision-text">
             <h2 id="vision-heading">/// VÍZIA</h2>
@@ -653,7 +737,7 @@
         <div class="portfolio-category reveal reveal-delay-1" data-category="foto">
             <h3 class="category-title">FOTOGRAFIA</h3>
             <div class="portfolio-grid">
-                <a href="humans_1.jpg" class="p-item" data-fancybox="humans" data-caption="Humans — Foto 1"><img src="humans_1.jpg" alt="Humans" loading="lazy"><div class="p-tag">PROJECT_GAMMA</div><div class="p-title">HUMANS</div></a>
+                <a href="humans_1.jpg" class="p-item" data-fancybox="humans" data-caption="Humans — Foto 1"><div class="skeleton"></div><img src="humans_1.jpg" alt="Humans" loading="lazy" onload="this.classList.add('loaded')"><div class="p-tag">PROJECT_GAMMA</div><div class="p-title">HUMANS</div></a>
                 <a href="humans_2.jpg" data-fancybox="humans" data-caption="Humans — Foto 2" style="display:none"></a>
                 <a href="humans_3.jpg" data-fancybox="humans" data-caption="Humans — Foto 3" style="display:none"></a>
                 <a href="humans_4.jpg" data-fancybox="humans" data-caption="Humans — Foto 4" style="display:none"></a>
@@ -661,7 +745,7 @@
                 <a href="humans_6.jpg" data-fancybox="humans" data-caption="Humans — Foto 6" style="display:none"></a>
                 <a href="humans_7.jpg" data-fancybox="humans" data-caption="Humans — Foto 7" style="display:none"></a>
                 <a href="humans_8.jpg" data-fancybox="humans" data-caption="Humans — Foto 8" style="display:none"></a>
-                <a href="brands_1.jpg" class="p-item" data-fancybox="brands" data-caption="Brands — Foto 1"><img src="brands_1.jpg" alt="Brands" loading="lazy"><div class="p-tag">PROJECT_DELTA</div><div class="p-title">BRANDS</div></a>
+                <a href="brands_1.jpg" class="p-item" data-fancybox="brands" data-caption="Brands — Foto 1"><div class="skeleton"></div><img src="brands_1.jpg" alt="Brands" loading="lazy" onload="this.classList.add('loaded')"><div class="p-tag">PROJECT_DELTA</div><div class="p-title">BRANDS</div></a>
                 <a href="brands_2.jpg" data-fancybox="brands" data-caption="Brands — Foto 2" style="display:none"></a>
                 <a href="brands_3.jpg" data-fancybox="brands" data-caption="Brands — Foto 3" style="display:none"></a>
                 <a href="brands_4.jpg" data-fancybox="brands" data-caption="Brands — Foto 4" style="display:none"></a>
@@ -677,7 +761,7 @@
         <div class="portfolio-category reveal reveal-delay-2" data-category="art">
             <h3 class="category-title">DIGITAL ART</h3>
             <div class="portfolio-grid">
-                <a href="art_1.jpg" class="p-item" data-fancybox="digital-art" data-caption="Visual Art — 01"><img src="art_1.jpg" alt="Digital Art" loading="lazy"><div class="p-tag">PROJECT_EPSILON</div><div class="p-title">Visual Art</div></a>
+                <a href="art_1.jpg" class="p-item" data-fancybox="digital-art" data-caption="Visual Art — 01"><div class="skeleton"></div><img src="art_1.jpg" alt="Digital Art" loading="lazy" onload="this.classList.add('loaded')"><div class="p-tag">PROJECT_EPSILON</div><div class="p-title">Visual Art</div></a>
                 <a href="art_2.jpg"  data-fancybox="digital-art" data-caption="Visual Art — 02" style="display:none"></a>
                 <a href="art_3.jpg"  data-fancybox="digital-art" data-caption="Visual Art — 03" style="display:none"></a>
                 <a href="art_4.jpg"  data-fancybox="digital-art" data-caption="Visual Art — 04" style="display:none"></a>
@@ -698,7 +782,7 @@
         </div>
         <div class="services-grid">
             <div class="service-card reveal" role="button" tabindex="0" onclick="openModal('m-video')" onkeydown="if(event.key==='Enter')openModal('m-video')" aria-haspopup="dialog" aria-label="Cenník videografia">
-                <div class="yt-wrapper sc-bg" aria-hidden="true"><iframe src="https://www.youtube.com/embed/em7w-iKJnCU?autoplay=1&mute=1&controls=0&loop=1&playlist=em7w-iKJnCU&showinfo=0&rel=0&iv_load_policy=3&fs=0" allow="autoplay;encrypted-media" loading="lazy"></iframe></div>
+                <div class="yt-wrapper sc-bg" aria-hidden="true" data-ytid="em7w-iKJnCU" id="sc-video-wrap"></div>
                 <div class="sc-inner"><span class="service-icon" aria-hidden="true">◉</span><h3 class="service-title">Videografia</h3><p class="service-desc">Filmový storytelling, hudobné klipy, reklamné spoty.</p></div>
             </div>
             <div class="service-card reveal" role="button" tabindex="0" onclick="openModal('m-photo')" onkeydown="if(event.key==='Enter')openModal('m-photo')" aria-haspopup="dialog" aria-label="Cenník fotografia">
@@ -801,17 +885,17 @@
         <div class="test-grid">
             <article class="test-card featured-quote reveal">
                 <div class="featured-quote-mark" aria-hidden="true">"</div>
-                <div class="log-head">&gt; LOG_ENTRY_01</div>
+                <div class="log-head">&gt; LOG_ENTRY_01 <span class="test-signal" aria-hidden="true"><span></span><span></span><span></span></span></div>
                 <p class="quote">"S Matejom som spolupracoval dvakrát a vždy veľká spokojnosť s výsledným videom. Znova ďakujem za spoluprácu a odporúčam!"</p>
                 <span class="author">Radoslav H.</span>
             </article>
             <article class="test-card reveal reveal-delay-1">
-                <div class="log-head">&gt; LOG_ENTRY_02</div>
+                <div class="log-head">&gt; LOG_ENTRY_02 <span class="test-signal" aria-hidden="true"><span></span><span></span><span></span></span></div>
                 <p class="quote">"Donor mi splnil môj dievčenský sen a fotky sú naozaj krásne — ako z iného vesmíru. Ďakujeem. :)"</p>
                 <span class="author">Kristína K.</span>
             </article>
             <article class="test-card reveal reveal-delay-2">
-                <div class="log-head">&gt; LOG_ENTRY_03</div>
+                <div class="log-head">&gt; LOG_ENTRY_03 <span class="test-signal" aria-hidden="true"><span></span><span></span><span></span></span></div>
                 <p class="quote">"Naše svadobné fotky a krátke video z pytačiek sa Maťovi veľmi podarili a aj s prístupom sme boli veľmi spokojní!"</p>
                 <span class="author">Igor H.</span>
             </article>
@@ -857,7 +941,7 @@
                 <div class="form-group"><label class="form-label" for="f-msg">SPRÁVA</label><textarea id="f-msg" name="sprava" rows="3" placeholder="..." required></textarea></div>
                 <div class="btn-row">
                     <button type="submit" class="submit-btn" id="submit-btn">ODOSLAŤ</button>
-                    <a href="https://calendly.com/TVOJ-LINK" target="_blank" rel="noopener" class="calendly-btn">REZERVOVAŤ CALL</a>
+                    <a href="https://calendly.com/TVOJ-LINK" onclick="if(this.href.includes('TVOJ-LINK')){event.preventDefault();alert('⚠️ Nastav Calendly link v index.html');}" target="_blank" rel="noopener" class="calendly-btn">REZERVOVAŤ CALL</a>
                 </div>
             </form>
         </div>
@@ -1215,10 +1299,39 @@
     ];
     function findArchetype(input) { const low = input.toLowerCase(); return ARCHETYPES.find(a => a.keywords.some(k => low.includes(k))) || ARCHETYPES[Math.floor(Math.random() * ARCHETYPES.length)]; }
     const archBtn = $('#arch-btn'), archInput = $('#arch-input'), tipText = $('#tip-text');
+    function copyCode(code) {
+        navigator.clipboard.writeText(code).then(() => {
+            const btn = document.getElementById('copy-code-btn');
+            if (btn) { btn.textContent = '✓ SKOPÍROVANÉ'; setTimeout(() => { btn.textContent = 'KOPÍROVAŤ KÓD'; }, 2000); }
+        });
+    }
+
     function renderArchResult(data, discount) {
-        tipText.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%"><span style="font-size:.6rem;letter-spacing:2px;opacity:.65">VÁŠ ARCHETYP</span><span class="blink-glow" style="font-family:var(--font-head);font-size:2.4rem;color:var(--accent)">${data.title}</span><span style="font-size:.88rem;max-width:90%;text-align:center;padding:8px 0">"${data.desc}"</span><div style="display:flex;flex-direction:column;align-items:center;margin-top:10px"><div style="font-size:.7rem;letter-spacing:2px;opacity:.65;margin-bottom:8px;text-transform:uppercase">ZĽAVOVÝ KÓD (−${discount}%)</div><span class="result-code">DONOR${discount}</span></div></div>`;
+        const code = 'DONOR' + discount;
+        tipText.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%">
+            <span style="font-size:.6rem;letter-spacing:2px;opacity:.65">VÁŠ ARCHETYP</span>
+            <span class="blink-glow" style="font-family:var(--font-head);font-size:2.4rem;color:var(--accent)">${data.title}</span>
+            <span style="font-size:.88rem;max-width:90%;text-align:center;padding:8px 0">"${data.desc}"</span>
+            <div style="display:flex;flex-direction:column;align-items:center;margin-top:10px">
+                <div style="font-size:.7rem;letter-spacing:2px;opacity:.65;margin-bottom:8px;text-transform:uppercase">ZĽAVOVÝ KÓD (−${discount}%)</div>
+                <span class="result-code">${code}</span>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;justify-content:center">
+                <button id="copy-code-btn" class="share-btn" onclick="copyCode('${code}')">KOPÍROVAŤ KÓD</button>
+                <button class="share-btn" onclick="shareArchetype('${data.title}','${code}')">↗ ZDIEĽAŤ</button>
+            </div>
+        </div>`;
         archBtn.textContent = 'KÓD ULOŽENÝ'; archBtn.disabled = true; archBtn.style.opacity = '.45';
     }
+
+    window.shareArchetype = (title, code) => {
+        const url = window.location.origin + window.location.pathname + '?archetyp=' + encodeURIComponent(title) + '&kod=' + code;
+        if (navigator.share) {
+            navigator.share({ title: '17 STUDIOS — Môj kreatívny archetyp', text: `Môj archetyp je ${title}. Zľavový kód: ${code}`, url });
+        } else {
+            navigator.clipboard.writeText(url).then(() => alert('Link skopírovaný do schránky!'));
+        }
+    };
     try { const saved = JSON.parse(localStorage.getItem('donor_archetype') || 'null'); if (saved?.title && saved?.desc && saved?.discount && saved.title !== 'undefined') { archInput.style.display = 'none'; renderArchResult(saved, saved.discount); } } catch (_) { localStorage.removeItem('donor_archetype'); }
     archBtn.addEventListener('click', async () => {
         const text = archInput.value.trim();
@@ -1260,15 +1373,84 @@
         });
     });
 
-    // CONTACT FORM
+    // CONTACT FORM + VALIDATION
     const contactForm = $('#contact-form'), formSuccess = $('#form-success'), submitBtn = $('#submit-btn');
+
+    function showFieldError(field, msg) {
+        field.classList.add('error');
+        let err = field.parentElement.querySelector('.field-error');
+        if (!err) { err = document.createElement('span'); err.className = 'field-error'; field.parentElement.appendChild(err); }
+        err.textContent = msg; err.classList.add('visible');
+    }
+    function clearFieldError(field) {
+        field.classList.remove('error');
+        const err = field.parentElement.querySelector('.field-error');
+        if (err) err.classList.remove('visible');
+    }
+
+    // Live clear on input
+    $$('#contact-form input, #contact-form textarea').forEach(f => {
+        f.addEventListener('input', () => clearFieldError(f));
+    });
+
     if (contactForm) {
         contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); submitBtn.textContent = 'ODOSIELA SA...'; submitBtn.disabled = true;
-            try { const data = new FormData(contactForm); await fetch('https://formsubmit.co/ajax/matejkakis@gmail.com', { method: 'POST', headers: { 'Accept': 'application/json' }, body: data }); contactForm.style.display = 'none'; formSuccess.classList.add('visible'); }
-            catch (_) { contactForm.submit(); }
+            e.preventDefault();
+            // Validate
+            const name = $('#f-name'), msg = $('#f-msg');
+            let valid = true;
+            if (!name.value.trim()) { showFieldError(name, '// MENO JE POVINNÉ'); valid = false; }
+            if (!msg.value.trim() || msg.value.trim().length < 10) { showFieldError(msg, '// NAPÍŠTE ASPOŇ PAR SLOV'); valid = false; }
+            if (!valid) return;
+
+            submitBtn.textContent = 'ODOSIELA SA...'; submitBtn.disabled = true;
+            try {
+                const data = new FormData(contactForm);
+                await fetch('https://formsubmit.co/ajax/matejkakis@gmail.com', { method: 'POST', headers: { 'Accept': 'application/json' }, body: data });
+                contactForm.style.display = 'none'; formSuccess.classList.add('visible');
+            } catch (_) { contactForm.submit(); }
         });
     }
+
+    // LAZY IFRAMES via IntersectionObserver
+    const lazyIframeObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+
+            // Vision media lazy load
+            if (el.id === 'vision-media-wrap') {
+                const lazy = el.querySelector('#vision-lazy');
+                if (lazy) {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = 'https://www.youtube.com/embed/UfeqKCXXi-g?autoplay=1&mute=1&loop=1&playlist=UfeqKCXXi-g&controls=0&rel=0&modestbranding=1&disablekb=1&iv_load_policy=3&showinfo=0&fs=0&playsinline=1';
+                    iframe.style.cssText = 'position:absolute;top:-60px;left:-60px;width:calc(100% + 120px);height:calc(100% + 120px);border:none;pointer-events:none;';
+                    iframe.allow = 'autoplay;encrypted-media';
+                    iframe.title = '17 Studios showreel';
+                    el.replaceChild(iframe, lazy);
+                }
+                lazyIframeObs.unobserve(el);
+            }
+
+            // Service card video lazy load
+            if (el.id === 'sc-video-wrap') {
+                const ytid = el.dataset.ytid;
+                if (ytid) {
+                    const iframe = document.createElement('iframe');
+                    iframe.src = `https://www.youtube.com/embed/${ytid}?autoplay=1&mute=1&controls=0&loop=1&playlist=${ytid}&showinfo=0&rel=0&iv_load_policy=3&fs=0`;
+                    iframe.allow = 'autoplay;encrypted-media';
+                    iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:300%;height:150%;transform:translate(-50%,-50%);border:none;pointer-events:none;opacity:.75';
+                    el.appendChild(iframe);
+                }
+                lazyIframeObs.unobserve(el);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    const visionWrap = $('#vision-media-wrap');
+    if (visionWrap) lazyIframeObs.observe(visionWrap);
+    const scWrap = $('#sc-video-wrap');
+    if (scWrap) lazyIframeObs.observe(scWrap);
 
     // CAROUSEL ARROWS + INERTIA + TOUCH (PATCH)
     const bundlesGrid = $('.bundles-grid');
