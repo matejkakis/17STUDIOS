@@ -1284,47 +1284,10 @@
         bundlesGrid.addEventListener('scroll', updateCarouselArrows, { passive: true });
         setTimeout(updateCarouselArrows, 100);
 
-        // Inertia scroll
-        let velX = 0, lastX = 0, lastTime = 0, rafId = null;
-        function applyInertia() {
-            if (Math.abs(velX) < 0.5) return;
-            bundlesGrid.scrollLeft += velX; velX *= 0.88;
-            rafId = requestAnimationFrame(applyInertia);
-        }
-
-        let touchStartX = 0, touchStartY = 0, lockAxis = null, startScrollLeft = 0;
-        const AXIS_THRESHOLD = 20;
-
-        bundlesGrid.addEventListener('touchstart', e => {
-            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-            touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY;
-            startScrollLeft = bundlesGrid.scrollLeft; lockAxis = null;
-            lastX = touchStartX; lastTime = Date.now(); velX = 0;
-        }, { passive: true });
-
-        bundlesGrid.addEventListener('touchmove', e => {
-            const dx = e.touches[0].clientX - touchStartX;
-            const dy = e.touches[0].clientY - touchStartY;
-            if (!lockAxis && (Math.abs(dx) > AXIS_THRESHOLD || Math.abs(dy) > AXIS_THRESHOLD)) {
-                lockAxis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-            }
-            if (lockAxis === 'x') {
-                e.preventDefault();
-                bundlesGrid.scrollLeft = startScrollLeft - dx;
-                const now = Date.now(); const dt = now - lastTime;
-                if (dt > 0) velX = (lastX - e.touches[0].clientX) / dt * 16;
-                lastX = e.touches[0].clientX; lastTime = Date.now();
-            }
-        }, { passive: false });
-
-        bundlesGrid.addEventListener('touchend', () => {
-            if (lockAxis === 'x') { velX = Math.max(-25, Math.min(25, velX)); applyInertia(); }
-        }, { passive: true });
-
         // Touch-active feedback na bundle kartách
         $$('.bundle-card').forEach(card => {
             card.addEventListener('touchstart', () => { card.classList.add('touch-active'); }, { passive: true });
-            card.addEventListener('touchend',   () => { setTimeout(() => card.classList.remove('touch-active'), 300); }, { passive: true });
+            card.addEventListener('touchend',   () => { setTimeout(() => card.classList.remove('touch-active'), 250); }, { passive: true });
             card.addEventListener('touchcancel',() => { card.classList.remove('touch-active'); }, { passive: true });
         });
     }
