@@ -607,7 +607,7 @@
         .services-hint {
             font-size:.75rem; color:var(--accent); letter-spacing:2px; opacity:.8;
             text-transform:uppercase; animation:pulseHint 3s ease-in-out infinite;
-            white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+            text-align:center; line-height:1.8;
         }
         @keyframes pulseHint { 0%,100%{opacity:.4} 50%{opacity:1} }
 
@@ -1044,16 +1044,18 @@
             .bundles-grid {
                 display: flex !important;
                 overflow-x: auto;
-                scroll-snap-type: x mandatory;
-                gap: 16px !important;
-                padding-bottom: 16px;
+                scroll-snap-type: x proximity;
+                gap: 12px !important;
+                padding: 0 5vw 20px !important;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
+                scroll-behavior: smooth;
             }
             .bundles-grid::-webkit-scrollbar { display: none; }
             .bundle-card {
-                min-width: 80vw;
-                scroll-snap-align: start;
+                min-width: 78vw;
+                max-width: 78vw;
+                scroll-snap-align: center;
                 flex-shrink: 0;
             }
         }
@@ -1177,10 +1179,10 @@
 <button id="close-nav" aria-label="Zavrieť menu">ZAVRIEŤ [X]</button>
 <nav id="nav-overlay" role="dialog" aria-modal="true" aria-label="Hlavné menu">
     <ul class="nav-links">
-        <li><span class="nav-num">01</span><a href="#home"     onclick="navTo('home')">Intro</a></li>
-        <li><span class="nav-num">02</span><a href="#services" onclick="navTo('services')">Služby</a></li>
-        <li><span class="nav-num">03</span><a href="#gallery"  onclick="navTo('gallery')">Portfólio</a></li>
-        <li><span class="nav-num">04</span><a href="#contact"  onclick="navTo('contact')">Kontakt</a></li>
+        <li><span class="nav-num">01</span><a href="javascript:void(0)" onclick="navTo('home')">Intro</a></li>
+        <li><span class="nav-num">02</span><a href="javascript:void(0)" onclick="navTo('services')">Služby</a></li>
+        <li><span class="nav-num">03</span><a href="javascript:void(0)" onclick="navTo('gallery')">Portfólio</a></li>
+        <li><span class="nav-num">04</span><a href="javascript:void(0)" onclick="navTo('contact')">Kontakt</a></li>
     </ul>
 </nav>
 
@@ -1393,7 +1395,7 @@
     <section id="services" class="services-section reveal" aria-labelledby="services-heading">
         <div class="services-head">
             <h2 class="services-main-title" id="services-heading">CENNÍK</h2>
-            <p class="services-hint">[ KLIKNITE NA KARTU PRE ZOBRAZENIE ]</p>
+            <p class="services-hint">[ KLIKNITE NA KARTU<br>PRE ZOBRAZENIE DETAILOV ]</p>
         </div>
         <div class="services-grid">
 
@@ -1461,7 +1463,7 @@
     <section id="bundles" class="bundles-section reveal" aria-labelledby="bundles-heading">
         <div class="bundles-head">
             <h2 class="bundles-main-title" id="bundles-heading">BALÍKY</h2>
-            <p class="services-hint">[ KLIKNITE NA BALÍK PRE DETAIL A CENU ]</p>
+            <p class="services-hint">[ KLIKNITE NA BALÍK<br>PRE DETAIL A CENU ]</p>
         </div>
         <div class="bundles-grid">
 
@@ -2387,10 +2389,11 @@
     ───────────────────────────────────────── */
     window.navTo = (id) => {
         closeMenu();
-        // počkáme kým sa menu zatvorí (transition 400ms) potom scrollujeme
         setTimeout(() => {
             const el = document.getElementById(id);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Odstráň hash z URL
+            history.replaceState(null, '', window.location.pathname);
         }, 420);
     };
 
