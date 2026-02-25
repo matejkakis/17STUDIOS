@@ -1092,19 +1092,21 @@
         @media(max-width:900px) {
             .bundles-grid {
                 display: flex !important;
-                overflow-x: auto;
+                overflow-x: scroll;
+                overflow-y: visible;
                 scroll-snap-type: x mandatory;
-                gap: 12px !important;
-                padding: 0 5vw 20px !important;
-                -webkit-overflow-scrolling: touch;
+                gap: 14px !important;
+                padding: 4px 10vw 20px !important;
                 scrollbar-width: none;
-                }
+            }
             .bundles-grid::-webkit-scrollbar { display: none; }
             .bundle-card {
-                min-width: 78vw;
-                max-width: 78vw;
+                min-width: 82vw;
+                max-width: 82vw;
                 scroll-snap-align: center;
                 flex-shrink: 0;
+                /* Väčší padding pre pohodlnejšie ťukanie */
+                padding: 28px 22px !important;
             }
         }
 
@@ -2581,8 +2583,34 @@
 
     if (bundlesGrid) {
         bundlesGrid.addEventListener('scroll', updateCarouselArrows, { passive: true });
-        // Inicializácia — prvá šípka disabled
         setTimeout(updateCarouselArrows, 100);
+
+        // Smart touch handler — horizontálny scroll bez blokovania stránky
+        let touchStartX = 0, touchStartY = 0, lockAxis = null;
+
+        bundlesGrid.addEventListener('touchstart', e => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            lockAxis = null;
+        }, { passive: true });
+
+        bundlesGrid.addEventListener('touchmove', e => {
+            const dx = Math.abs(e.touches[0].clientX - touchStartX);
+            const dy = Math.abs(e.touches[0].clientY - touchStartY);
+
+            if (!lockAxis) {
+                // Určíme os po prvých 8px pohybu
+                if (dx > 8 || dy > 8) {
+                    lockAxis = dx > dy ? 'x' : 'y';
+                }
+            }
+
+            if (lockAxis === 'x') {
+                // Horizontálny scroll — zabráníme stránke scrollovať
+                e.preventDefault();
+            }
+            // Ak lockAxis === 'y', necháme event prebehnúť prirodzene
+        }, { passive: false });
     }
 
     /* ─────────────────────────────────────────
