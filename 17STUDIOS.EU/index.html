@@ -288,7 +288,21 @@
             content:''; position:absolute; top:0; left:50%; width:1px; height:14px;
             background:var(--text); opacity:.4; transition: height .25s, background .25s, opacity .25s;
         }
-        .tree-num  { font-family:var(--font-mono); font-size:.65rem; color:var(--accent); font-weight:700; margin-bottom:2px; }
+        .tree-num  {
+            font-family:var(--font-mono); font-size:.65rem; color:var(--accent);
+            font-weight:700; margin-bottom:2px;
+            opacity:0;
+            text-shadow: none;
+        }
+        @keyframes treeNumLight {
+            0%   { opacity:0; text-shadow: none; }
+            40%  { opacity:1; text-shadow: 0 0 12px var(--accent), 0 0 28px var(--accent); }
+            70%  { opacity:1; text-shadow: 0 0 6px var(--accent), 0 0 16px var(--accent); }
+            100% { opacity:1; text-shadow: 0 0 4px rgba(255,60,0,.4), 0 0 10px rgba(255,60,0,.2); }
+        }
+        .tree-num.lit {
+            animation: treeNumLight .7s var(--ease-out-expo) forwards;
+        }
         .tree-label{ font-family:var(--font-mono); font-size:.75rem; letter-spacing:1px; text-transform:uppercase; }
         .tree-item:hover .tree-label { color:var(--accent); text-shadow:var(--glow-accent); }
         .tree-item:hover::before { height:24px; background:var(--accent); opacity:1; }
@@ -1895,6 +1909,13 @@
         fly(l2, '-120vw', 400);
 
         body.classList.add('loaded');
+
+        // Postupné zapaľovanie čísel v stromčeku
+        $$('.tree-num').forEach((num, i) => {
+            setTimeout(() => {
+                num.classList.add('lit');
+            }, 800 + i * 220);
+        });
     }
 
     /* ─────────────────────────────────────────
