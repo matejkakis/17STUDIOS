@@ -455,10 +455,10 @@
             font-family:var(--font-mono); font-size:.88rem;
             opacity:.65; min-height:200px;
             display:flex; align-items:center; justify-content:center;
-            text-align:center; white-space:pre-wrap;
+            text-align:center; white-space:nowrap; line-height:1.7;
             transition: border .3s, opacity .3s;
         }
-        .ai-result.filled { border-style:solid; border-color:var(--accent); opacity:1; text-align:left; align-items:flex-start; flex-direction:column; }
+        .ai-result.filled { border-style:solid; border-color:var(--accent); opacity:1; text-align:left; align-items:flex-start; flex-direction:column; white-space:pre-wrap; }
 
         .glow-btn {
             background:var(--accent); color:#fff; border:none;
@@ -651,17 +651,19 @@
             position:fixed; inset:0; background:rgba(0,0,0,.72);
             backdrop-filter:blur(10px); z-index:5000;
             display:flex; justify-content:center; align-items:center;
-            opacity:0; pointer-events:none; transition:opacity .3s;
+            opacity:0; visibility:hidden; pointer-events:none;
+            transition:opacity .3s, visibility .3s;
             padding:40px 20px;
         }
-        .modal-backdrop.open { opacity:1; pointer-events:auto; }
+        .modal-backdrop.open { opacity:1; visibility:visible; pointer-events:auto; }
 
         .data-packet {
             width:100%; max-width:480px; background:var(--modal-bg);
             border:1px solid var(--modal-bd); position:relative;
-            transform:translateY(18px); transition:transform .35s var(--ease-out-expo);
+            transform:translateY(24px); transition:transform .4s var(--ease-out-expo);
             display:flex; flex-direction:column; max-height:90vh;
             box-shadow:0 20px 50px rgba(0,0,0,.5);
+            will-change:transform;
         }
         .modal-backdrop.open .data-packet { transform:translateY(0); }
 
@@ -1115,16 +1117,18 @@
             .carousel-hint {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                font-family: var(--font-mono);
-                font-size: .65rem;
-                opacity: .5;
-                letter-spacing: 2px;
-                margin-top: 12px;
                 justify-content: center;
+                gap: 10px;
+                font-family: var(--font-mono);
+                font-size: .85rem;
+                letter-spacing: 3px;
+                margin-top: 20px;
+                color: var(--accent);
+                opacity: .85;
+                animation: pulseHint 2.5s ease-in-out infinite;
             }
-            .carousel-hint::before { content: '← '; }
-            .carousel-hint::after  { content: ' →'; }
+            .carousel-hint::before { content: '←'; font-size: 1rem; }
+            .carousel-hint::after  { content: '→'; font-size: 1rem; }
         }
         @media(min-width:901px) { .carousel-hint { display: none; } }
     </style>
@@ -1443,7 +1447,7 @@
     <section id="bundles" class="bundles-section reveal" aria-labelledby="bundles-heading">
         <div class="bundles-head">
             <h2 class="bundles-main-title" id="bundles-heading">BALÍKY</h2>
-            <p class="services-hint">[ KLIKNITE NA BALÍK PRE VIAC INFORMÁCIÍ ]</p>
+            <p class="services-hint">[ KLIKNITE NA BALÍK PRE DETAIL A CENU ]</p>
         </div>
         <div class="bundles-grid">
 
@@ -1460,7 +1464,7 @@
                 <div class="bundle-price">od €800<span>Foto + Video · Svadba</span></div>
             </div>
 
-<div class="bundle-card reveal" role="button" tabindex="0"
+<div class="bundle-card reveal reveal-delay-2" role="button" tabindex="0"
                  onclick="openModal('m-bundle2')"
                  onkeydown="if(event.key==='Enter')openModal('m-bundle2')">
                 <span class="bundle-tag">// BALÍK_02</span>
@@ -1473,7 +1477,7 @@
                 <div class="bundle-price">od €600<span>Foto + Video · Event</span></div>
             </div>
 
-<div class="bundle-card reveal" role="button" tabindex="0"
+<div class="bundle-card reveal reveal-delay-3" role="button" tabindex="0"
                  onclick="openModal('m-bundle3')"
                  onkeydown="if(event.key==='Enter')openModal('m-bundle3')">
                 <span class="bundle-tag">// BALÍK_03</span>
@@ -1488,6 +1492,21 @@
 
         </div>
         <p class="carousel-hint" aria-label="Posúvajte horizontálne">POSÚVAJTE</p>
+    </section>
+
+    <!-- ===== ARCHETYPE GAME ===== -->
+    <section class="game-section reveal" aria-labelledby="game-heading">
+        <div class="game-box">
+            <div class="game-label" id="game-heading">/// ARCHETYPE_ANALYZER</div>
+            <p style="font-family:var(--font-mono);font-size:.75rem;opacity:.5;margin-bottom:10px;max-width:400px;text-align:center;line-height:1.6;">Zadajte jedno slovo, ktoré vás opisuje. Dostanete svoj kreatívny archetyp a zľavový kód na prvú spoluprácu.</p>
+            <div id="tip-text" class="tip-display" aria-live="polite">
+                <span style="font-size:1.9rem;font-family:var(--font-head)">AKÝ JE VÁŠ ARCHETYP?</span>
+                <input type="text" id="arch-input" class="game-input"
+                    placeholder="napr. búrka"
+                    autocomplete="off" aria-label="Vaše slovo pre analýzu archetypu">
+            </div>
+            <button id="arch-btn" class="tip-btn">NÁJSŤ SVOJ ARCHETYP ✨</button>
+        </div>
     </section>
 
     <!-- ===== AI LABS ===== -->
@@ -1505,21 +1524,6 @@
             <div id="vision-result" class="ai-result" aria-live="polite" aria-label="Výsledok AI konceptu">
                 [ ČAKÁM NA VSTUPNÉ DÁTA... ]
             </div>
-        </div>
-    </section>
-
-    <!-- ===== ARCHETYPE GAME ===== -->
-    <section class="game-section reveal" aria-labelledby="game-heading">
-        <div class="game-box">
-            <div class="game-label" id="game-heading">/// ARCHETYPE_ANALYZER</div>
-            <p style="font-family:var(--font-mono);font-size:.75rem;opacity:.5;margin-bottom:10px;max-width:400px;text-align:center;line-height:1.6;">Zadajte jedno slovo, ktoré vás opisuje. Dostanete svoj kreatívny archetyp a zľavový kód na prvú spoluprácu.</p>
-            <div id="tip-text" class="tip-display" aria-live="polite">
-                <span style="font-size:1.9rem;font-family:var(--font-head)">AKÝ JE VÁŠ ARCHETYP?</span>
-                <input type="text" id="arch-input" class="game-input"
-                    placeholder="Zadajte slovo (napr. búrka)..."
-                    autocomplete="off" aria-label="Vaše slovo pre analýzu archetypu">
-            </div>
-            <button id="arch-btn" class="tip-btn">NÁJSŤ SVOJ ARCHETYP ✨</button>
         </div>
     </section>
 
