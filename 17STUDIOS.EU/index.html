@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>17STUDIOS | VISUAL ARCHIVE</title>
     <meta name="description" content="17 Studios — videografia, fotografia a digital art z Prievidze. Kamera, Svetlá & Emócia.">
+    <meta name="keywords" content="videografia, fotografia, digital art, svadobné video, svadobná fotografia, Prievidza, 17 Studios">
+    <meta name="author" content="Matej Kakiš — 17 Studios">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website">
+    <meta property="og:url"         content="https://17studios.sk/">
+    <meta property="og:title"       content="17STUDIOS | Videografia & Fotografia · Prievidza">
+    <meta property="og:description" content="Zachytávame momenty, ktoré ostanú. Svadobné video, fotografia a brand obsah z Prievidze.">
+    <meta property="og:image"       content="https://img.youtube.com/vi/JTvWrASemTU/maxresdefault.jpg">
+    <meta property="og:locale"      content="sk_SK">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="17STUDIOS | Videografia & Fotografia">
+    <meta name="twitter:description" content="Zachytávame momenty, ktoré ostanú. Svadobné video, fotografia a brand obsah z Prievidze.">
+    <meta name="twitter:image"       content="https://img.youtube.com/vi/JTvWrASemTU/maxresdefault.jpg">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://17studios.sk/">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +51,7 @@
             --glow-border: 0 0 10px rgba(255,60,0,0.28);
 
             --noise-blend:   overlay;
-            --noise-opacity: 0.22;
+            --noise-opacity: 0.30;
 
             --font-head: 'Playfair Display', serif;
             --font-mono: 'Space Mono', monospace;
@@ -53,7 +73,7 @@
             --glow-accent: none;
             --glow-border: none;
             --noise-blend:   multiply;
-            --noise-opacity: 0.07;
+            --noise-opacity: 0.10;
         }
 
         /* =============================================
@@ -74,12 +94,22 @@
         /* =============================================
            3. LAYERS & OVERLAYS
         ============================================= */
+        @keyframes grainShift {
+            0%,100% { transform: translate(0,0) scale(1.05); }
+            20%  { transform: translate(-1px, 1px) scale(1.05); }
+            40%  { transform: translate(1px, -1px) scale(1.05); }
+            60%  { transform: translate(-1px, -1px) scale(1.05); }
+            80%  { transform: translate(1px, 1px) scale(1.05); }
+        }
         .noise-overlay {
-            position: fixed; inset:0; pointer-events:none; z-index:1;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            position: fixed; inset:-5%; pointer-events:none; z-index:1;
+            width: 110%; height: 110%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 200px 200px;
             mix-blend-mode: var(--noise-blend);
             opacity: var(--noise-opacity);
             transition: opacity .4s;
+            animation: grainShift 0.12s steps(1) infinite;
         }
 
         .film-gate {
@@ -383,8 +413,29 @@
         .section-header { font-family:var(--font-mono); font-size:1.3rem; margin-bottom:50px; text-transform:uppercase; border-bottom:1px solid var(--line); padding-bottom:18px; display:inline-block; }
 
         .category-title { font-family:var(--font-mono); color:var(--accent); font-size:.85rem; letter-spacing:3px; margin-bottom:18px; padding-left:16px; border-left:2px solid var(--accent); }
-        .portfolio-grid { display:grid; grid-template-columns:1fr; gap:24px; }
-        @media(min-width:800px) { .portfolio-grid { grid-template-columns:repeat(2,1fr); } }
+        .portfolio-grid {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            gap: 16px;
+            padding-bottom: 16px;
+            scroll-snap-type: x mandatory;
+            touch-action: pan-x;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+        }
+        .portfolio-grid:active { cursor: grabbing; }
+        .portfolio-grid::-webkit-scrollbar { display: none; }
+        .portfolio-grid .p-item {
+            min-width: 280px;
+            width: 280px;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
+        @media(min-width:800px) {
+            .portfolio-grid .p-item { min-width: 340px; width: 340px; }
+        }
 
         .p-item {
             display:block; height:380px;
@@ -1044,12 +1095,13 @@
             .bundles-grid {
                 display: flex !important;
                 overflow-x: auto;
-                scroll-snap-type: x proximity;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
                 gap: 12px !important;
                 padding: 0 5vw 20px !important;
                 -webkit-overflow-scrolling: touch;
                 scrollbar-width: none;
-                scroll-behavior: smooth;
+                touch-action: pan-x;
             }
             .bundles-grid::-webkit-scrollbar { display: none; }
             .bundle-card {
@@ -1119,22 +1171,11 @@
 
         /* Bundle carousel hint on mobile */
         @media(max-width:900px) {
-            .bundles-grid::after {
-                content: '→';
-                font-family: var(--font-mono);
-                font-size: 1.2rem;
-                color: var(--accent);
-                min-width: 40px;
-                display: flex;
-                align-items: center;
-                opacity: .6;
-                flex-shrink: 0;
-            }
             .carousel-hint {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 10px;
+                gap: 14px;
                 font-family: var(--font-mono);
                 font-size: .85rem;
                 letter-spacing: 3px;
@@ -1143,12 +1184,148 @@
                 opacity: .85;
                 animation: pulseHint 2.5s ease-in-out infinite;
             }
-            .carousel-hint::before { content: '←'; font-size: 1rem; }
-            .carousel-hint::after  { content: '→'; font-size: 1rem; }
+            .carousel-arrow {
+                font-size: 1.1rem;
+                transition: opacity .3s, transform .3s;
+                display: inline-block;
+            }
+            .carousel-arrow.disabled {
+                opacity: .2;
+                transform: scale(.8);
+            }
         }
         @media(min-width:901px) { .carousel-hint { display: none; } }
+
+        /* =============================================
+           SECTION PULSE GLOW
+        ============================================= */
+        @keyframes sectionPulse {
+            0%   { box-shadow: none; }
+            30%  { box-shadow: inset 0 0 60px -20px rgba(255,60,0,.12); }
+            100% { box-shadow: none; }
+        }
+        .section-pulse {
+            animation: sectionPulse 1.4s ease-out forwards;
+        }
+
+        /* =============================================
+           GDPR COOKIE BANNER
+        ============================================= */
+        #cookie-banner {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: var(--panel);
+            border-top: 1px solid var(--line);
+            padding: 16px 5vw;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 20px; flex-wrap: wrap;
+            z-index: 9999;
+            transform: translateY(100%);
+            transition: transform .5s var(--ease-out-expo);
+            backdrop-filter: blur(12px);
+        }
+        #cookie-banner.visible { transform: translateY(0); }
+        .cookie-text {
+            font-family: var(--font-mono); font-size: .72rem;
+            opacity: .75; line-height: 1.6; flex: 1; min-width: 200px;
+        }
+        .cookie-text a { color: var(--accent); text-decoration: none; }
+        .cookie-btns { display: flex; gap: 10px; flex-shrink: 0; }
+        .cookie-accept {
+            background: var(--accent); color: #fff; border: none;
+            font-family: var(--font-mono); font-size: .72rem; font-weight: 700;
+            padding: 8px 18px; cursor: pointer; letter-spacing: 1px;
+            transition: opacity .2s;
+        }
+        .cookie-accept:hover { opacity: .85; }
+        .cookie-decline {
+            background: none; border: 1px solid var(--line);
+            color: var(--text); font-family: var(--font-mono); font-size: .72rem;
+            padding: 8px 14px; cursor: pointer; letter-spacing: 1px;
+            transition: border-color .2s;
+        }
+        .cookie-decline:hover { border-color: var(--accent); }
+
+        /* =============================================
+           CURSOR TRAIL
+        ============================================= */
+        .cursor-trail {
+            position: fixed;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity .15s;
+            mix-blend-mode: screen;
+        }
+        @media (hover: none) { .cursor-trail { display: none; } }
+
+        /* =============================================
+           CRT SCAN-LINE THEME TRANSITION
+        ============================================= */
+        @keyframes crtOn {
+            0%   { clip-path: inset(50% 0 50% 0); opacity: 0; }
+            40%  { clip-path: inset(0% 0 0% 0);   opacity: 1; }
+            100% { clip-path: inset(0% 0 0% 0);   opacity: 1; }
+        }
+        body.theme-switching {
+            animation: crtOn .4s var(--ease-out-expo) forwards;
+        }
+
+        /* =============================================
+           MICRO-INTERACTIONS
+        ============================================= */
+        @keyframes clickFlash {
+            0%   { box-shadow: 0 0 0 0 rgba(255,60,0,.5); transform: scale(.97); }
+            50%  { box-shadow: 0 0 0 8px rgba(255,60,0,0); transform: scale(1.01); }
+            100% { box-shadow: none; transform: scale(1); }
+        }
+        .click-flash {
+            animation: clickFlash .35s var(--ease-out-expo) forwards !important;
+        }
+        /* Aktívny stav tlačidiel */
+        .glow-btn:active    { transform: scale(.97); }
+        .bundle-card:active { transform: scale(.98); }
+        .service-card:active{ transform: scale(.98); }
+        .filter-btn:active  { transform: scale(.95); }
     </style>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230f0e0d'/><text x='4' y='24' font-family='monospace' font-size='20' font-weight='900' fill='%23ff3c00'>17</text></svg>">
+
+    <!-- Structured Data — LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "17 Studios",
+      "description": "Videografia, fotografia a digital art z Prievidze. Svadobné video, eventová fotografia, brand obsah.",
+      "url": "https://17studios.sk",
+      "telephone": "+421950592956",
+      "email": "matejkakis@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Prievidza",
+        "addressCountry": "SK"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 48.7706,
+        "longitude": 18.6319
+      },
+      "sameAs": [
+        "https://www.instagram.com/donorvisuals",
+        "https://www.facebook.com/MatejKakisDonor",
+        "https://www.tiktok.com/@donorvisuals"
+      ],
+      "priceRange": "€€",
+      "serviceArea": {
+        "@type": "GeoCircle",
+        "geoMidpoint": { "@type": "GeoCoordinates", "latitude": 48.7706, "longitude": 18.6319 },
+        "geoRadius": "150000"
+      }
+    }
+    </script>
 </head>
 
 <body class="js-loading">
@@ -1268,7 +1445,7 @@
             <div class="featured-thumb" id="featured-thumb"
                  role="button" tabindex="0" aria-label="Prehrať featured video"
                  onclick="loadFeatured()" onkeydown="if(event.key==='Enter')loadFeatured()">
-                <img src="https://img.youtube.com/vi/JTvWrASemTU/sddefault.jpg"
+                <img src="https://img.youtube.com/vi/JTvWrASemTU/sddefault.jpg" width="480" height="360"
                      onerror="this.onerror=null;this.src='https://img.youtube.com/vi/JTvWrASemTU/hqdefault.jpg'"
                      alt="Featured video — 17 Studios" loading="lazy">
                 <div class="featured-play" aria-hidden="true">
@@ -1306,7 +1483,7 @@
                      onkeydown="if(event.key==='Enter')openVideo('vMazDgh0wMo')"
                      aria-label="Prehrať: Hudobný klip">
                     <div class="yt-thumb" style="pointer-events:none">
-                        <img src="https://img.youtube.com/vi/vMazDgh0wMo/maxresdefault.jpg" alt="Hudobný klip" loading="lazy">
+                        <img src="https://img.youtube.com/vi/vMazDgh0wMo/maxresdefault.jpg" width="480" height="360" alt="Hudobný klip" loading="lazy">
                     </div>
                     <div class="p-tag">PROJECT_ALPHA</div>
                     <div class="p-title">Hudobný klip</div>
@@ -1317,7 +1494,7 @@
                      onkeydown="if(event.key==='Enter')openVideo('i0jR2p-oiWQ')"
                      aria-label="Prehrať: Aftermovie">
                     <div class="yt-thumb" style="pointer-events:none">
-                        <img src="https://img.youtube.com/vi/i0jR2p-oiWQ/maxresdefault.jpg" alt="Aftermovie" loading="lazy">
+                        <img src="https://img.youtube.com/vi/i0jR2p-oiWQ/maxresdefault.jpg" width="480" height="360" alt="Aftermovie" loading="lazy">
                     </div>
                     <div class="p-tag">PROJECT_BETA</div>
                     <div class="p-title">Aftermovie</div>
@@ -1507,7 +1684,11 @@
             </div>
 
         </div>
-        <p class="carousel-hint" aria-label="Posúvajte horizontálne">POSÚVAJTE</p>
+        <div class="carousel-hint" aria-label="Posúvajte horizontálne" id="carousel-hint">
+            <span class="carousel-arrow" id="arrow-left">←</span>
+            <span>POSÚVAJTE</span>
+            <span class="carousel-arrow" id="arrow-right">→</span>
+        </div>
     </section>
 
     <!-- ===== ARCHETYPE GAME ===== -->
@@ -1928,7 +2109,7 @@
     /* ─────────────────────────────────────────
        THEME
     ───────────────────────────────────────── */
-    themeBtn.addEventListener('click', () => body.classList.toggle('light'));
+    // themeBtn — CRT switch je nižšie
 
     /* ─────────────────────────────────────────
        NAVIGATION MENU
@@ -2387,6 +2568,48 @@
     /* ─────────────────────────────────────────
        NAV — smooth scroll po zatvorení menu
     ───────────────────────────────────────── */
+    /* ─────────────────────────────────────────
+       CAROUSEL ARROWS — update podľa scroll pozície
+    ───────────────────────────────────────── */
+    const bundlesGrid = $('.bundles-grid');
+    const arrowLeft   = $('#arrow-left');
+    const arrowRight  = $('#arrow-right');
+
+    function updateCarouselArrows() {
+        if (!bundlesGrid || !arrowLeft || !arrowRight) return;
+        const atStart = bundlesGrid.scrollLeft <= 10;
+        const atEnd   = bundlesGrid.scrollLeft >= bundlesGrid.scrollWidth - bundlesGrid.clientWidth - 10;
+        arrowLeft.classList.toggle('disabled', atStart);
+        arrowRight.classList.toggle('disabled', atEnd);
+    }
+
+    if (bundlesGrid) {
+        bundlesGrid.addEventListener('scroll', updateCarouselArrows, { passive: true });
+        // Inicializácia — prvá šípka disabled
+        setTimeout(updateCarouselArrows, 100);
+    }
+
+    /* ─────────────────────────────────────────
+       SECTION PULSE GLOW — pri scrolle
+    ───────────────────────────────────────── */
+    let lastSection = null;
+    const pulseObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.target !== lastSection) {
+                lastSection = entry.target;
+                entry.target.classList.remove('section-pulse');
+                // force reflow
+                void entry.target.offsetWidth;
+                entry.target.classList.add('section-pulse');
+                entry.target.addEventListener('animationend', () => {
+                    entry.target.classList.remove('section-pulse');
+                }, { once: true });
+            }
+        });
+    }, { threshold: 0.3 });
+
+    $$('section').forEach(s => pulseObserver.observe(s));
+
     window.navTo = (id) => {
         closeMenu();
         setTimeout(() => {
@@ -2419,7 +2642,117 @@
     ───────────────────────────────────────── */
 
 
+
+    /* ─────────────────────────────────────────
+       CURSOR TRAIL
+    ───────────────────────────────────────── */
+    const trails = Array.from({ length: 8 }, (_, i) => $(`#trail-${i}`)).filter(Boolean);
+    let mouseX = 0, mouseY = 0;
+    const trailPos = trails.map(() => ({ x: 0, y: 0 }));
+
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    if (trails.length) {
+        (function animateTrail() {
+            trailPos[0].x += (mouseX - trailPos[0].x) * 0.35;
+            trailPos[0].y += (mouseY - trailPos[0].y) * 0.35;
+            for (let i = 1; i < trails.length; i++) {
+                trailPos[i].x += (trailPos[i-1].x - trailPos[i].x) * 0.4;
+                trailPos[i].y += (trailPos[i-1].y - trailPos[i].y) * 0.4;
+            }
+            trails.forEach((el, i) => {
+                const scale = 1 - i * 0.1;
+                const opacity = (1 - i / trails.length) * 0.55;
+                el.style.left = trailPos[i].x + 'px';
+                el.style.top  = trailPos[i].y + 'px';
+                el.style.opacity = opacity;
+                el.style.transform = `translate(-50%,-50%) scale(${scale})`;
+            });
+            requestAnimationFrame(animateTrail);
+        })();
+    }
+
+    /* ─────────────────────────────────────────
+       CRT THEME SWITCH
+    ───────────────────────────────────────── */
+    themeBtn.addEventListener('click', () => {
+        body.classList.add('theme-switching');
+        body.classList.toggle('light');
+        body.addEventListener('animationend', () => {
+            body.classList.remove('theme-switching');
+        }, { once: true });
+    });
+
+    /* ─────────────────────────────────────────
+       MICRO-INTERACTIONS — klik flash
+    ───────────────────────────────────────── */
+    $$('.bundle-card, .service-card, .glow-btn, .filter-btn').forEach(el => {
+        el.addEventListener('click', () => {
+            el.classList.remove('click-flash');
+            void el.offsetWidth;
+            el.classList.add('click-flash');
+            el.addEventListener('animationend', () => el.classList.remove('click-flash'), { once: true });
+        });
+    });
+
+    /* ─────────────────────────────────────────
+       PORTFOLIO — drag to scroll (desktop)
+    ───────────────────────────────────────── */
+    $$('.portfolio-grid').forEach(grid => {
+        let isDown = false, startX = 0, scrollLeft = 0;
+        grid.addEventListener('mousedown', e => {
+            isDown = true;
+            startX = e.pageX - grid.offsetLeft;
+            scrollLeft = grid.scrollLeft;
+        });
+        grid.addEventListener('mouseleave', () => isDown = false);
+        grid.addEventListener('mouseup',    () => isDown = false);
+        grid.addEventListener('mousemove', e => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - grid.offsetLeft;
+            grid.scrollLeft = scrollLeft - (x - startX) * 1.5;
+        });
+    });
+
+    /* ─────────────────────────────────────────
+       GDPR COOKIE BANNER
+    ───────────────────────────────────────── */
+    const cookieBanner = $('#cookie-banner');
+    window.closeCookieBanner = () => {
+        cookieBanner.classList.remove('visible');
+        localStorage.setItem('cookie-consent', '1');
+    };
+    if (!localStorage.getItem('cookie-consent') && cookieBanner) {
+        setTimeout(() => cookieBanner.classList.add('visible'), 2000);
+    }
+
 })();
 </script>
+
+<!-- GDPR COOKIE BANNER -->
+<div id="cookie-banner" role="dialog" aria-label="Súhlas s cookies" aria-live="polite">
+    <p class="cookie-text">
+        Táto stránka nepoužíva žiadne sledovacie cookies. Používame iba funkčné cookies nevyhnutné pre chod stránky.
+        Viac info: <a href="#" onclick="return false;">GDPR & Privacy</a>
+    </p>
+    <div class="cookie-btns">
+        <button class="cookie-decline" onclick="closeCookieBanner()">ZAVRIEŤ</button>
+        <button class="cookie-accept" onclick="closeCookieBanner()">ROZUMIEM</button>
+    </div>
+</div>
+
+<!-- CURSOR TRAIL -->
+<div class="cursor-trail" id="trail-0" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-1" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-2" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-3" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-4" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-5" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-6" aria-hidden="true"></div>
+<div class="cursor-trail" id="trail-7" aria-hidden="true"></div>
 </body>
 </html>
