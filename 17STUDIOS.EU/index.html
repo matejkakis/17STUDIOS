@@ -1029,6 +1029,22 @@
             margin-bottom: 20px;
             transition: background .35s ease, color .35s ease, box-shadow .35s ease, transform .35s ease;
         }
+
+        /* Aktívny step pri scrolle */
+        .process-step { cursor: default; }
+        .process-step.in-view .step-num {
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(255,60,0,.6), 0 0 40px rgba(255,60,0,.3);
+        }
+        .process-step.in-view {
+            transform: translateY(-4px);
+            border-color: rgba(255,60,0,.3);
+            box-shadow: 0 8px 24px rgba(0,0,0,.15);
+        }
+        .process-step.in-view .step-title {
+            color: var(--accent);
+        }
+
         .process-step:hover .step-num,
         .process-step:focus-within .step-num {
             background: var(--accent);
@@ -1090,22 +1106,31 @@
            BUNDLES MOBILE CAROUSEL
         ============================================= */
         @media(max-width:900px) {
+            /* Wrapper rieši clip bez blokovania scroll */
+            .bundles-section-wrap {
+                width: 100%;
+                overflow: hidden;
+            }
             .bundles-grid {
                 display: flex !important;
-                overflow-x: scroll;
-                overflow-y: visible;
-                scroll-snap-type: x mandatory;
+                width: 100%;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                scroll-snap-type: x mandatory !important;
                 gap: 14px !important;
                 padding: 4px 10vw 20px !important;
-                scrollbar-width: none;
+                scrollbar-width: none !important;
+                -webkit-overflow-scrolling: touch;
+                /* Kritické: bez clip-path na rodičovi funguje */
+                position: relative;
+                z-index: 1;
             }
-            .bundles-grid::-webkit-scrollbar { display: none; }
+            .bundles-grid::-webkit-scrollbar { display: none !important; }
             .bundle-card {
-                min-width: 82vw;
-                max-width: 82vw;
-                scroll-snap-align: center;
-                flex-shrink: 0;
-                /* Väčší padding pre pohodlnejšie ťukanie */
+                min-width: 82vw !important;
+                max-width: 82vw !important;
+                scroll-snap-align: center !important;
+                flex-shrink: 0 !important;
                 padding: 28px 22px !important;
             }
         }
@@ -1181,15 +1206,29 @@
                 color: var(--accent);
                 opacity: .85;
                 animation: pulseHint 2.5s ease-in-out infinite;
+                user-select: none;
             }
             .carousel-arrow {
-                font-size: 1.1rem;
-                transition: opacity .3s, transform .3s;
-                display: inline-block;
+                font-size: 1.3rem;
+                transition: opacity .25s, transform .2s;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 36px; height: 36px;
+                border: 1px solid rgba(255,60,0,.3);
+                cursor: pointer;
+                background: none;
+                color: var(--accent);
+                font-family: var(--font-mono);
+                padding: 0;
+            }
+            .carousel-arrow:hover:not(.disabled) {
+                background: rgba(255,60,0,.1);
+                transform: scale(1.1);
             }
             .carousel-arrow.disabled {
                 opacity: .2;
-                transform: scale(.8);
+                cursor: default;
             }
         }
         @media(min-width:901px) { .carousel-hint { display: none; } }
@@ -1364,6 +1403,32 @@
         .sticky-dm.visible { opacity: 1; transform: translateX(0); }
         .sticky-dm:hover { border-color: var(--accent); color: var(--accent); }
         body.light .sticky-dm { background: rgba(234,227,204,.9); }
+
+        /* =============================================
+           TESTIMONIAL IMAGES
+        ============================================= */
+        .test-img-wrap {
+            width: 100%; height: 160px;
+            overflow: hidden; position: relative;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
+        .test-img-wrap img {
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center top;
+            opacity: .75; transition: opacity .3s;
+        }
+        .test-card:hover .test-img-wrap img { opacity: 1; }
+        .test-card.featured-quote .test-img-wrap {
+            height: 200px;
+        }
+        @media(min-width:900px) {
+            .test-card.featured-quote .test-img-wrap {
+                width: 180px; height: auto; margin-bottom: 0;
+                border-bottom: none; border-right: 1px solid var(--line);
+                margin-right: 20px; flex-shrink: 0;
+            }
+        }
     </style>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230f0e0d'/><text x='4' y='24' font-family='monospace' font-size='20' font-weight='900' fill='%23ff3c00'>17</text></svg>">
 
@@ -1423,14 +1488,14 @@
 
 <!-- STICKY CTA GROUP -->
 <div class="sticky-cta-group">
+    <button class="sticky-cta" aria-label="Kontakt" onclick="openContactModal()" style="position:static;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12.09 19.79 19.79 0 0 1 1.12 3.47 2 2 0 0 1 3.11 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </button>
     <a href="https://www.instagram.com/donorvisuals" target="_blank" rel="noopener"
        class="sticky-dm" id="sticky-dm" aria-label="Napísať na Instagram DM">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         DM NA INSTAGRAM
     </a>
-    <button class="sticky-cta" aria-label="Kontakt" onclick="openContactModal()" style="position:static;">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 12.09 19.79 19.79 0 0 1 1.12 3.47 2 2 0 0 1 3.11 1.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-    </button>
 </div>
 
 <!-- FULLSCREEN NAVIGATION -->
@@ -1723,7 +1788,7 @@
             <h2 class="bundles-main-title" id="bundles-heading">BALÍKY</h2>
             <p class="services-hint">[ KLIKNITE NA BALÍK<br>PRE DETAIL A CENU ]</p>
         </div>
-        <div class="bundles-grid">
+        <div class="bundles-section-wrap"><div class="bundles-grid">
 
 <div class="bundle-card reveal" role="button" tabindex="0"
                  onclick="openModal('m-bundle1')"
@@ -1765,10 +1830,11 @@
             </div>
 
         </div>
+        </div><!-- /bundles-grid --></div><!-- /bundles-section-wrap -->
         <div class="carousel-hint" aria-label="Posúvajte horizontálne" id="carousel-hint">
-            <span class="carousel-arrow" id="arrow-left">←</span>
+            <button class="carousel-arrow" id="arrow-left" aria-label="Predchádzajúci balík">←</button>
             <span>POSÚVAJTE</span>
-            <span class="carousel-arrow" id="arrow-right">→</span>
+            <button class="carousel-arrow" id="arrow-right" aria-label="Nasledujúci balík">→</button>
         </div>
     </section>
 
@@ -1837,20 +1903,41 @@
         <h2 class="section-header reveal" id="test-heading">CLIENT_LOGS</h2>
         <div class="test-grid">
             <article class="test-card featured-quote reveal">
+                <div class="test-img-wrap">
+                    <img src="/log_01.jpg" alt="Radoslav H." loading="lazy" width="480" height="320"
+                         onerror="this.parentElement.style.display='none'">
+                </div>
                 <div class="featured-quote-mark" aria-hidden="true">"</div>
                 <div class="log-head">&gt; LOG_ENTRY_01</div>
                 <p class="quote">"S Matejom som spolupracoval dvakrát a vždy veľká spokojnosť s výsledným videom. Znova ďakujem za spoluprácu a odporúčam!"</p>
                 <span class="author">Radoslav H.</span>
             </article>
             <article class="test-card reveal reveal-delay-1">
+                <div class="test-img-wrap">
+                    <img src="/log_02.jpg" alt="Kristína K." loading="lazy" width="480" height="320"
+                         onerror="this.parentElement.style.display='none'">
+                </div>
                 <div class="log-head">&gt; LOG_ENTRY_02</div>
                 <p class="quote">"Donor mi splnil môj dievčenský sen a fotky sú naozaj krásne — ako z iného vesmíru. Ďakujeem. :)"</p>
                 <span class="author">Kristína K.</span>
             </article>
             <article class="test-card reveal reveal-delay-2">
+                <div class="test-img-wrap">
+                    <img src="/log_03.jpg" alt="Igor H." loading="lazy" width="480" height="320"
+                         onerror="this.parentElement.style.display='none'">
+                </div>
                 <div class="log-head">&gt; LOG_ENTRY_03</div>
                 <p class="quote">"Naše svadobné fotky a krátke video z pytačiek sa Maťovi veľmi podarili a aj s prístupom sme boli veľmi spokojní!"</p>
                 <span class="author">Igor H.</span>
+            </article>
+            <article class="test-card reveal reveal-delay-3">
+                <div class="test-img-wrap">
+                    <img src="/log_04.jpg" alt="Dávid B." loading="lazy" width="480" height="320"
+                         onerror="this.parentElement.style.display='none'">
+                </div>
+                <div class="log-head">&gt; LOG_ENTRY_04</div>
+                <p class="quote">"S chalanmi bola radosť spolupracovať, od premysleného scenára, až po finálny výsledok a konečné revízie. Ďakujem!"</p>
+                <span class="author">Dávid B. (SCERO)</span>
             </article>
         </div>
     </section>
@@ -2045,14 +2132,14 @@
             <div class="bundle-result-tags">
                 <span class="result-tag">Svadobný film so scenárom</span>
                 <span class="result-tag">Editované fotografie</span>
-                <span class="result-tag">Dodanie do 4 týždňov</span>
+                <span class="result-tag">Dodanie do 7 dní</span>
                 <span class="result-tag">2 revízie v cene</span>
             </div>
             <div class="bundle-guarantee">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <div class="bundle-guarantee-text">
                     <span class="bundle-guarantee-title">GARANCIA SPOKOJNOSTI</span>
-                    Ak s výsledkom nebudete spokojní, doladíme ho. Vždy. Svadba sa nedá zopakovať — výsledok áno.
+                    Vďaka scenáru budete vopred vedieť, ako váš deň zachytíme. Revízie sú ale stále samozrejmosťou.
                 </div>
             </div>
             <p style="font-family:var(--font-mono);font-size:.9rem;line-height:1.75;opacity:.85;margin-bottom:24px;">Svadba je jeden z tých dní, na ktoré sa dlho čaká a rýchlo pominie. Balík fotiek aj videa znamená, že si ho budete môcť znovu prežiť, ukázať deťom a tešiť sa z neho ešte roky po tom, čo odznie posledná pieseň.</p>
@@ -2080,14 +2167,14 @@
             <div class="bundle-result-tags">
                 <span class="result-tag">Dynamický aftermovie</span>
                 <span class="result-tag">Fotoreportáž</span>
-                <span class="result-tag">Dodanie do 2 týždňov</span>
+                <span class="result-tag">Dodanie do 7 dní</span>
                 <span class="result-tag">Vertikálny strih pre Reels</span>
             </div>
             <div class="bundle-guarantee">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <div class="bundle-guarantee-text">
                     <span class="bundle-guarantee-title">GARANCIA SPOKOJNOSTI</span>
-                    Výsledok upravíme, kým nebudete spokojní. 2 revízie sú súčasťou každej objednávky.
+                    Konzultácia vášho eventu je prvým krokom spolupráce a táto služba je samozrejme v cene.
                 </div>
             </div>
             <p style="font-family:var(--font-mono);font-size:.9rem;line-height:1.75;opacity:.85;margin-bottom:24px;">Vieme, že za každým eventom stoja mesiace príprav. Oplatí sa mať z neho obsah, ktorý to ukáže. Fotografie zachytia detaily, aftermovie zachytí energiu celého dňa. Niečo, čo ukážete partnerom, sponzorom aj publiku.</p>
@@ -2115,14 +2202,14 @@
             <div class="bundle-result-tags">
                 <span class="result-tag">Brand video + Reels</span>
                 <span class="result-tag">Editoriálne fotografie</span>
-                <span class="result-tag">Dodanie do 3 týždňov</span>
+                <span class="result-tag">Obsah na dlhodobé použitie</span>
                 <span class="result-tag">Obsah na mesiace dopredu</span>
             </div>
             <div class="bundle-guarantee">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <div class="bundle-guarantee-text">
                     <span class="bundle-guarantee-title">GARANCIA SPOKOJNOSTI</span>
-                    Obsah, ktorý skutočne použijete. Ak nie, upravíme ho. Vaša značka si zaslúži výsledok, na ktorý ste hrdí.
+                    Po konzultácii vytvoríme obsah, ktorý použijete dlhodobo a vašej značke dá tvár.
                 </div>
             </div>
             <p style="font-family:var(--font-mono);font-size:.9rem;line-height:1.75;opacity:.85;margin-bottom:24px;">Ľudia si o vašej práci urobia názor skôr, ako si prečítajú čo robíte. Foto a video, ktoré skutočne ukazujú kto ste, funguje lepšie ako čokoľvek iné. Počas jedného, až dvoch dní pripravíme obsah, ktorý budete môcť použiť mesiace.</p>
@@ -2689,11 +2776,16 @@
        NAV — smooth scroll po zatvorení menu
     ───────────────────────────────────────── */
     /* ─────────────────────────────────────────
-       CAROUSEL ARROWS — update podľa scroll pozície
+       CAROUSEL — šípky + scroll + touch
     ───────────────────────────────────────── */
     const bundlesGrid = $('.bundles-grid');
     const arrowLeft   = $('#arrow-left');
     const arrowRight  = $('#arrow-right');
+
+    function getCardWidth() {
+        const card = bundlesGrid ? bundlesGrid.querySelector('.bundle-card') : null;
+        return card ? card.offsetWidth + 14 : 300;
+    }
 
     function updateCarouselArrows() {
         if (!bundlesGrid || !arrowLeft || !arrowRight) return;
@@ -2705,9 +2797,17 @@
 
     if (bundlesGrid) {
         bundlesGrid.addEventListener('scroll', updateCarouselArrows, { passive: true });
-        setTimeout(updateCarouselArrows, 100);
+        setTimeout(updateCarouselArrows, 200);
 
-        // Smart touch handler — horizontálny scroll bez blokovania stránky
+        // Klikateľné šípky
+        if (arrowLeft) arrowLeft.addEventListener('click', () => {
+            bundlesGrid.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+        });
+        if (arrowRight) arrowRight.addEventListener('click', () => {
+            bundlesGrid.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+        });
+
+        // Smart touch — rozlíšenie smeru gesta
         let touchStartX = 0, touchStartY = 0, lockAxis = null;
 
         bundlesGrid.addEventListener('touchstart', e => {
@@ -2719,20 +2819,22 @@
         bundlesGrid.addEventListener('touchmove', e => {
             const dx = Math.abs(e.touches[0].clientX - touchStartX);
             const dy = Math.abs(e.touches[0].clientY - touchStartY);
-
-            if (!lockAxis) {
-                // Určíme os po prvých 8px pohybu
-                if (dx > 8 || dy > 8) {
-                    lockAxis = dx > dy ? 'x' : 'y';
-                }
-            }
-
-            if (lockAxis === 'x') {
-                // Horizontálny scroll — zabráníme stránke scrollovať
-                e.preventDefault();
-            }
-            // Ak lockAxis === 'y', necháme event prebehnúť prirodzene
+            if (!lockAxis && (dx > 8 || dy > 8)) lockAxis = dx > dy ? 'x' : 'y';
+            if (lockAxis === 'x') e.preventDefault();
         }, { passive: false });
+    }
+
+    /* ─────────────────────────────────────────
+       HOW IT WORKS — aktívny step pri scrolle
+    ───────────────────────────────────────── */
+    const processSteps = $$('.process-step');
+    if (processSteps.length) {
+        const stepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('in-view', entry.isIntersecting);
+            });
+        }, { threshold: 0.55 });
+        processSteps.forEach(s => stepObserver.observe(s));
     }
 
     /* ─────────────────────────────────────────
