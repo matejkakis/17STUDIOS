@@ -254,7 +254,8 @@
             <div class="feature-media">
                 <button class="yt-facade" data-yt="JTvWrASemTU" data-title="SCERO – Pavučina lží (Web of Lies)" aria-label="Play SCERO – Pavučina lží">
                     <img src="https://img.youtube.com/vi/JTvWrASemTU/maxresdefault.jpg" alt="" loading="lazy" width="1280" height="720"
-                         onerror="this.onerror=null;this.src='https://img.youtube.com/vi/JTvWrASemTU/hqdefault.jpg'">
+                         onload="if(this.naturalWidth&lt;=120&amp;&amp;!this.dataset.f){this.dataset.f=1;this.src='https://img.youtube.com/vi/JTvWrASemTU/hqdefault.jpg'}"
+                         onerror="if(!this.dataset.f){this.dataset.f=1;this.src='https://img.youtube.com/vi/JTvWrASemTU/hqdefault.jpg'}">
                     <span class="cat-play" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
                 </button>
             </div>
@@ -486,7 +487,7 @@
                         <h4 class="cat-box-k">Selected work</h4>
                         <div class="cat-gallery" data-group="hudba">
                         <a class="cat-tile" data-title="SCERO — Pavučina lží" data-yt="JTvWrASemTU"></a>
-                        <a class="cat-tile" data-title="Music video" data-yt="vMazDgh0wMo"></a>
+                        <a class="cat-tile" data-title="Po stopách spomienok" data-yt="vMazDgh0wMo"></a>
                         <a class="cat-tile" data-vid="../hudba_pbd_erase.mp4" data-poster="../hudba_pbd_erase.webp" data-vertical data-title="PBD × Donor – Erase, video and music"></a>
                         <a class="cat-tile" data-img="../hudba_1.webp"></a>
                         <a class="cat-tile" data-img="../hudba_2.webp"></a>
