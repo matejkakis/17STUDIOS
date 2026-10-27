@@ -1025,7 +1025,7 @@
         const COMBO = 0.10; // zvýhodnenie pri 2+ službách mimo balíka
         const list = $('#calc-list'), total = $('#calc-total'), saveEl = $('#calc-save'), send = $('#calc-send');
         const eur = v => '€' + Math.round(v).toLocaleString('sk-SK');
-        const peek = $('#calc-peek'), peekV = $('#calc-peek-v'), sumBox = $('.calc-sum', calc);
+        const peek = $('#calc-peek'), peekV = $('#calc-peek-v'), peekN = $('#calc-peek-n'), sumBox = $('.calc-sum', calc);
         let calcVisible = false, sumVisible = false;
         const peekSync = () => { if (peek) peek.classList.toggle('on', calcVisible && !sumVisible && $$('input:checked', calc).length > 0); };
         if (peek && 'IntersectionObserver' in window) {
@@ -1039,18 +1039,20 @@
             const ids = $$('input:checked', calc).map(i => i.value);
             const sum = ids.reduce((a, id) => a + ITEMS[id].p, 0);
             let rest = [...ids], save = 0; const notes = [];
-            BUNDLES.forEach(b => { if (b.ids.every(id => rest.includes(id))) { save += b.save; rest = rest.filter(id => !b.ids.includes(id)); notes.push(`balík ${b.name} (−${eur(b.save)})`); } });
+            BUNDLES.forEach(b => { if (b.ids.every(id => rest.includes(id))) { save += b.save; rest = rest.filter(id => !b.ids.includes(id)); notes.push(`balík ${b.name}`); } });
             if (ids.length >= 2 && rest.length) {
                 const r = rest.reduce((a, id) => a + ITEMS[id].p, 0) * COMBO;
-                if (r > 0) { save += r; notes.push(`kombinácia služieb −10 % (−${eur(r)})`); }
+                if (r > 0) { save += r; notes.push(`kombinácia služieb −10\u00a0%`); }
             }
             const final = sum - save;
             list.innerHTML = ids.length ? ids.map(id => `<li${prevIds.includes(id) ? '' : ' class="new"'}><span>${ITEMS[id].n}</span><span>${eur(ITEMS[id].p)}</span></li>`).join('') : '<li class="calc-empty">Zatiaľ nič. Zaškrtnite služby, ktoré potrebujete.</li>';
             setOdo(total, ids.length ? 'od ' + eur(final) : '€0');
             saveEl.classList.toggle('on', !!save);
-            if (save) saveEl.firstElementChild.textContent = `Zvýhodnenie: ${notes.join(', ')}. Ušetríte ${eur(save)}.`;
+            if (save) saveEl.firstElementChild.innerHTML = `<span class="sv-n">Zvýhodnenie: ${notes.join(' + ')}</span><span class="sv-v">Ušetríte ${eur(save)}</span>`;
             send.disabled = !ids.length;
             if (peekV) peekV.textContent = ids.length ? 'od ' + eur(final) : '€0';
+            if (peekN) peekN.textContent = `${ids.length} ${ids.length === 1 ? 'služba' : ids.length < 5 ? 'služby' : 'služieb'} v zostave`;
+            if (peek && ids.length > prevIds.length) { peek.classList.remove('bump'); void peek.offsetWidth; peek.classList.add('bump'); }
             peekSync();
             prevIds = ids;
             state = { ids, sum, final, notes, save };
