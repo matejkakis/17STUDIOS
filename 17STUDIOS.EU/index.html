@@ -642,7 +642,7 @@
             </article>
             <article class="bento-tile bt-d">
                 <img src="thumbs/portrety_7.webp" alt="" loading="lazy" decoding="async">
-                <div class="bt-body"><p class="bt-k">Portrét</p><h4>Kristína</h4><p>Fotenie v lese s modrozeleným portálom.</p>
+                <div class="bt-body"><p class="bt-k">Fantasy</p><h4>Kristína</h4><p>Fotenie v lese s modrozeleným portálom.</p>
                 <button type="button" class="bt-go" data-work="cat-portrety" data-src="portrety_7.webp">Pozrieť fotky</button></div>
             </article>
         </div>
@@ -881,31 +881,43 @@
             </div>
             <div class="cat-item" data-cat="portrety" style="--n:3">
                 <button class="cat-tab" type="button" id="tab-portrety" data-cat="portrety" aria-expanded="false" aria-controls="cat-portrety">
-                    <span class="cat-tab-txt"><span class="cat-tab-name">Portréty</span><span class="cat-tab-sub">Osobné, pre páry, ako z magazínu</span></span>
+                    <span class="cat-tab-txt"><span class="cat-tab-name">Portréty</span><span class="cat-tab-sub">Klasické aj fantasy s efektmi</span></span>
                     <svg class="cat-tab-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
                 </button>
                 <div class="cat-panel" id="cat-portrety" role="region" aria-labelledby="tab-portrety" data-label="Portréty">
                     <div class="cat-head">
                         <h3 class="cat-title">Portréty</h3>
-                        <p class="cat-lead">Osobné portréty, fotky pre páry aj fotenie ako z magazínu. Pri prirodzenom svetle alebo so štúdiovými svetlami, vždy tak, aby ste na fotkách boli naozaj vy.</p>
+                        <p class="cat-lead">Osobné portréty, fotky pre páry aj fotenie ako z magazínu. Pri prirodzenom svetle alebo so štúdiovými svetlami, vždy tak, aby ste na fotkách boli naozaj vy. A ak chcete niečo navyše, spravíme fantasy portrét s digitálnymi efektmi.</p>
                     </div>
                     <div class="cat-box cat-box-gallery">
+                        <div class="cat-sub-head">
                         <h4 class="cat-box-k">Ukážky práce</h4>
-                        <div class="cat-gallery" data-group="portrety">
-                        <a class="cat-tile" data-img="portrety_1.webp"></a>
+                        <div class="cat-sub" role="tablist" aria-label="Druh portrétu"><button type="button" role="tab" class="cat-sub-b is-on" aria-selected="true" data-sub="klasicke">Portréty</button><button type="button" role="tab" class="cat-sub-b" aria-selected="false" data-sub="fantasy">Fantasy</button></div>
+                        </div>
+                        <p class="cat-sub-lead" data-sub="fantasy" hidden>Portréty, ktoré vyzerajú ako z iného sveta. Najprv vás nafotím, potom do fotiek dokreslím svetlo, mágiu a portály.</p>
+                        <div class="cat-gallery" data-group="portrety" data-sub="klasicke">
                         <a class="cat-tile" data-img="portrety_2.webp"></a>
-                        <a class="cat-tile" data-img="portrety_3.webp"></a>
                         <a class="cat-tile" data-img="portrety_4.webp"></a>
                         <a class="cat-tile" data-img="portrety_9.webp"></a>
                         <a class="cat-tile" data-img="portrety_5.webp"></a>
-                        <a class="cat-tile" data-img="portrety_6.webp"></a>
-                        <a class="cat-tile" data-img="portrety_7.webp"></a>
-                        <a class="cat-tile" data-img="portrety_8.webp"></a>
                         <a class="cat-tile" data-img="humans_6.webp"></a>
                         <a class="cat-tile" data-img="humans_8.webp"></a>
                         <a class="cat-tile" data-img="portrety_10.webp"></a>
                         <a class="cat-tile" data-img="portrety_11.webp"></a>
                         <a class="cat-tile" data-img="portrety_12.webp"></a>
+                        </div>
+                        <div class="cat-gallery" data-group="fantasy" data-sub="fantasy" hidden>
+                        <a class="cat-tile" data-img="portrety_7.webp"></a>
+                        <a class="cat-tile" data-img="art_1.webp"></a>
+                        <a class="cat-tile" data-img="art_3.webp"></a>
+                        <a class="cat-tile" data-img="portrety_1.webp"></a>
+                        <a class="cat-tile" data-img="art_4.webp"></a>
+                        <a class="cat-tile" data-img="art_6.webp"></a>
+                        <a class="cat-tile" data-img="portrety_3.webp"></a>
+                        <a class="cat-tile" data-img="art_7.webp"></a>
+                        <a class="cat-tile" data-img="portrety_8.webp"></a>
+                        <a class="cat-tile" data-img="art_8.webp"></a>
+                        <a class="cat-tile" data-img="portrety_6.webp"></a>
                         </div>
                     </div>
                     <div class="cat-box cat-box-gets">
@@ -913,6 +925,7 @@
                         <ul class="cat-gets">
                         <li>Pomoc s výberom lokácie a štýlu</li>
                         <li>Poradím vám s pózami, aj keď sa necítite fotogenicky</li>
+                        <li>Pri fantasy portréte aj digitálne efekty, všetko od jedného človeka</li>
                         <li>Upravené fotky v plnej kvalite</li>
                         </ul>
                     </div>
@@ -921,6 +934,7 @@
                         <ul class="price-list cat-prices">
                         <li class="price-row" onclick="selectService('Portrét','Portrétne fotenie (1 h)')" onkeydown="if(event.key==='Enter')selectService('Portrét','Portrétne fotenie (1 h)')" role="button" tabindex="0"><span class="p-name">Portrétne fotenie (1 h)</span><span class="p-val">€150</span></li>
                         <li class="price-row" onclick="selectService('Portrét','Fotenie ako z magazínu')" onkeydown="if(event.key==='Enter')selectService('Portrét','Fotenie ako z magazínu')" role="button" tabindex="0"><span class="p-name">Fotenie ako z magazínu</span><span class="p-val">od €500</span></li>
+                        <li class="price-row" onclick="selectService('Portrét','Kreatívna úprava fotiek')" onkeydown="if(event.key==='Enter')selectService('Portrét','Kreatívna úprava fotiek')" role="button" tabindex="0"><span class="p-name">Fantasy efekty (kreatívna úprava fotiek)</span><span class="p-val">od €250</span></li>
                         </ul>
                         <p class="cat-hint">Kliknite na položku a formulár sa vyplní za vás.</p>
                         <button class="btn btn-primary cat-cta" onclick="selectService('Portrét','Portrétne fotenie — termín')">Chcem termín fotenia</button>
@@ -932,7 +946,7 @@
                         <div class="cat-review-img"><img alt="Kristína K." height="320" loading="lazy" onerror="this.parentElement.remove()" src="assets/img/log-02.webp" width="480"/></div>
                         <div class="cat-review-body">
                         <blockquote class="cat-review-quote">„Donor mi splnil môj dievčenský sen a fotky sú naozaj krásne — ako z iného vesmíru. Ďakujeem. :)“</blockquote>
-                        <figcaption class="cat-review-author">Kristína K. <span>· Portrétne fotenie</span></figcaption>
+                        <figcaption class="cat-review-author">Kristína K. <span>· Fantasy portrét</span></figcaption>
                         <button type="button" class="cat-review-link" onclick="openWork('cat-portrety','portrety_7.webp')">Pozrieť jej fotky</button>
                         </div>
                         </figure>
@@ -942,13 +956,13 @@
             </div>
             <div class="cat-item" data-cat="art" style="--n:4">
                 <button class="cat-tab" type="button" id="tab-art" data-cat="art" aria-expanded="false" aria-controls="cat-art">
-                    <span class="cat-tab-txt"><span class="cat-tab-name">Grafika</span><span class="cat-tab-sub">Plagáty, obaly skladieb, úpravy fotiek</span></span>
+                    <span class="cat-tab-txt"><span class="cat-tab-name">Grafika</span><span class="cat-tab-sub">Plagáty, logá, obaly skladieb</span></span>
                     <svg class="cat-tab-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
                 </button>
                 <div class="cat-panel" id="cat-art" role="region" aria-labelledby="tab-art" data-label="Grafika">
                     <div class="cat-head">
                         <h3 class="cat-title">Grafika</h3>
-                        <p class="cat-lead">Obaly skladieb, plagáty a originálna grafika. Vizuály, ktoré sa nedajú len tak nafotiť.</p>
+                        <p class="cat-lead">Plagáty, logá a obaly skladieb. Grafika pre akcie, kapely aj značky.</p>
                     </div>
                     <div class="cat-box cat-box-gallery">
                         <h4 class="cat-box-k">Ukážky práce</h4>
@@ -957,12 +971,6 @@
                         <a class="cat-tile" data-img="art_hp_hostia.webp"></a>
                         <a class="cat-tile" data-img="art_hp_program.webp"></a>
                         <a class="cat-tile" data-img="art_hp_logo.webp"></a>
-                        <a class="cat-tile" data-img="art_1.webp"></a>
-                        <a class="cat-tile" data-img="art_3.webp"></a>
-                        <a class="cat-tile" data-img="art_4.webp"></a>
-                        <a class="cat-tile" data-img="art_6.webp"></a>
-                        <a class="cat-tile" data-img="art_7.webp"></a>
-                        <a class="cat-tile" data-img="art_8.webp"></a>
                         <a class="cat-tile" data-img="art_9.webp"></a>
                         <a class="cat-tile" data-img="art_10.webp"></a>
                         </div>
@@ -972,14 +980,13 @@
                         <ul class="cat-gets">
                         <li>Obal k singlu, EP aj albumu</li>
                         <li>Plagáty na koncerty a eventy</li>
-                        <li>Kreatívne úpravy a koláže vašich fotiek</li>
+                        <li>Logo pre akciu alebo značku</li>
                         </ul>
                     </div>
                     <div class="cat-box cat-box-price">
                         <h4 class="cat-box-k">Ceny</h4>
                         <ul class="price-list cat-prices">
                         <li class="price-row" onclick="selectService('Digital Art','Obal skladby / plagát')" onkeydown="if(event.key==='Enter')selectService('Digital Art','Obal skladby / plagát')" role="button" tabindex="0"><span class="p-name">Obal skladby / plagát</span><span class="p-val">od €150</span></li>
-                        <li class="price-row" onclick="selectService('Digital Art','Kreatívna úprava fotiek')" onkeydown="if(event.key==='Enter')selectService('Digital Art','Kreatívna úprava fotiek')" role="button" tabindex="0"><span class="p-name">Kreatívna úprava fotiek</span><span class="p-val">od €250</span></li>
                         </ul>
                         <p class="cat-hint">Kliknite na položku a formulár sa vyplní za vás.</p>
                         <button class="btn btn-primary cat-cta" onclick="selectService('Digital Art','Grafika — nezáväzná ponuka')">Chcem grafiku na mieru</button>

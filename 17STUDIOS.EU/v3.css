@@ -452,3 +452,20 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 @keyframes pkBob { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(3px); } }
 @keyframes pkBump { 0% { scale: 1; } 35% { scale: 1.045; } 100% { scale: 1; } }
 @media (prefers-reduced-motion: reduce) { .calc-peek .pk-a svg, .calc-peek.bump, .chip:has(input:checked)::before { animation: none !important; } }
+
+/* =========================================================
+   PORTRÉTY: prepínač Portréty / Fantasy
+========================================================= */
+.cat-sub-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.cat-sub-head .cat-box-k { margin: 0; }
+.cat-sub { display: inline-flex; padding: 4px; gap: 4px; border-radius: 999px; background: var(--paper-2); border: 1px solid var(--rule); }
+.cat-sub-b { min-height: 38px; padding: 0 18px; border: 0; border-radius: 999px; background: transparent; color: var(--ink-2); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; transition: background .25s, color .25s, box-shadow .25s; }
+.cat-sub-b.is-on { background: var(--ink); color: var(--paper); box-shadow: 0 6px 16px -10px rgba(22,19,15,.7); }
+.cat-sub-b[data-sub="fantasy"].is-on { background: linear-gradient(135deg, #3B2350, #6B3A7A); }
+.cat-sub-b:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.cat-sub-lead { margin: -4px 0 14px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+.cat-gallery.sub-in { animation: subIn .5s cubic-bezier(.2,.7,.1,1); }
+@keyframes subIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@media (max-width: 600px) { .cat-sub { width: 100%; } .cat-sub-b { flex: 1; } }
+@media (prefers-reduced-motion: reduce) { .cat-gallery.sub-in { animation: none; } }
+.cat-gallery[hidden], .cat-sub-lead[hidden] { display: none !important; }

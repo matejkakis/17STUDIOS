@@ -428,10 +428,10 @@
     function loadPanel(panel) {
         if (!panel || panel.dataset.loaded) return;
         panel.dataset.loaded = '1';
-        const gal = panel.querySelector('.cat-gallery');
-        if (!gal) return;
-        $$('.cat-tile', gal).forEach((t, i) => initTile(t, panel.dataset.label || '', i, gal));
-        layoutGallery(gal);
+        $$('.cat-gallery', panel).forEach(gal => {
+            $$('.cat-tile', gal).forEach((t, i) => initTile(t, panel.dataset.label || '', i, gal));
+            layoutGallery(gal);
+        });
     }
 
     /* ── Výber služby: akordeón (mobil) / zoznam + obsah (desktop) ── */
@@ -988,10 +988,25 @@
         }));
     }
 
+    /* ── PORTRÉTY: prepínač Portréty / Fantasy v jednej službe ── */
+    function setSub(panel, key) {
+        $$('.cat-sub-b', panel).forEach(b => { const on = b.dataset.sub === key; b.classList.toggle('is-on', on); b.setAttribute('aria-selected', String(on)); });
+        $$('[data-sub]:not(.cat-sub-b)', panel).forEach(el => {
+            const on = el.dataset.sub === key; el.hidden = !on;
+            if (on && el.classList.contains('cat-gallery')) { el.classList.remove('sub-in'); void el.offsetWidth; el.classList.add('sub-in'); }
+        });
+    }
+    $$('.cat-sub').forEach(bar => bar.addEventListener('click', e => {
+        const b = e.target.closest('.cat-sub-b'); if (!b) return;
+        setSub(bar.closest('.cat-panel'), b.dataset.sub);
+    }));
+
     /* ── RECENZIA → otvoriť konkrétnu ukážku ── */
     window.openWork = (panelId, src) => {
         const panel = document.getElementById(panelId);
         const tile = panel && $$('.cat-tile', panel).find(t => (t.dataset.img || '') === src || (t.dataset.yt || '') === src);
+        const subGal = tile && tile.closest('.cat-gallery[data-sub]');
+        if (subGal && subGal.hidden) setSub(panel, subGal.dataset.sub);
         if (tile && tile.dataset.state === 'real') { tile.click(); return; }
         if (window.Fancybox && src) window.Fancybox.show([{ src, type: 'image' }]);
     };

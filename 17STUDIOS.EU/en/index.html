@@ -299,7 +299,7 @@
             </article>
             <article class="bento-tile bt-d">
                 <img src="../thumbs/portrety_7.webp" alt="" loading="lazy" decoding="async">
-                <div class="bt-body"><p class="bt-k">Portrait</p><h4>Kristína</h4><p>A forest shoot with a blue-green portal.</p>
+                <div class="bt-body"><p class="bt-k">Fantasy</p><h4>Kristína</h4><p>A forest shoot with a blue-green portal.</p>
                 <button type="button" class="bt-go" data-work="cat-portrety" data-src="../portrety_7.webp">See the photos</button></div>
             </article>
         </div>
@@ -538,31 +538,43 @@
             </div>
             <div class="cat-item" data-cat="portrety" style="--n:3">
                 <button class="cat-tab" type="button" id="tab-portrety" data-cat="portrety" aria-expanded="false" aria-controls="cat-portrety">
-                    <span class="cat-tab-txt"><span class="cat-tab-name">Portraits</span><span class="cat-tab-sub">Personal, couples, magazine-style</span></span>
+                    <span class="cat-tab-txt"><span class="cat-tab-name">Portraits</span><span class="cat-tab-sub">Classic and fantasy with effects</span></span>
                     <svg class="cat-tab-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
                 </button>
                 <div class="cat-panel" id="cat-portrety" role="region" aria-labelledby="tab-portrety" data-label="Portraits">
                     <div class="cat-head">
                         <h3 class="cat-title">Portraits</h3>
-                        <p class="cat-lead">Personal portraits, couples and magazine-style shoots. In natural light or with studio lights, always so that the photos look like the real you.</p>
+                        <p class="cat-lead">Personal portraits, couple photos and editorial-style shoots. In natural light or with studio lights, always so that the photos really look like you. And if you want something extra, we can make a fantasy portrait with digital effects.</p>
                     </div>
                     <div class="cat-box cat-box-gallery">
+                        <div class="cat-sub-head">
                         <h4 class="cat-box-k">Selected work</h4>
-                        <div class="cat-gallery" data-group="portrety">
-                        <a class="cat-tile" data-img="../portrety_1.webp"></a>
+                        <div class="cat-sub" role="tablist" aria-label="Portrait type"><button type="button" role="tab" class="cat-sub-b is-on" aria-selected="true" data-sub="klasicke">Portraits</button><button type="button" role="tab" class="cat-sub-b" aria-selected="false" data-sub="fantasy">Fantasy</button></div>
+                        </div>
+                        <p class="cat-sub-lead" data-sub="fantasy" hidden>Portraits that look like they come from another world. First I photograph you, then I paint light, magic and portals into the photos.</p>
+                        <div class="cat-gallery" data-group="portrety" data-sub="klasicke">
                         <a class="cat-tile" data-img="../portrety_2.webp"></a>
-                        <a class="cat-tile" data-img="../portrety_3.webp"></a>
                         <a class="cat-tile" data-img="../portrety_4.webp"></a>
                         <a class="cat-tile" data-img="../portrety_9.webp"></a>
                         <a class="cat-tile" data-img="../portrety_5.webp"></a>
-                        <a class="cat-tile" data-img="../portrety_6.webp"></a>
-                        <a class="cat-tile" data-img="../portrety_7.webp"></a>
-                        <a class="cat-tile" data-img="../portrety_8.webp"></a>
                         <a class="cat-tile" data-img="../humans_6.webp"></a>
                         <a class="cat-tile" data-img="../humans_8.webp"></a>
                         <a class="cat-tile" data-img="../portrety_10.webp"></a>
                         <a class="cat-tile" data-img="../portrety_11.webp"></a>
                         <a class="cat-tile" data-img="../portrety_12.webp"></a>
+                        </div>
+                        <div class="cat-gallery" data-group="fantasy" data-sub="fantasy" hidden>
+                        <a class="cat-tile" data-img="../portrety_7.webp"></a>
+                        <a class="cat-tile" data-img="../art_1.webp"></a>
+                        <a class="cat-tile" data-img="../art_3.webp"></a>
+                        <a class="cat-tile" data-img="../portrety_1.webp"></a>
+                        <a class="cat-tile" data-img="../art_4.webp"></a>
+                        <a class="cat-tile" data-img="../art_6.webp"></a>
+                        <a class="cat-tile" data-img="../portrety_3.webp"></a>
+                        <a class="cat-tile" data-img="../art_7.webp"></a>
+                        <a class="cat-tile" data-img="../portrety_8.webp"></a>
+                        <a class="cat-tile" data-img="../art_8.webp"></a>
+                        <a class="cat-tile" data-img="../portrety_6.webp"></a>
                         </div>
                     </div>
                     <div class="cat-box cat-box-gets">
@@ -570,6 +582,7 @@
                         <ul class="cat-gets">
                         <li>Help choosing the location and style</li>
                         <li>I'll guide your posing, even if you don't feel photogenic</li>
+                        <li>For fantasy portraits, the digital effects too, all from one person</li>
                         <li>Edited photos in full resolution</li>
                         </ul>
                     </div>
@@ -578,6 +591,7 @@
                         <ul class="price-list cat-prices">
                         <li class="price-row" onclick="selectService('Portrét','Portrait session (1 h)')" onkeydown="if(event.key==='Enter')selectService('Portrét','Portrait session (1 h)')" role="button" tabindex="0"><span class="p-name">Portrait session (1 h)</span><span class="p-val">€150</span></li>
                         <li class="price-row" onclick="selectService('Portrét','Magazine-style shoot')" onkeydown="if(event.key==='Enter')selectService('Portrét','Magazine-style shoot')" role="button" tabindex="0"><span class="p-name">Magazine-style shoot</span><span class="p-val">from €500</span></li>
+                        <li class="price-row" onclick="selectService('Portrét','Creative photo editing')" onkeydown="if(event.key==='Enter')selectService('Portrét','Creative photo editing')" role="button" tabindex="0"><span class="p-name">Fantasy effects (creative photo editing)</span><span class="p-val">from €250</span></li>
                         </ul>
                         <p class="cat-hint">Click an item and the form fills itself in.</p>
                         <button class="btn btn-primary cat-cta" onclick="selectService('Portrét','Portrait session — booking')">Book a session</button>
@@ -589,23 +603,23 @@
                         <div class="cat-review-img"><img alt="Kristína K." height="320" loading="lazy" onerror="this.parentElement.remove()" src="../assets/img/log-02.webp" width="480"/></div>
                         <div class="cat-review-body">
                         <blockquote class="cat-review-quote">“Donor made my childhood dream come true and the photos are truly beautiful, like from another universe. Thank youuu :)”</blockquote>
-                        <figcaption class="cat-review-author">Kristína K. <span>· Portrait session</span></figcaption>
+                        <figcaption class="cat-review-author">Kristína K. <span>· Fantasy portrait</span></figcaption>
                         <button type="button" class="cat-review-link" onclick="openWork('cat-portrety','portrety_7.webp')">See her photos</button>
                         </div>
                         </figure>
                     </div>
-                    <nav class="cat-pager" aria-label="More services"><button class="cat-pg cat-pg-prev" type="button" data-go="hudba"><span>Previous service</span><b>Music & videos</b></button><button class="cat-pg cat-pg-next" type="button" data-go="art"><span>Next service</span><b>Grafika</b></button></nav>
+                    <nav class="cat-pager" aria-label="More services"><button class="cat-pg cat-pg-prev" type="button" data-go="hudba"><span>Previous service</span><b>Music & videos</b></button><button class="cat-pg cat-pg-next" type="button" data-go="art"><span>Next service</span><b>Graphic design</b></button></nav>
                 </div>
             </div>
             <div class="cat-item" data-cat="art" style="--n:4">
                 <button class="cat-tab" type="button" id="tab-art" data-cat="art" aria-expanded="false" aria-controls="cat-art">
-                    <span class="cat-tab-txt"><span class="cat-tab-name">Grafika</span><span class="cat-tab-sub">Posters, cover art, edits</span></span>
+                    <span class="cat-tab-txt"><span class="cat-tab-name">Graphic design</span><span class="cat-tab-sub">Posters, logos, cover art</span></span>
                     <svg class="cat-tab-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
                 </button>
-                <div class="cat-panel" id="cat-art" role="region" aria-labelledby="tab-art" data-label="Grafika">
+                <div class="cat-panel" id="cat-art" role="region" aria-labelledby="tab-art" data-label="Graphic design">
                     <div class="cat-head">
-                        <h3 class="cat-title">Grafika</h3>
-                        <p class="cat-lead">Cover art, posters and experimental design. Visuals you can't simply photograph.</p>
+                        <h3 class="cat-title">Graphic design</h3>
+                        <p class="cat-lead">Posters, logos and cover art. Design for events, bands and brands.</p>
                     </div>
                     <div class="cat-box cat-box-gallery">
                         <h4 class="cat-box-k">Selected work</h4>
@@ -614,12 +628,6 @@
                         <a class="cat-tile" data-img="../art_hp_hostia.webp"></a>
                         <a class="cat-tile" data-img="../art_hp_program.webp"></a>
                         <a class="cat-tile" data-img="../art_hp_logo.webp"></a>
-                        <a class="cat-tile" data-img="../art_1.webp"></a>
-                        <a class="cat-tile" data-img="../art_3.webp"></a>
-                        <a class="cat-tile" data-img="../art_4.webp"></a>
-                        <a class="cat-tile" data-img="../art_6.webp"></a>
-                        <a class="cat-tile" data-img="../art_7.webp"></a>
-                        <a class="cat-tile" data-img="../art_8.webp"></a>
                         <a class="cat-tile" data-img="../art_9.webp"></a>
                         <a class="cat-tile" data-img="../art_10.webp"></a>
                         </div>
@@ -629,14 +637,13 @@
                         <ul class="cat-gets">
                         <li>Cover art for singles, EPs and albums</li>
                         <li>Posters for concerts and events</li>
-                        <li>Creative edits and collages of your photos</li>
+                        <li>A logo for an event or brand</li>
                         </ul>
                     </div>
                     <div class="cat-box cat-box-price">
                         <h4 class="cat-box-k">Prices</h4>
                         <ul class="price-list cat-prices">
                         <li class="price-row" onclick="selectService('Digital Art','Cover art / poster')" onkeydown="if(event.key==='Enter')selectService('Digital Art','Cover art / poster')" role="button" tabindex="0"><span class="p-name">Cover art / poster</span><span class="p-val">from €150</span></li>
-                        <li class="price-row" onclick="selectService('Digital Art','Creative photo editing')" onkeydown="if(event.key==='Enter')selectService('Digital Art','Creative photo editing')" role="button" tabindex="0"><span class="p-name">Creative photo editing</span><span class="p-val">from €250</span></li>
                         </ul>
                         <p class="cat-hint">Click an item and the form fills itself in.</p>
                         <button class="btn btn-primary cat-cta" onclick="selectService('Digital Art','Digital art — quote')">Get a custom visual</button>
@@ -684,7 +691,7 @@
                         <button class="btn btn-primary cat-cta" onclick="selectService('Web','Website — quote')">Get a website quote</button>
                         <p class="cat-trust">The consultation is free and I reply within 24 hours.</p>
                     </div>
-                    <nav class="cat-pager" aria-label="More services"><button class="cat-pg cat-pg-prev" type="button" data-go="art"><span>Previous service</span><b>Grafika</b></button><a class="cat-pg cat-pg-next" href="#services" onclick="scrollToSection('services');return false;"><span>Everything in one place</span><b>All prices</b></a></nav>
+                    <nav class="cat-pager" aria-label="More services"><button class="cat-pg cat-pg-prev" type="button" data-go="art"><span>Previous service</span><b>Graphic design</b></button><a class="cat-pg cat-pg-next" href="#services" onclick="scrollToSection('services');return false;"><span>Everything in one place</span><b>All prices</b></a></nav>
                 </div>
             </div>
             <a class="cat-all" href="#services" onclick="scrollToSection('services');return false;"><span class="cat-tab-name">All prices</span><span class="cat-tab-sub">All services in one place</span></a>
@@ -1221,7 +1228,7 @@
                         <option value="Event / koncert">Event / concert</option>
                         <option value="Hudba / klip">Music / music video</option>
                         <option value="Portrét">Portrait session</option>
-                        <option value="Digital Art">Grafika</option>
+                        <option value="Digital Art">Graphic design</option>
                         <option value="Web">Website</option>
                         <option value="Bundle">Package (photo + video)</option>
                         <option value="Videografia">Other: video</option>
@@ -1351,10 +1358,10 @@
 
 <div class="modal-backdrop" id="m-art" role="dialog" aria-modal="true" aria-labelledby="m-art-title">
     <div class="data-packet">
-        <div class="packet-head">Grafika</div>
+        <div class="packet-head">Graphic design</div>
         <button class="packet-close" onclick="closeModal('m-art')" aria-label="Close price list">Close</button>
         <div class="packet-body">
-            <div class="packet-title" id="m-art-title">Grafika</div>
+            <div class="packet-title" id="m-art-title">Graphic design</div>
             <span class="packet-sub">2026 prices</span>
             <ul class="price-list">
                 <li class="price-row" tabindex="0" role="button" onclick="selectService('Digital Art','Cover art / poster')"    onkeydown="if(event.key==='Enter')selectService('Digital Art','Cover art / poster')"><span class="p-name">Cover art / poster</span><span class="p-val">from €150</span></li>
