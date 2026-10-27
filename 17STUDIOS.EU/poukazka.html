@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Výroba poukážky | 17 Studios</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <style>
+        @font-face { font-family: 'Instrument Serif'; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+20AC; }
+        @font-face { font-family: 'Instrument Serif'; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-latin-ext-400-normal.woff2) format('woff2'); unicode-range: U+0100-024F; }
+        @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-latin-400-italic.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+20AC; }
+        @font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url(assets/fonts/instrument-serif-latin-ext-400-italic.woff2) format('woff2'); unicode-range: U+0100-024F; }
+        @font-face { font-family: 'Instrument Sans'; font-weight: 400 700; font-display: swap; src: url(assets/fonts/instrument-sans-latin-wght-normal.woff2) format('woff2'); unicode-range: U+0000-00FF, U+2000-206F, U+20AC; }
+        @font-face { font-family: 'Instrument Sans'; font-weight: 400 700; font-display: swap; src: url(assets/fonts/instrument-sans-latin-ext-wght-normal.woff2) format('woff2'); unicode-range: U+0100-02BA; }
+        :root { --paper: #F4F1EC; --ink: #16130F; --ink-2: #5C564C; --ember: #C13D12; --peach: #F0A57A; --stage: #110F0D; --on: #EFE9DF; --on2: #A29B8F; --serif: 'Instrument Serif', Georgia, serif; --sans: 'Instrument Sans', Arial, sans-serif; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+        .tool { max-width: 1180px; margin: 0 auto; padding: 32px 20px 60px; display: grid; grid-template-columns: 340px 1fr; gap: 36px; align-items: start; }
+        h1 { font-family: var(--serif); font-weight: 400; font-size: 40px; margin: 0 0 6px; }
+        .hint { color: var(--ink-2); font-size: 14px; line-height: 1.55; margin: 0 0 20px; }
+        form { display: grid; gap: 14px; }
+        label { display: grid; gap: 5px; font-size: 13px; font-weight: 600; }
+        .panel { min-width: 0; }
+        input, select, textarea { width: 100%; min-width: 0; font: inherit; font-weight: 400; font-size: 15px; padding: 10px 12px; border-radius: 6px; border: 1px solid rgba(22,19,15,.22); background: #fff; color: var(--ink); }
+        textarea { min-height: 70px; resize: vertical; }
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        button { font: inherit; font-weight: 650; padding: 14px 18px; border: 0; border-radius: 6px; background: var(--ember); color: #fff; cursor: pointer; }
+        button.sec { background: transparent; color: var(--ink); border: 1px solid var(--ink); }
+        .stage { position: sticky; top: 20px; min-width: 0; }
+        /* Poukážka: A5 na šírku (210 × 148 mm) */
+        .v { position: relative; width: 210mm; height: 148mm; overflow: hidden; color: var(--on); background: radial-gradient(70% 90% at 100% 0%, rgba(228,82,31,.38), transparent 62%), radial-gradient(60% 70% at 0% 100%, rgba(240,165,122,.12), transparent 60%), linear-gradient(135deg, #1E1A16, #0C0A09); border-radius: 4mm; box-shadow: 0 30px 60px -30px rgba(22,19,15,.55); display: grid; grid-template-columns: 1fr 58mm; }
+        .v-main { padding: 13mm 12mm 11mm 14mm; display: flex; flex-direction: column; min-width: 0; }
+        .v-k { font-size: 3mm; letter-spacing: .18em; text-transform: uppercase; color: var(--on2); display: flex; align-items: center; gap: 2.4mm; }
+        .v-k i { width: 2.2mm; height: 2.2mm; border-radius: 50%; background: #E4521F; }
+        .v-t { font-family: var(--serif); font-weight: 400; font-size: 15mm; line-height: .95; margin: 7mm 0 2mm; }
+        .v-t em { color: var(--peach); }
+        .v-s { font-size: 4.2mm; color: #E5DCCF; margin: 0; }
+        .v-ded { font-family: var(--serif); font-style: italic; font-size: 6.4mm; line-height: 1.2; color: #F3E7D8; margin: auto 0 0; padding-top: 6mm; }
+        .v-for { margin-top: 4mm; font-size: 3.6mm; color: var(--on2); }
+        .v-for b { color: var(--on); font-size: 4.6mm; font-weight: 600; }
+        .v-side { border-left: .35mm dashed rgba(240,165,122,.45); padding: 13mm 9mm 11mm; display: flex; flex-direction: column; gap: 5mm; position: relative; }
+        .v-side::before, .v-side::after { content: ''; position: absolute; left: -4mm; width: 8mm; height: 8mm; border-radius: 50%; background: var(--paper); }
+        .v-side::before { top: -4mm; } .v-side::after { bottom: -4mm; }
+        .v-val { font-family: var(--serif); font-size: 17mm; line-height: 1; color: var(--peach); }
+        .v-meta { font-size: 3.1mm; line-height: 1.6; color: var(--on2); }
+        .v-meta b { display: block; color: var(--on); font-size: 3.9mm; font-weight: 600; letter-spacing: .04em; }
+        .v-foot { margin-top: auto; font-size: 2.9mm; line-height: 1.5; color: var(--on2); }
+        .v-logo { font-family: var(--serif); font-size: 7mm; color: var(--on); }
+        @media (max-width: 900px) { .tool { grid-template-columns: 1fr; } .stage { position: static; overflow-x: auto; } }
+        @page { size: 210mm 148mm; margin: 0; }
+        @media print {
+            body { background: none; }
+            .tool { display: block; padding: 0; max-width: none; }
+            .panel { display: none; }
+            .stage { position: static; }
+            .v { border-radius: 0; box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .v-side::before, .v-side::after { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="tool">
+    <div class="panel">
+        <h1>Výroba poukážky</h1>
+        <p class="hint">Interná stránka pre 17 Studios, vyhľadávače ju nevidia. Vyplňte údaje z objednávky, ktorá vám prišla e-mailom, potom kliknite na <b>Uložiť ako PDF</b> a v okne tlače zvoľte „Uložiť ako PDF“. Údaje sa uložia do odkazu, takže si poukážku viete otvoriť znova.</p>
+        <form id="f">
+            <label>Typ poukážky
+                <select name="typ">
+                    <option>Portrétne fotenie (1 h)</option>
+                    <option>Fotenie pre pár (1 h)</option>
+                    <option>Poukážka na ľubovoľnú službu</option>
+                    <option>Halloweenske mini fotenie</option>
+                    <option>Svadobné fotenie</option>
+                </select>
+            </label>
+            <div class="row">
+                <label>Hodnota (€)<input name="hodnota" type="number" min="0" step="10" value="150"></label>
+                <label>Kód poukážky<input name="kod" maxlength="16"></label>
+            </div>
+            <label>Pre koho<input name="pre" maxlength="40" value="Zuzka"></label>
+            <label>Venovanie<textarea name="ven" maxlength="90">Všetko najlepšie k narodeninám!</textarea></label>
+            <label>Od koho (nepovinné)<input name="od" maxlength="40"></label>
+            <div class="row">
+                <label>Vystavená<input name="vyst" type="date"></label>
+                <label>Platí do<input name="plati" type="date"></label>
+            </div>
+            <button type="button" id="print">Uložiť ako PDF</button>
+            <button type="button" class="sec" id="newcode">Nový kód</button>
+        </form>
+    </div>
+    <div class="stage">
+        <article class="v" id="v">
+            <div class="v-main">
+                <div class="v-k"><i></i>17 Studios · darčeková poukážka</div>
+                <h2 class="v-t" id="o-t">Portrétne <em>fotenie</em></h2>
+                <p class="v-s" id="o-s">Hodina pred objektívom a upravené fotky v plnom rozlíšení.</p>
+                <p class="v-ded" id="o-ded"></p>
+                <p class="v-for" id="o-for"></p>
+            </div>
+            <div class="v-side">
+                <div class="v-logo">17 Studios</div>
+                <div class="v-val" id="o-val">€150</div>
+                <div class="v-meta"><b id="o-kod">17S-0000</b>kód poukážky</div>
+                <div class="v-meta"><b id="o-plati">—</b>platí do</div>
+                <div class="v-foot">Termín si rezervujte na<br>0950 592 956<br>matejkakis@gmail.com<br>17studios.eu</div>
+            </div>
+        </article>
+    </div>
+</div>
+<script>
+(() => {
+    const f = document.getElementById('f'), $ = id => document.getElementById(id);
+    const SUB = {
+        'Portrétne fotenie (1 h)': ['Portrétne <em>fotenie</em>', 'Hodina pred objektívom a upravené fotky v plnom rozlíšení.'],
+        'Fotenie pre pár (1 h)': ['Fotenie <em>pre pár</em>', 'Hodina len pre vás dvoch a upravené fotky v plnom rozlíšení.'],
+        'Poukážka na ľubovoľnú službu': ['Poukážka na <em>zážitok</em>', 'Dá sa použiť na akúkoľvek službu 17 Studios: fotenie, video aj grafiku.'],
+        'Halloweenske mini fotenie': ['Halloweenske <em>fotenie</em>', '30 minút s filmovým svetlom a dymom, 10 upravených fotiek.'],
+        'Svadobné fotenie': ['Svadobné <em>fotenie</em>', 'Fotky z vášho veľkého dňa, starostlivo upravené.'],
+    };
+    const iso = d => d.toISOString().slice(0, 10);
+    const sk = v => { if (!v) return '—'; const [y, m, d] = v.split('-'); return `${+d}. ${+m}. ${y}`; };
+    const code = () => '17S-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+    // načítanie z odkazu alebo predvolené hodnoty
+    const q = new URLSearchParams(location.hash.slice(1));
+    const today = new Date(), year = new Date(today); year.setFullYear(year.getFullYear() + 1);
+    const def = { kod: code(), vyst: iso(today), plati: iso(year) };
+    [...f.elements].forEach(el => { if (!el.name) return; if (q.has(el.name)) el.value = q.get(el.name); else if (def[el.name]) el.value = def[el.name]; });
+    const render = () => {
+        const v = Object.fromEntries(new FormData(f));
+        const [t, s] = SUB[v.typ] || [esc(v.typ), ''];
+        $('o-t').innerHTML = t; $('o-s').textContent = s;
+        $('o-val').textContent = '€' + (v.hodnota || 0);
+        $('o-kod').textContent = v.kod || '—';
+        $('o-plati').textContent = sk(v.plati);
+        $('o-ded').textContent = v.ven ? '„' + v.ven + '“' : '';
+        $('o-for').innerHTML = (v.pre ? 'Pre: <b>' + esc(v.pre) + '</b>' : '') + (v.od ? ' &nbsp;·&nbsp; od: ' + esc(v.od) : '');
+        history.replaceState(null, '', '#' + new URLSearchParams(v).toString());
+        document.title = 'Poukážka ' + (v.kod || '') + ' | 17 Studios';
+    };
+    f.addEventListener('input', render); f.addEventListener('change', render);
+    f.typ.addEventListener('change', () => { const p = { 'Portrétne fotenie (1 h)': 150, 'Fotenie pre pár (1 h)': 150, 'Halloweenske mini fotenie': 79 }[f.typ.value]; if (p) { f.hodnota.value = p; render(); } });
+    $('newcode').addEventListener('click', () => { f.kod.value = code(); render(); });
+    $('print').addEventListener('click', () => window.print());
+    render();
+})();
+</script>
+</body>
+</html>
