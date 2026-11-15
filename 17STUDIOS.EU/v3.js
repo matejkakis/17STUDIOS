@@ -106,8 +106,12 @@
         const b = e.target.closest('.fb-ask'); if (!b) return;
         const cat = CAT[b.dataset.panel] || 'Neurčené';
         window.Fancybox?.close?.();
-        const msg = `Dobrý deň,\n\nna vašom webe sa mi páčila táto fotka (${b.dataset.file}) a chcel/a by som niečo podobné.\n\nTermín:\nMiesto:`;
-        setTimeout(() => window.selectService?.(cat, 'Fotenie ako na fotke z galérie', msg), 250);
+        const p = b.dataset.panel;
+        const msg = p === 'cat-art' ? `Dobrý deň,\n\nna vašom webe sa mi páčila táto grafika (${b.dataset.file}) a chcel/a by som niečo podobné.\n\nNa čo ju potrebujem:\nTermín:`
+            : p === 'cat-weby' ? `Dobrý deň,\n\nna vašom webe sa mi páčil tento web (${b.dataset.file}) a chcel/a by som niečo podobné.\n\nO čom bude web:\nTermín:`
+            : `Dobrý deň,\n\nna vašom webe sa mi páčila táto fotka (${b.dataset.file}) a chcel/a by som niečo podobné.\n\nTermín:\nMiesto:`;
+        const what = p === 'cat-art' ? 'Grafika ako na ukážke z galérie' : p === 'cat-weby' ? 'Web ako na ukážke z galérie' : 'Fotenie ako na fotke z galérie';
+        setTimeout(() => window.selectService?.(cat, what, msg), 250);
     });
 
     /* 13 · Úvod podľa odkazu a pokračovanie v kalkulačke */

@@ -106,8 +106,12 @@
         const b = e.target.closest('.fb-ask'); if (!b) return;
         const cat = CAT[b.dataset.panel] || 'Neurčené';
         window.Fancybox?.close?.();
-        const msg = `Hello,\n\nI liked this photo on your website (${b.dataset.file}) and would like something similar.\n\nDate:\nVenue:`;
-        setTimeout(() => window.selectService?.(cat, 'Shoot like the gallery photo', msg), 250);
+        const p = b.dataset.panel;
+        const msg = p === 'cat-art' ? `Hello,\n\nI liked this design on your website (${b.dataset.file}) and would like something similar.\n\nWhat I need it for:\nDeadline:`
+            : p === 'cat-weby' ? `Hello,\n\nI liked this website on your site (${b.dataset.file}) and would like something similar.\n\nWhat the website is about:\nDeadline:`
+            : `Hello,\n\nI liked this photo on your website (${b.dataset.file}) and would like something similar.\n\nDate:\nVenue:`;
+        const what = p === 'cat-art' ? 'Design like the gallery example' : p === 'cat-weby' ? 'Website like the gallery example' : 'Shoot like the gallery photo';
+        setTimeout(() => window.selectService?.(cat, what, msg), 250);
     });
 
     /* 13 · Úvod podľa odkazu a pokračovanie v kalkulačke */

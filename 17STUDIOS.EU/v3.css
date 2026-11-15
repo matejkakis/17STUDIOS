@@ -530,3 +530,22 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 /* Bočná stupnica: neviditeľné popisky nesmú prekrývať tlačidlá na stránke (napr. Klasické / Fantasy) */
 .focus-scale, .focus-scale ol, .focus-scale li, .focus-scale a { pointer-events: none; }
 .focus-scale .fs-d, .focus-scale a::after { pointer-events: auto; }
+
+/* Balíky: filmový pás sa posúva šípkami a bodkami, stránka sa neprilepí */
+.bundles-section.is-reel { height: auto; padding-top: clamp(70px, 10vh, 120px); padding-bottom: clamp(60px, 9vh, 110px); }
+.is-reel .bundles-pin { position: static; height: auto; padding-top: 0; }
+.is-reel .bundles-grid { transition: transform .7s cubic-bezier(.65,.05,.25,1); }
+.is-reel .bundle-card:not(.in-gate) { cursor: pointer; }
+.is-reel .bundle-card:not(.in-gate):hover { opacity: .5; }
+.reel-nav { display: none; }
+.is-reel .reel-nav { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 24px; }
+.is-reel .reel-dots { margin-top: 0; gap: 4px; }
+.reel-dots button { padding: 12px 3px; border: 0; background: none; cursor: pointer; display: flex; }
+.reel-dots button:hover i:not(.on) { background: rgba(239,233,223,.45); }
+.reel-dots button.on i { width: 48px; background: var(--peach); }
+.reel-dots button:focus-visible, .reel-arr:focus-visible { outline: 2px solid var(--peach); outline-offset: 3px; border-radius: 6px; }
+.reel-arr { width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(239,233,223,.28); background: transparent; color: var(--on-stage, #EFE9DF); display: grid; place-items: center; cursor: pointer; transition: border-color .25s, background-color .25s, color .25s, opacity .25s, transform .25s; }
+.reel-arr svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.reel-arr:hover:not(:disabled) { border-color: var(--peach); color: var(--peach); transform: scale(1.06); }
+.reel-arr:disabled { opacity: .25; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .is-reel .bundles-grid { transition: none; } }

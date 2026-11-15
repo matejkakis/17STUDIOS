@@ -23,7 +23,9 @@
             const el = slide.triggerEl;
             if (!el || slide.type === 'video' || slide.type === 'iframe' || slide.type === 'html5video') return cap;
             const file = String(slide.src || '').split('/').pop();
-            return `${cap ? `<span class="fb-cap">${cap}</span>` : ''}<button type="button" class="fb-ask" data-file="${file}" data-panel="${el.closest('.cat-panel')?.id || el.closest('section')?.id || ''}">Chcem takéto fotenie</button>`;
+            const pid = el.closest('.cat-panel')?.id || el.closest('section')?.id || '';
+            const askLabel = ({ 'cat-art': 'Chcem takúto grafiku', 'cat-weby': 'Chcem takýto web' })[pid] || 'Chcem takéto fotenie';
+            return `${cap ? `<span class="fb-cap">${cap}</span>` : ''}<button type="button" class="fb-ask" data-file="${file}" data-panel="${pid}">${askLabel}</button>`;
         },
     });
 
@@ -1173,40 +1175,56 @@
         }
     }
 
-    /* 6 · Balíky ako filmový pás (počítač) */
+    /* 6 · Balíky ako filmový pás (počítač): posúva sa šípkami, bodkami, klávesmi alebo vodorovným ťahom na touchpade.
+       Koliesko myši ostáva stránke, takže sa sekcia už „neprilepí“. */
     const bsec = $('#bundles'), bgrid2 = $('.bundles-grid');
     if (bsec && bgrid2) {
-        const cards = $$('.bundle-card', bgrid2), dots = $$('.reel-dots i', bsec);
+        const cards = $$('.bundle-card', bgrid2), dots = $$('.reel-dots button', bsec), arrs = $$('.reel-arr', bsec);
         const wide = window.matchMedia('(min-width: 1000px)');
-        let active = false, rt = false; const bm = { cw: 0, gap: 0, wrapW: 0 };
-        const update = () => {
-            rt = false;
+        let active = false, cur = 0, swipeLock = 0, swipeAcc = 0; const bm = { cw: 0, gap: 0, wrapW: 0 };
+        const render = () => {
             if (!active) return;
-            const r = bsec.getBoundingClientRect(), total = r.height - window.innerHeight;
-            const p = Math.min(1, Math.max(0, -r.top / Math.max(1, total)));
-            const x = p * (cards.length - 1), i = Math.min(cards.length - 1, Math.floor(x));
-            const t = Math.min(1, Math.max(0, (x - i - 0.2) / 0.6)), e = t * t * (3 - 2 * t);
-            const pos = i + e;
-            const cw = bm.cw, gap = bm.gap, wrapW = bm.wrapW;
-            const rx = (wrapW - cw) / 2 - pos * (cw + gap);
+            const rx = (bm.wrapW - bm.cw) / 2 - cur * (bm.cw + bm.gap);
             bgrid2.style.setProperty('--rx', rx.toFixed(1) + 'px');
             bgrid2.parentElement.style.setProperty('--perf', (rx * 0.6).toFixed(1) + 'px');
-            const g = Math.round(pos);
-            cards.forEach((c, k) => c.classList.toggle('in-gate', k === g));
-            dots.forEach((d, k) => d.classList.toggle('on', k === g));
+            cards.forEach((c, k) => c.classList.toggle('in-gate', k === cur));
+            dots.forEach((d, k) => { d.classList.toggle('on', k === cur); d.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
+            arrs.forEach(a => { const d = +a.dataset.dir; a.disabled = (d < 0 && cur === 0) || (d > 0 && cur === cards.length - 1); });
         };
+        const go = (i) => { const n = Math.min(cards.length - 1, Math.max(0, i)); if (n === cur) return; cur = n; render(); };
         const setup = () => {
-            const on = wide.matches && window.innerHeight >= 700 && !reducedMotion;
+            const on = wide.matches && window.innerHeight >= 600;
             if (on !== active) {
                 active = on;
                 bsec.classList.toggle('is-reel', on);
-                bsec.style.setProperty('--reel-n', cards.length);
                 if (!on) { bgrid2.style.removeProperty('--rx'); cards.forEach(c => c.classList.remove('in-gate')); }
             }
             bm.cw = cards[0].offsetWidth; bm.gap = parseFloat(getComputedStyle(bgrid2).columnGap) || 0; bm.wrapW = bgrid2.parentElement.clientWidth;
-            update();
+            render();
         };
-        window.addEventListener('scroll', () => { if (!rt) { rt = true; requestAnimationFrame(update); } }, { passive: true });
+        arrs.forEach(a => a.addEventListener('click', () => go(cur + (+a.dataset.dir))));
+        dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+        // Klik na stlmený bočný balík ho najprv posunie do stredu, až potom sa otvára detail
+        bgrid2.addEventListener('click', (e) => {
+            if (!active) return;
+            const c = e.target.closest('.bundle-card'); const k = cards.indexOf(c);
+            if (k > -1 && k !== cur) { e.preventDefault(); e.stopImmediatePropagation(); go(k); }
+        }, true);
+        bsec.addEventListener('keydown', (e) => {
+            if (!active || e.target.closest('input, textarea, select')) return;
+            if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+        });
+        // Iba vodorovný ťah (touchpad, Shift + koliesko) prepína balíky, zvislé koliesko sa nechytá
+        bsec.querySelector('.bundles-section-wrap').addEventListener('wheel', (e) => {
+            if (!active) return;
+            const dx = e.deltaX || (e.shiftKey ? e.deltaY : 0);
+            if (Math.abs(dx) <= Math.abs(e.shiftKey ? 0 : e.deltaY)) return;
+            e.preventDefault();
+            if (performance.now() < swipeLock) return;
+            swipeAcc += dx;
+            if (Math.abs(swipeAcc) > 40) { go(cur + (swipeAcc > 0 ? 1 : -1)); swipeAcc = 0; swipeLock = performance.now() + 550; }
+        }, { passive: false });
         window.addEventListener('resize', setup, { passive: true });
         setup();
     }
