@@ -75,7 +75,7 @@
                 </select>
             </label>
             <div class="row">
-                <label>Hodnota (€)<input name="hodnota" type="number" min="0" step="10" value="150"></label>
+                <label>Hodnota (€)<input name="hodnota" type="number" min="0" step="10" value="130"></label>
                 <label>Kód poukážky<input name="kod" maxlength="16"></label>
             </div>
             <label>Pre koho<input name="pre" maxlength="40" value="Zuzka"></label>
@@ -100,7 +100,7 @@
             </div>
             <div class="v-side">
                 <div class="v-logo">17 Studios</div>
-                <div class="v-val" id="o-val">€150</div>
+                <div class="v-val" id="o-val">€130</div>
                 <div class="v-meta"><b id="o-kod">17S-0000</b>kód poukážky</div>
                 <div class="v-meta"><b id="o-plati">—</b>platí do</div>
                 <div class="v-foot">Termín si rezervujte na<br>0950 592 956<br>matejkakis@gmail.com<br>17studios.eu</div>
@@ -140,7 +140,7 @@
         document.title = 'Poukážka ' + (v.kod || '') + ' | 17 Studios';
     };
     f.addEventListener('input', render); f.addEventListener('change', render);
-    f.typ.addEventListener('change', () => { const p = { 'Portrétne fotenie (1 h)': 150, 'Fotenie pre pár (1 h)': 150, 'Halloweenske mini fotenie': 79 }[f.typ.value]; if (p) { f.hodnota.value = p; render(); } });
+    f.typ.addEventListener('change', () => { const p = { 'Portrétne fotenie (1 h)': 130, 'Fotenie pre pár (1 h)': 150, 'Halloweenske mini fotenie': 79 }[f.typ.value]; if (p) { f.hodnota.value = p; render(); } });
     $('newcode').addEventListener('click', () => { f.kod.value = code(); render(); });
     $('print').addEventListener('click', () => window.print());
     render();

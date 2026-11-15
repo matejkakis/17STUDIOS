@@ -1004,7 +1004,7 @@
     /* ── RECENZIA → otvoriť konkrétnu ukážku ── */
     window.openWork = (panelId, src) => {
         const panel = document.getElementById(panelId);
-        const tile = panel && $$('.cat-tile', panel).find(t => (t.dataset.img || '') === src || (t.dataset.yt || '') === src);
+        const tile = panel && $$('.cat-tile', panel).find(t => (t.dataset.img || '') === src || (t.dataset.yt || '') === src || (t.dataset.vid || '') === src);
         const subGal = tile && tile.closest('.cat-gallery[data-sub]');
         if (subGal && subGal.hidden) setSub(panel, subGal.dataset.sub);
         if (tile && tile.dataset.state === 'real') { tile.click(); return; }
@@ -1025,10 +1025,10 @@
             promo:  { n: 'Fotenie pre hudobníkov (1 h)', p: 150, cat: 'Hudba / klip' },
             cover:  { n: 'Obal skladby', p: 150, cat: 'Hudba / klip' },
             teaser: { n: 'Krátke upútavky na Reels a TikTok', p: 150, cat: 'Hudba / klip' },
-            portret:{ n: 'Portrétne fotenie (1 h)', p: 150, cat: 'Portrét' },
+            portret:{ n: 'Portrétne fotenie (1 h)', p: 130, cat: 'Portrét' },
             edit:   { n: 'Fotenie ako z magazínu', p: 500, cat: 'Portrét' },
             plagat: { n: 'Plagát na akciu', p: 150, cat: 'Digital Art' },
-            uprava: { n: 'Kreatívna úprava fotiek', p: 250, cat: 'Digital Art' },
+            uprava: { n: 'Kreatívna úprava fotiek', p: 160, cat: 'Digital Art' },
             web1:   { n: 'One-page web', p: 400, cat: 'Web' },
             web2:   { n: 'Viacstránkový web', p: 800, cat: 'Web' },
         };

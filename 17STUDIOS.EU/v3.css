@@ -469,3 +469,60 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 @media (max-width: 600px) { .cat-sub { width: 100%; } .cat-sub-b { flex: 1; } }
 @media (prefers-reduced-motion: reduce) { .cat-gallery.sub-in { animation: none; } }
 .cat-gallery[hidden], .cat-sub-lead[hidden] { display: none !important; }
+
+/* =========================================================
+   SVADBY: tri štýly filmu + ako vzniká scenár
+========================================================= */
+.cat-box-styles { grid-column: 1 / -1; background: var(--paper-w); }
+.fs-head { display: grid; gap: 8px; margin-bottom: 20px; }
+.fs-head .cat-box-k { margin: 0; }
+.fs-lead { margin: 0; max-width: 44em; color: var(--ink-2); font-size: 16px; line-height: 1.55; }
+.fs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.fs-card { position: relative; display: flex; flex-direction: column; padding: 24px 22px 22px; border-radius: 10px; border: 1px solid var(--rule); background: var(--card); overflow: hidden; }
+.fs-n { margin: 0 0 6px; font-family: 'Hand', cursive; font-size: 26px; line-height: 1; color: var(--ember); transform: rotate(-4deg); transform-origin: 0 50%; }
+.fs-name { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 32px; line-height: 1; }
+.fs-tag { margin: 6px 0 12px; font-size: 12.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.fs-mood { margin: 0 0 14px; font-size: 15.5px; line-height: 1.55; color: var(--ink); }
+.fs-scenes { list-style: none; margin: 0 0 14px; padding: 12px 0 0; border-top: 1px dashed var(--rule); display: grid; gap: 8px; }
+.fs-scenes li { position: relative; padding-left: 20px; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+.fs-scenes li::before { content: ''; position: absolute; left: 0; top: 6px; width: 10px; height: 6px; border-left: 1.5px solid var(--ember); border-bottom: 1.5px solid var(--ember); transform: rotate(-45deg); }
+.fs-who { margin: 0 0 18px; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.fs-who b { color: var(--ink); font-weight: 600; }
+.fs-acts { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.fs-btn { min-height: 46px; }
+.fs-link { padding: 0; border: 0; background: none; font: inherit; font-size: 14.5px; font-weight: 600; color: var(--ember); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+/* nálada každej karty */
+.fs-doc { background: #F1EEE9; }
+.fs-doc .fs-n { color: #5C564C; }
+.fs-com { background: #16130F; border-color: #16130F; color: var(--on-stage); }
+.fs-com::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: repeating-linear-gradient(90deg, #EFE9DF 0 12px, transparent 12px 22px); opacity: .5; }
+.fs-com .fs-n { color: var(--peach); }
+.fs-com .fs-name, .fs-com .fs-mood, .fs-com .fs-who b { color: var(--on-stage); }
+.fs-com .fs-tag, .fs-com .fs-scenes li, .fs-com .fs-who { color: var(--on-stage-2); }
+.fs-com .fs-scenes { border-top-color: rgba(239,233,223,.18); }
+.fs-com .fs-scenes li::before { border-color: var(--peach); }
+.fs-love { background: #F7E6DA; border-color: #EDCDB8; }
+/* proces */
+.fs-how { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.fs-how-k { margin: 0 0 14px; font-family: var(--serif); font-weight: 400; font-size: 26px; line-height: 1.1; }
+.fs-steps { list-style: none; counter-reset: fs; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 22px; }
+.fs-steps li { counter-increment: fs; display: grid; grid-template-columns: 30px 1fr; column-gap: 10px; align-items: baseline; }
+.fs-steps li::before { content: counter(fs); grid-row: 1 / 3; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 700; }
+.fs-steps b { font-size: 15.5px; font-weight: 600; }
+.fs-steps span { grid-column: 2; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+.fs-files { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: 20px 0 0; }
+.fs-files a { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+.fs-files a::before { content: ''; width: 12px; height: 14px; border: 1.5px solid currentColor; border-radius: 2px; }
+@media (max-width: 1100px) { .fs-grid { grid-template-columns: 1fr; } .fs-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .fs-steps { grid-template-columns: 1fr; } .fs-name { font-size: 30px; } }
+.fs-new { justify-self: start; margin: 0 0 4px; padding: 5px 11px 4px; border: 1.5px solid var(--ember); border-radius: 6px; color: var(--ember); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transform: rotate(-2deg); }
+.fs-proof { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin: 8px 0 0; }
+.fs-proof span { font-family: 'Hand', cursive; font-size: 21px; line-height: 1.1; color: var(--ember); }
+.btn-ghost-dark { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid var(--ink); border-radius: var(--r); color: var(--ink); font-weight: 600; font-size: 15px; text-decoration: none; background: none; }
+.btn-ghost-dark:hover { background: var(--ink); color: var(--paper); }
+.fs-safe { list-style: none; margin: 16px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.fs-safe li { display: grid; gap: 4px; padding: 14px 16px 14px 44px; position: relative; border-radius: 10px; border: 1px dashed rgba(193,61,18,.5); background: rgba(193,61,18,.04); }
+.fs-safe li::before { content: ''; position: absolute; left: 16px; top: 17px; width: 14px; height: 8px; border-left: 2px solid var(--ember); border-bottom: 2px solid var(--ember); transform: rotate(-45deg); }
+.fs-safe b { font-size: 15px; font-weight: 600; }
+.fs-safe span { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+@media (max-width: 1100px) { .fs-safe { grid-template-columns: 1fr; } }
