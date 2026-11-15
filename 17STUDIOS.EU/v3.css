@@ -549,3 +549,27 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 .reel-arr:hover:not(:disabled) { border-color: var(--peach); color: var(--peach); transform: scale(1.06); }
 .reel-arr:disabled { opacity: .25; cursor: default; }
 @media (prefers-reduced-motion: reduce) { .is-reel .bundles-grid { transition: none; } }
+
+/* Svadobný film podľa scenára: výrazne oddelený blok s veľkým nadpisom */
+.cat-box-styles { margin-top: clamp(14px, 2.4vw, 34px); padding-top: calc(clamp(18px, 2.4vw, 28px) + 30px); overflow: hidden;
+  background: radial-gradient(70% 60% at 100% 0%, rgba(240,165,122,.26), transparent 70%), radial-gradient(60% 50% at 0% 100%, rgba(193,61,18,.07), transparent 70%), #FBF5EC;
+  border: 1.5px solid rgba(193,61,18,.38); box-shadow: 0 30px 70px -45px rgba(193,61,18,.45); }
+.cat-box-styles::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 16px; background: repeating-linear-gradient(90deg, transparent 0 10px, #FBF5EC 10px 22px, transparent 22px 34px) 0 50% / 34px 7px repeat-x, var(--ink); }
+.fs-title { margin: 6px 0 10px; font-family: var(--serif); font-weight: 400; font-size: clamp(42px, 6vw, 84px); line-height: .95; letter-spacing: -.01em; color: var(--ink); max-width: 12em; }
+.fs-title em { font-style: italic; color: var(--ember); }
+.cat-box-styles .fs-head .cat-box-k { color: var(--ember); }
+.cat-box-styles .fs-lead { font-size: 17px; }
+
+/* Ponuka (Čo dostanete + Ceny) v jednom rade, balík ako samostatný pruh pod ňou */
+.cat-box-bundle { background: radial-gradient(80% 120% at 100% 0%, rgba(240,165,122,.28), transparent 70%), #F8EBE0; border: 1.5px dashed rgba(193,61,18,.6); }
+.cat-box-bundle .cat-box-k { display: inline-flex; align-items: center; gap: 8px; }
+.cat-box-bundle .cat-box-k::before { content: '%'; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--ember); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0; }
+@media (min-width: 1000px) {
+  .cat-panel .cat-box-price { grid-row: auto; }
+  .cat-panel .cat-box-bundle { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 40px; align-items: center; }
+  .cat-box-bundle > :not(.cat-bundle) { grid-column: 1; }
+  .cat-box-bundle .cat-bundle-txt { margin-bottom: 0; }
+  .cat-box-bundle .cat-bundle { grid-column: 2; grid-row: 1 / span 3; }
+}
+.cat-box-styles { margin-bottom: clamp(14px, 2.4vw, 34px); }
+@media (min-width: 1000px) { .cat-panel .cat-box-bundle { margin-top: 10px; } }
