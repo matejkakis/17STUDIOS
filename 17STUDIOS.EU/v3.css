@@ -630,3 +630,6 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 @media (max-width: 480px) { .nav { gap: 8px; } .nav .logo { margin-right: auto; } .nav .snd { margin-right: 0; } }
 /* tmavý režim: kartičky Čoho sa nemusíte báť bez linajok */
 [data-theme="dark"] .worries-grid.desk .worry, [data-theme="dark"] .wf { background-image: none; }
+/* pohyblivé náhľady v úvodných oknách: pod textom aj pod stmavením */
+.bento-tile .cat-vprev { z-index: -2; filter: saturate(.92) brightness(.82); }
+.bento-tile.is-previewing .cat-vprev { opacity: 1; }

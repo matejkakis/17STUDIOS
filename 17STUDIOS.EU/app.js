@@ -29,6 +29,26 @@
         },
     });
 
+    /* ── POHYBLIVÉ NÁHĽADY: krátka tichá slučka hrá iba vtedy, keď je okno na obrazovke ── */
+    const prevOff = window.matchMedia('(prefers-reduced-motion: reduce)').matches || (navigator.connection && navigator.connection.saveData);
+    const prevIO = (!prevOff && 'IntersectionObserver' in window) ? new IntersectionObserver((ens) => ens.forEach(en => {
+        const v = en.target, host = v.closest('.cat-tile, .bento-tile');
+        if (en.isIntersecting) {
+            if (!v.src) { v.src = v.dataset.src; v.addEventListener('playing', () => host && host.classList.add('is-previewing'), { once: true }); }
+            v.play().catch(() => {});
+        } else v.pause();
+    }), { threshold: 0.35 }) : null;
+    function attachPreview(host, src, before) {
+        if (!prevIO || !src || host.querySelector('.cat-vprev')) return;
+        const v = document.createElement('video');
+        v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.preload = 'none';
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('aria-hidden', 'true');
+        v.className = 'cat-vprev'; v.dataset.src = src;
+        host.insertBefore(v, before || host.firstChild);
+        prevIO.observe(v);
+    }
+    $$('.bento-tile[data-prev]').forEach(t => attachPreview(t, t.dataset.prev, t.querySelector('img') ? t.querySelector('img').nextSibling : null));
+
     /* ── NAVIGÁCIA ── */
     const nav = $('#nav'), hero = $('#home');
     const toggle = $('#nav-toggle'), menu = $('#mobile-menu');
@@ -317,20 +337,7 @@
             const im = tile.querySelector('img');
             im.onload = () => tile.classList.add('is-ready');
             if (im.complete) tile.classList.add('is-ready');
-            // Náhľad pohybu pri prejdení myšou (iba počítač)
-            if (finePointer && !reducedMotion) {
-                let v = null;
-                tile.addEventListener('mouseenter', () => {
-                    if (!v) {
-                        v = document.createElement('video');
-                        v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
-                        v.src = src; v.className = 'cat-vprev'; v.setAttribute('aria-hidden', 'true');
-                        tile.insertBefore(v, im.nextSibling);
-                    }
-                    v.play().then(() => tile.classList.add('is-previewing')).catch(() => {});
-                });
-                tile.addEventListener('mouseleave', () => { if (v) { v.pause(); tile.classList.remove('is-previewing'); } });
-            }
+            attachPreview(tile, tile.dataset.prev, im.nextSibling);
             return;
         }
 
