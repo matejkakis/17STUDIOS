@@ -526,3 +526,7 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 .fs-safe b { font-size: 15px; font-weight: 600; }
 .fs-safe span { font-size: 14px; line-height: 1.5; color: var(--ink-2); }
 @media (max-width: 1100px) { .fs-safe { grid-template-columns: 1fr; } }
+
+/* Bočná stupnica: neviditeľné popisky nesmú prekrývať tlačidlá na stránke (napr. Klasické / Fantasy) */
+.focus-scale, .focus-scale ol, .focus-scale li, .focus-scale a { pointer-events: none; }
+.focus-scale .fs-d, .focus-scale a::after { pointer-events: auto; }
