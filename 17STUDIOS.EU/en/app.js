@@ -965,10 +965,12 @@
     const bts = $('#bts');
     if (bts) {
         const tabs = $$('[role="tab"]', bts);
+        const seen = new Set([tabs.find(x => x.getAttribute('aria-selected') === 'true') || tabs[0]]);
         const sel = (t, focus) => {
             const idx = tabs.indexOf(t);
             bts.style.setProperty('--step', idx);
-            tabs.forEach((x, k) => { const on = x === t; x.classList.toggle('is-done', k < idx); x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+            seen.add(t); const mark = seen.size > 1;      // fajka pri každom kroku, ktorý už návštevník videl
+            tabs.forEach((x, k) => { const on = x === t; x.classList.toggle('is-done', mark && seen.has(x)); x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
             if (focus) t.focus();
         };
         tabs.forEach((t, i) => {
@@ -1447,7 +1449,7 @@
         $('#cam-go').addEventListener('click', start);
         $('#cam-again').addEventListener('click', start);
         $('#cam-use').addEventListener('click', () => {
-            window.selectService('Neurčené', 'Game discount', `Hello,\n\nI won the code ${GAME_CODE} for 5 % off in the Sharp Game. I'm interested in:\n\nDate:\nVenue:`);
+            window.selectService('Neurčené', 'Game discount', `Hello,\n\nI won the code ${GAME_CODE} for 5 % off in the Focus for a discount game. I'm interested in:\n\nDate:\nVenue:`);
         });
         view.addEventListener('wheel', (e) => {
             if (!playing) return;

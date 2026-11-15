@@ -573,3 +573,60 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 }
 .cat-box-styles { margin-bottom: clamp(14px, 2.4vw, 34px); }
 @media (min-width: 1000px) { .cat-panel .cat-box-bundle { margin-top: 10px; } }
+
+/* ═════════ TMAVÝ REŽIM ═════════ */
+.thm .thm-sun { display: none; }
+[data-theme="dark"] .thm .thm-sun { display: block; }
+[data-theme="dark"] .thm .thm-moon { display: none; }
+.thm svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+/* prepnutie režimu: nová farba sa rozvinie z tlačidla ako clona objektívu */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { z-index: 2; }
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #141210; --paper-2: #1E1B17; --card: #1B1815; --paper-w: #1D1A16;
+  --ink: #EDE6DA; --ink-2: #A9A194; --rule: rgba(237,230,218,.13);
+  --ember: #E0663A; --ember-2: #F07B4E;
+  --hl: rgba(224,102,58,.38); --tape: rgba(237,230,218,.16);
+}
+[data-theme="dark"] .nav.is-solid, [data-theme="dark"] .nav.is-moving.is-solid { background: rgba(20,18,16,.9); }
+[data-theme="dark"] .city-nav { background: rgba(20,18,16,.88); }
+[data-theme="dark"] body::after { opacity: .5; }
+/* svetlé tlačidlá ostávajú s tmavým textom */
+[data-theme="dark"] :is(.btn-light, .nav-cta, .cookie-btns .cookie-accept, .bts-tabs button[aria-selected="true"], .resume button, .service-card::after, .packet-close:hover, .contact-modal-close:hover, .gdpr-modal-close:hover, .vl-close:hover) { color: #16130F; }
+[data-theme="dark"] .nav.is-solid .nav-cta { background: var(--on-stage); color: #16130F; }
+/* prvky, ktoré boli tmavé na papieri, zostanú tmavé (o odtieň svetlejšie ako pozadie) */
+[data-theme="dark"] :is(.cat-item.open > .cat-tab, .cat-sw[aria-selected="true"]) { background: #2A251F; border-color: rgba(240,165,122,.45); color: var(--on-stage); }
+[data-theme="dark"] .cat-item.open > .cat-tab .cat-tab-name { color: #fff; }
+[data-theme="dark"] .slate-board { background: #24201B; }
+[data-theme="dark"] .calc-peek { background: #24201B; }
+[data-theme="dark"] .cat-sub-b.is-on { background: var(--on-stage); color: #16130F; }
+/* Vyskladajte si projekt */
+[data-theme="dark"] .services-section::before { background: radial-gradient(60vmax 40vmax at 8% 18%, rgba(228,82,31,.12), transparent 70%), radial-gradient(50vmax 36vmax at 95% 80%, rgba(240,165,122,.08), transparent 70%), linear-gradient(#181512, #141210); }
+[data-theme="dark"] .calc-row:nth-child(n) { --gb: #221E1A; }
+[data-theme="dark"] :is(.calc-opt, .chip)::before { background-color: #2A251F; border-color: rgba(237,230,218,.35); }
+/* Svadobný film: blok a karty štýlov */
+[data-theme="dark"] .cat-box-styles { background: radial-gradient(70% 60% at 100% 0%, rgba(224,102,58,.16), transparent 70%), #1C1814; border-color: rgba(224,102,58,.4); box-shadow: none; }
+[data-theme="dark"] .cat-box-styles::before { background: repeating-linear-gradient(90deg, transparent 0 10px, #1C1814 10px 22px, transparent 22px 34px) 0 50% / 34px 7px repeat-x, #EDE6DA; }
+[data-theme="dark"] .fs-doc { background: #24201B; }
+[data-theme="dark"] .fs-doc .fs-n { color: var(--ink-2); }
+[data-theme="dark"] .fs-com { background: #0C0A09; border-color: rgba(237,230,218,.14); }
+[data-theme="dark"] .fs-love { background: #2E211A; border-color: rgba(240,165,122,.28); }
+[data-theme="dark"] .cat-box-bundle { background: radial-gradient(80% 120% at 100% 0%, rgba(224,102,58,.18), transparent 70%), #241B16; border-color: rgba(224,102,58,.55); }
+[data-theme="dark"] .cat-box-price { background: radial-gradient(90% 70% at 100% 0%, rgba(228,82,31,.18), transparent 70%), #0C0A09; border-color: rgba(237,230,218,.1); }
+/* fotky v rámikoch: rámik nesvieti */
+[data-theme="dark"] .bento-tile { border-color: #2B2620; }
+/* zvýrazňovač v tme: tmavý tehlový ťah, text ostáva čitateľný */
+[data-theme="dark"] .hl { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'%3E%3Cpath d='M3 9 C 40 5, 90 7, 140 5 S 190 6, 197 8 L 198 33 C 160 36, 110 34, 60 36 S 12 35, 2 34 Z' fill='%236B2C14'/%3E%3C/svg%3E"); }
+/* mobil: logo v jednom riadku aj s dvomi okrúhlymi tlačidlami */
+.logo { white-space: nowrap; }
+@media (max-width: 480px) { .nav .snd { width: 36px; height: 36px; margin-right: 6px; } .nav .logo { font-size: 26px; } }
+[data-theme="dark"] :is(.delivery-grid.desk .delivery-card, .worries-grid.desk .worry, .light-tips.notebook, .calc-row) { box-shadow: 0 0 0 1px rgba(237,230,218,.08), 0 22px 40px -28px rgba(0,0,0,.8); }
+/* okrúhle tlačidlá v lište: vždy presný kruh */
+.nav .snd { flex: none; aspect-ratio: 1; padding: 0; }
+/* Zaostri na zľavu: nadpis sa láme vyvážene */
+#game-title { text-wrap: balance; }
+@media (max-width: 480px) { .nav { gap: 8px; } .nav .logo { margin-right: auto; } .nav .snd { margin-right: 0; } }
+/* tmavý režim: kartičky Čoho sa nemusíte báť bez linajok */
+[data-theme="dark"] .worries-grid.desk .worry, [data-theme="dark"] .wf { background-image: none; }

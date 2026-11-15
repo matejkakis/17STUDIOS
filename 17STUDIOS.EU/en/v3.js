@@ -56,7 +56,7 @@
 
     /* 4 · Názov aktuálnej sekcie v lište */
     const navSec = $('#nav-sec');
-    const LABELS = { praca: 'Latest work', kategorie: 'Services & work', hra: 'The Sharp Game', 'hviezdna-prievidza': 'Hviezdna Prievidza', odovzdanie: 'What you get',
+    const LABELS = { praca: 'Latest work', kategorie: 'Services & work', hra: 'Focus for a discount', 'hviezdna-prievidza': 'Hviezdna Prievidza', odovzdanie: 'What you get',
         tipy: 'Tips', ponuka: 'Offers', poukazky: 'Vouchers', bundles: 'Packages', services: 'Prices', 'bez-obav': 'No worries', faq: 'FAQ', checklist: 'Checklist', contact: 'Contact' };
     if (navSec && 'IntersectionObserver' in window) {
         const io = new IntersectionObserver((en) => {
@@ -243,4 +243,29 @@
             setTimeout(() => sign.classList.add('in'), 500);
         });
     }
+})();
+
+/* Tmavý režim: podľa systému, alebo podľa voľby návštevníka (uloží sa) */
+(() => {
+    const root = document.documentElement, btn = document.getElementById('thm');
+    const metas = document.querySelectorAll('meta[name="theme-color"]');
+    const apply = (t) => {
+        root.setAttribute('data-theme', t);
+        metas.forEach(m => m.setAttribute('content', t === 'dark' ? '#0E0C0A' : '#16130F'));
+        if (btn) { btn.setAttribute('aria-pressed', String(t === 'dark')); btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+    };
+    apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+    btn?.addEventListener('click', () => {
+        const t = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('theme', t); } catch (_) {}
+        // Nová farba sa rozvinie z tlačidla ako clona objektívu (View Transitions, beží na grafickej karte)
+        if (!document.startViewTransition || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) { apply(t); return; }
+        const r = btn.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+        const R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+        const tr = document.startViewTransition(() => apply(t));
+        tr.ready.then(() => root.animate({ clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`] },
+            { duration: 600, easing: 'cubic-bezier(.45,0,.2,1)', pseudoElement: '::view-transition-new(root)' })).catch(() => {});
+    });
+    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
+    mq?.addEventListener?.('change', (e) => { let s = null; try { s = localStorage.getItem('theme'); } catch (_) {} if (!s) apply(e.matches ? 'dark' : 'light'); });
 })();
