@@ -633,3 +633,5 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 /* pohyblivé náhľady v úvodných oknách: pod textom aj pod stmavením */
 .bento-tile .cat-vprev { z-index: -2; filter: saturate(.92) brightness(.82); }
 .bento-tile.is-previewing .cat-vprev { opacity: 1; }
+/* Časté otázky: veta o odpovedi až pod zoznamom */
+.faq-after { margin: clamp(22px, 3vw, 34px) 0 0; }
