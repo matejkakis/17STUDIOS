@@ -438,7 +438,7 @@
         if (!panel || panel.dataset.loaded) return;
         panel.dataset.loaded = '1';
         $$('.cat-gallery', panel).forEach(gal => {
-            $$('.cat-tile', gal).forEach((t, i) => initTile(t, panel.dataset.label || '', i, gal));
+            $$('.cat-tile', gal).forEach((t, i) => initTile(t, gal.dataset.label || panel.dataset.label || '', i, gal));
             layoutGallery(gal);
         });
     }

@@ -490,8 +490,32 @@
                         <p class="cat-lead">Concerts, festivals, club nights and corporate events. I capture the energy of the crowd, the people on stage and the details an organiser never gets to see on the day.</p>
                     </div>
                     <div class="cat-box cat-box-gallery">
+                        <div class="cat-sub-head">
                         <h4 class="cat-box-k">Selected work</h4>
-                        <div class="cat-gallery" data-group="eventy">
+                        <div class="cat-sub" role="tablist" aria-label="Event type"><button type="button" role="tab" class="cat-sub-b is-on" aria-selected="true" data-sub="akcie">Events & concerts</button><button type="button" role="tab" class="cat-sub-b" aria-selected="false" data-sub="stuzkove">Ribbon balls</button></div>
+                        </div>
+                        <p class="cat-sub-lead" data-sub="stuzkove" hidden>Class 4.B ribbon ball, October 2026. The ribbon ceremony.</p>
+                        <div class="cat-gallery" data-group="stuzkove" data-sub="stuzkove" data-label="Ribbon ball" hidden>
+                        <a class="cat-tile" data-vid="../stuzkova_film.mp4" data-prev="../prev/stuzkova_film.mp4" data-poster="../stuzkova_film.webp" data-title="4.B – Maturantus Fotograficus"></a>
+                        <a class="cat-tile" data-img="../stuzkova_1.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_2.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_3.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_4.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_12.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_15.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_5.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_6.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_8.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_7.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_13.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_14.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_16.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_17.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_9.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_10.webp"></a>
+                        <a class="cat-tile" data-img="../stuzkova_11.webp"></a>
+                        </div>
+                        <div class="cat-gallery" data-group="eventy" data-sub="akcie">
                         <a class="cat-tile" data-title="Event aftermovie" data-yt="i0jR2p-oiWQ"></a>
                         <a class="cat-tile" data-img="../eventy_1.webp"></a>
                         <a class="cat-tile" data-img="../eventy_2.webp"></a>
@@ -514,11 +538,16 @@
                     </div>
                     <div class="cat-box cat-box-price">
                         <h4 class="cat-box-k">Prices</h4>
-                        <ul class="price-list cat-prices">
+                        <ul class="price-list cat-prices" data-sub="akcie">
                         <li class="price-row" onclick="selectService('Event / koncert','Aftermovie z akcie')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Aftermovie z akcie')" role="button" tabindex="0"><span class="p-name">Event aftermovie</span><span class="p-val">from €400</span></li>
                         <li class="price-row" onclick="selectService('Event / koncert','Photo coverage (4 h)')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Photo coverage (4 h)')" role="button" tabindex="0"><span class="p-name">Photo coverage (4 h)</span><span class="p-val">€350</span></li>
                         <li class="price-row" onclick="selectService('Event / koncert','Photo coverage, full day (8 h)')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Photo coverage, full day (8 h)')" role="button" tabindex="0"><span class="p-name">Photo coverage, full day (8 h)</span><span class="p-val">€550</span></li>
                         <li class="price-row" onclick="selectService('Event / koncert','Reels / short videos')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Reels / short videos')" role="button" tabindex="0"><span class="p-name">Reels / short videos</span><span class="p-val">from €150</span></li>
+                        </ul>
+                        <ul class="price-list cat-prices" data-sub="stuzkove" hidden>
+                        <li class="price-row" onclick="selectService('Event / koncert','Ribbon ball: photos of the whole evening')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Ribbon ball: photos of the whole evening')" role="button" tabindex="0"><span class="p-name">Photos of the whole ribbon ball</span><span class="p-val">€300</span></li>
+                        <li class="price-row" onclick="selectService('Event / koncert','Ribbon ball: aftermovie')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Ribbon ball: aftermovie')" role="button" tabindex="0"><span class="p-name">Ribbon ball aftermovie</span><span class="p-val">€350</span></li>
+                        <li class="price-row" onclick="selectService('Event / koncert','Ribbon ball: reel')" onkeydown="if(event.key==='Enter')selectService('Event / koncert','Ribbon ball: reel')" role="button" tabindex="0"><span class="p-name">Ribbon ball reel</span><span class="p-val">€150</span></li>
                         </ul>
                         <p class="cat-hint">Click an item and the form fills itself in.</p>
                         <button class="btn btn-primary cat-cta" onclick="selectService('Event / koncert','Event — quote')">Get an event quote</button>
