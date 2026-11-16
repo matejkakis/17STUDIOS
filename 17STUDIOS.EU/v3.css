@@ -639,3 +639,5 @@ h1, h2, h3, h4, .section-title, .services-main-title { text-wrap: balance; }
 [data-theme="dark"] .worries-grid.desk .worry.flipcard { box-shadow: none; }
 [data-theme="dark"] .wf { box-shadow: 0 0 0 1px rgba(237,230,218,.08), 0 22px 40px -28px rgba(0,0,0,.8); }
 .cat-prices[hidden] { display: none !important; }
+/* Akcie a koncerty: na úzkom mobile len „Akcie“, aby sa zmestili tri záložky */
+@media (max-width: 480px) { .sub-long { display: none; } .cat-sub-b { padding: 0 12px; } }
